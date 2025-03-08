@@ -16,13 +16,16 @@ pipeline {
             steps {
                 script {
                     def branchName = sh(
-                        script: 'git rev-parse --abbrev-ref HEAD',
+                        script: 'git name-rev --name-only HEAD || git rev-parse --abbrev-ref HEAD',
                         returnStdout: true
                     ).trim()
                     
+                    // Remove 'origin/' prefix and '^0' suffix if present
+                    branchName = branchName.replaceAll('^origin/', '').replaceAll('\\^0$', '')
+                    
                     echo "Current branch: ${branchName}"
                     
-                    if (branchName != 'main') {
+                    if (branchName != 'remotes/origin/main') {
                         error "Skipping deployment: Changes were pushed to '${branchName}', not 'main'."
                     }
                 }
