@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "bi-friends-fe"
         CONTAINER_NAME = "react-vite-container"
+        PORT = "3000"
     }
 
     triggers {
@@ -15,15 +16,13 @@ pipeline {
             steps {
                 script {
                     def branchName = sh(
-                        script: 'git name-rev --name-only HEAD || git rev-parse --abbrev-ref HEAD',
+                        script: 'git rev-parse --abbrev-ref HEAD',
                         returnStdout: true
                     ).trim()
                     
-                    branchName = branchName.replaceAll('^origin/', '').replaceAll('\\^0$', '')
-                    
                     echo "Current branch: ${branchName}"
                     
-                    if (branchName != 'remotes/origin/main') {
+                    if (branchName != 'main') {
                         error "Skipping deployment: Changes were pushed to '${branchName}', not 'main'."
                     }
                 }
@@ -44,12 +43,15 @@ pipeline {
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Stop and Remove Old Container') {
             steps {
                 script {
-                    def running = sh(script: "docker ps -q -f name=$CONTAINER_NAME", returnStdout: true).trim()
-                    if (running) {
-                        sh "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME"
+                    def existingContainer = sh(script: "docker ps -aq -f name=$CONTAINER_NAME", returnStdout: true).trim()
+                    if (existingContainer) {
+                        echo "Stopping and removing old container: $CONTAINER_NAME"
+                        sh "docker rm -f $CONTAINER_NAME"
+                    } else {
+                        echo "No existing container found with name: $CONTAINER_NAME"
                     }
                 }
             }
@@ -57,17 +59,17 @@ pipeline {
 
         stage('Run New Container') {
             steps {
-                sh 'docker run -d --name $CONTAINER_NAME -p 3000:80 $IMAGE_NAME'
+                sh 'docker run -d --name $CONTAINER_NAME -p $PORT:80 $IMAGE_NAME'
             }
         }
     }
 
     post {
         success {
-            echo "Deployment Successful!"
+            echo "✅ Deployment Successful!"
         }
         failure {
-            echo "Deployment Failed!"
+            echo "❌ Deployment Failed!"
         }
     }
 }
