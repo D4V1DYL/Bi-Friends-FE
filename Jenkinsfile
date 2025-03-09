@@ -5,6 +5,7 @@ pipeline {
         IMAGE_NAME = "bi-friends-fe"
         CONTAINER_NAME = "react-vite-container"
         PORT = "3000"
+        DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1348391496319111241/Q2-Y2zNTe3MC-PlAsziHoKhD6pWdWb6ZPcLoLqtkUq4f5J5CmmYqcR0uIGddt7ajGVux"
     }
 
     triggers {
@@ -19,12 +20,12 @@ pipeline {
                         script: 'git name-rev --name-only HEAD || git rev-parse --abbrev-ref HEAD',
                         returnStdout: true
                     ).trim()
-                    
+
                     // Remove 'origin/' prefix and '^0' suffix if present
                     branchName = branchName.replaceAll('^origin/', '').replaceAll('\\^0$', '')
-                    
+
                     echo "Current branch: ${branchName}"
-                    
+
                     if (branchName != 'remotes/origin/main') {
                         error "Skipping deployment: Changes were pushed to '${branchName}', not 'main'."
                     }
@@ -70,9 +71,33 @@ pipeline {
     post {
         success {
             echo "✅ Deployment Successful!"
+            script {
+                def payload = """
+                {
+                    "username": "Jenkins",
+                    "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
+                    "content": "✅ **Deployment Successful!** \\n **Job:** ${env.JOB_NAME} \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${env.BUILD_URL}"
+                }
+                """
+                sh """
+                curl -H "Content-Type: application/json" -X POST -d '${payload}' $DISCORD_WEBHOOK_URL
+                """
+            }
         }
         failure {
             echo "❌ Deployment Failed!"
+            script {
+                def payload = """
+                {
+                    "username": "Jenkins",
+                    "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
+                    "content": "❌ **Deployment Failed!** \\n **Job:** ${env.JOB_NAME} \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${env.BUILD_URL}"
+                }
+                """
+                sh """
+                curl -H "Content-Type: application/json" -X POST -d '${payload}' $DISCORD_WEBHOOK_URL
+                """
+            }
         }
     }
 }
