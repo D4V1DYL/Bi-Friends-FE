@@ -6,6 +6,7 @@ pipeline {
         CONTAINER_NAME = "react-vite-container"
         PORT = "3000"
         DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1348391496319111241/Q2-Y2zNTe3MC-PlAsziHoKhD6pWdWb6ZPcLoLqtkUq4f5J5CmmYqcR0uIGddt7ajGVux"
+        JENKINS_URL = "https://jenkins.bifriends.my.id/"
     }
 
     triggers {
@@ -70,13 +71,12 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment Successful!"
             script {
                 def payload = """
                 {
-                    "username": "Jenkins",
+                    "username": "BiFriends Bot - Jenkins",
                     "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
-                    "content": "✅ **Deployment Successful!** \\n **Job:** ${env.JOB_NAME} \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${env.BUILD_URL}"
+                    "content": "✅ **Deployment Successful!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
                 }
                 """
                 sh """
@@ -85,13 +85,12 @@ pipeline {
             }
         }
         failure {
-            echo "❌ Deployment Failed!"
             script {
                 def payload = """
                 {
-                    "username": "Jenkins",
+                    "username": "BiFriends Bot - Jenkins",
                     "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
-                    "content": "❌ **Deployment Failed!** \\n **Job:** ${env.JOB_NAME} \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${env.BUILD_URL}"
+                    "content": "❌ **Deployment Failed!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
                 }
                 """
                 sh """
