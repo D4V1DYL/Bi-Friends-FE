@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = "bi-friends-fe"
         CONTAINER_NAME = "react-vite-container"
         PORT = "3000"
-        DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1348391496319111241/Q2-Y2zNTe3MC-PlAsziHoKhD6pWdWb6ZPcLoLqtkUq4f5J5CmmYqcR0uIGddt7ajGVux"
+        DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL"
         JENKINS_URL = "https://jenkins.bifriends.my.id/"
     }
 
@@ -39,6 +39,15 @@ pipeline {
                 git branch: 'main', 
                     credentialsId: 'github-ssh-key',
                     url: 'git@github.com:D4V1DYL/Bi-Friends-FE.git'
+            }
+        }
+
+        stage('Extract Commit Info') {
+            steps {
+                script {
+                    env.GIT_COMMITTER = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+                    env.GIT_COMMIT_MESSAGE = sh(script: "git log -1 --pretty=format:'%s'", returnStdout: true).trim()
+                }
             }
         }
 
@@ -76,7 +85,7 @@ pipeline {
                 {
                     "username": "BiFriends Bot - Jenkins",
                     "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
-                    "content": "✅ **Deployment Successful!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
+                    "content": "✅ **Deployment Successful!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n **Deployed By:** ${env.GIT_COMMITTER} \\n **Commit:** ${env.GIT_COMMIT_MESSAGE} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
                 }
                 """
                 sh """
@@ -90,7 +99,7 @@ pipeline {
                 {
                     "username": "BiFriends Bot - Jenkins",
                     "avatar_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png",
-                    "content": "❌ **Deployment Failed!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
+                    "content": "❌ **Deployment Failed!** \\n **Job:** BiFriendsFE \\n **Build:** #${env.BUILD_NUMBER} \\n **Deployed By:** ${env.GIT_COMMITTER} \\n **Commit:** ${env.GIT_COMMIT_MESSAGE} \\n 🔗 ${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/"
                 }
                 """
                 sh """
