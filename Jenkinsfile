@@ -91,7 +91,7 @@ pipeline {
                     "embeds": [
                         {
                             "title": "✅ Deployment Successful!",
-                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [#${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
+                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
                             "color": 3066993,
                             "url": "${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/",
                             "footer": {
@@ -117,7 +117,7 @@ pipeline {
                     "embeds": [
                         {
                             "title": "❌ Deployment Failed!",
-                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [#${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
+                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
                             "color": 15158332,
                             "url": "${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/",
                             "footer": {
