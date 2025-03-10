@@ -7,6 +7,7 @@ pipeline {
         PORT = "3000"
         DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1348391496319111241/Q2-Y2zNTe3MC-PlAsziHoKhD6pWdWb6ZPcLoLqtkUq4f5J5CmmYqcR0uIGddt7ajGVux"
         JENKINS_URL = "https://jenkins.bifriends.my.id/"
+        GITHUB_REPO_URL = "https://github.com/D4V1DYL/Bi-Friends-FE/commit/"
     }
 
     triggers {
@@ -88,9 +89,9 @@ pipeline {
                     "embeds": [
                         {
                             "title": "✅ Deployment Successful!",
-                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** ${env.GIT_COMMIT_MESSAGE}",
+                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [#${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
                             "color": 3066993,
-                            "url": "${JENKINS_URL}job/BiFriendsBE/${env.BUILD_NUMBER}/",
+                            "url": "${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/",
                             "footer": {
                                 "text": "BiFriends Deployment",
                                 "icon_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
@@ -114,9 +115,9 @@ pipeline {
                     "embeds": [
                         {
                             "title": "❌ Deployment Failed!",
-                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** ${env.GIT_COMMIT_MESSAGE}",
+                            "description": "**Job:** BiFriends-FE\\n**Build:** #${env.BUILD_NUMBER}\\n**Deployed By:** ${env.GIT_COMMITTER}\\n**Commit:** [#${env.GIT_COMMIT_MESSAGE}](${commitUrl})",
                             "color": 15158332,
-                            "url": "${JENKINS_URL}job/BiFriendsBE/${env.BUILD_NUMBER}/",
+                            "url": "${JENKINS_URL}job/BiFriendsFE/${env.BUILD_NUMBER}/",
                             "footer": {
                                 "text": "BiFriends Deployment",
                                 "icon_url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
