@@ -110,6 +110,7 @@ pipeline {
         }
         failure {
             script {
+                def commitUrl = "${GITHUB_REPO_URL}${env.GIT_COMMIT}"
                 def payload = """
                 {
                     "username": "BiFriends Bot - Jenkins",
