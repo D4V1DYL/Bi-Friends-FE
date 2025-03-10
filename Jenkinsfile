@@ -48,6 +48,7 @@ pipeline {
                 script {
                     env.GIT_COMMITTER = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
                     env.GIT_COMMIT_MESSAGE = sh(script: "git log -1 --pretty=format:'%s'", returnStdout: true).trim()
+                    env.GIT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
                 }
             }
         }
@@ -82,6 +83,7 @@ pipeline {
     post {
         success {
             script {
+                def commitUrl = "${GITHUB_REPO_URL}${env.GIT_COMMIT}"
                 def payload = """
                 {
                     "username": "BiFriends Bot - Jenkins",
