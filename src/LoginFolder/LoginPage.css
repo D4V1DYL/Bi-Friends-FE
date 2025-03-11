@@ -1,6 +1,6 @@
-body.RegisterPage {
+body.LoginPage {
     margin: 6% 0 0 0;  
-  }
+}
 
   #TheTemplate{
     display: flex;

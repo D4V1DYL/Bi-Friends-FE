@@ -1,0 +1,117 @@
+body.RegisterPage {
+    margin: 6% 0 0 0;  
+}
+
+#TheImage_Register{
+    display: flex;
+    height: 21rem;
+    width: 21rem;
+    margin: 3rem 0 0 0;
+}
+  
+  
+.RegisterTxt{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+  
+.TheBox{
+    width: 25rem;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.Txt_Input_Box{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(228, 228, 228);
+    border-radius: 20px;
+    height: 3rem;
+    width: 70%;
+}
+  
+.InputTxt{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: x-small;
+    color: rgb(65, 64, 64);
+    margin: 0.4rem 0 0.1rem 1rem;
+}
+  
+.Txt_pw_box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 20px;
+    height: 3rem;
+    width: 70%;
+}
+  
+.Txt_Input_Box_pw1{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(228, 228, 228);
+    border-radius: 20px;
+    height: 3rem;
+    width: 49%;
+}
+  
+.Txt_Input_Box_pw2{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(228, 228, 228);
+    border-radius: 20px;
+    height: 3rem;
+    width: 49%;
+}
+  
+  
+.Name, .NIM, .Password{
+    background-color: rgb(228, 228, 228);
+    margin: 0 0 0 0.8rem;
+    color: rgb(63, 63, 63);
+    border-radius: 20px;
+    border-width: 1px;
+    border: none;
+    width: 89%;
+}
+  
+.Password_Register, .Password_Confirm{
+    display: flex;
+    background-color: rgb(228, 228, 228);
+    margin: 0 0 0 0.8rem;
+    color: rgb(63, 63, 63);
+    border-radius: 20px;
+    border-width: 1px;
+    border: none;
+    width: 79%;
+}
+  
+.Name:focus,  .NIM:focus, .Password_Register:focus, .Password_Confirm:focus{
+    outline: none;
+}
+  
+  
+.RegisterBox{
+    display: flex;
+    justify-content: center;
+    width: 70%;
+}
+.RegisterBtn{
+    margin: 0.4rem 0 0 0;
+    height: 2.3rem;
+    width: 100%;
+    border: none;
+    border-radius: 15px;
+    background-color: rgb(255, 194, 81);
+    color: aliceblue;
+}
+.RegisterBtn:hover{
+    background-color: rgb(255, 181, 44);
+}

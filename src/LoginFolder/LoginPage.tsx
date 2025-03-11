@@ -7,8 +7,8 @@ function LoginPage(){
     const navigate = useNavigate();
 
     useEffect(() => {
-      document.body.classList.add("RegisterPage");
-      return () => document.body.classList.remove("RegisterPage"); 
+      document.body.classList.add("LoginPage");
+      return () => document.body.classList.remove("LoginPage"); 
     }, []);
 
 
