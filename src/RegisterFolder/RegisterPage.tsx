@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import RegisterLogo from "../assets/Register.png";
 import "./RegisterPage.css"
 
 function RegisterPage() {
@@ -19,7 +20,7 @@ function RegisterPage() {
         <div id="TheTemplate">
 
                 <div id="TheImage_Register">
-                    <img src="./src/assets/Register.png" alt="RegisterImg" /> 
+                    <img src={RegisterLogo} alt="RegisterImg" /> 
                 </div>
 
                <div className="TheBox">

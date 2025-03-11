@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import LoginLogo from "../assets/login.png";
 import "./LoginPage.css"
 
 function LoginPage(){
@@ -59,7 +60,7 @@ function LoginPage(){
 
                 </div>
                 <div id="TheImage">
-                    <img src="./src/assets/login.png" alt="loginImg" />
+                    <img src={LoginLogo} alt="loginImg" />
                 </div>
             </div>
     );
