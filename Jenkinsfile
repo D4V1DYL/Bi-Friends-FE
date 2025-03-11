@@ -28,9 +28,6 @@ pipeline {
 
                     echo "Current branch: ${branchName}"
 
-                    if (branchName != 'remotes/origin/main') {
-                        error "Skipping deployment: Changes were pushed to '${branchName}', not 'main'."
-                    }
                 }
             }
         }
