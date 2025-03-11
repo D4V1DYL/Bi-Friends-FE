@@ -1,0 +1,1 @@
+export const baseURL = 'https://bifriendsbe.bifriends.my.id/';

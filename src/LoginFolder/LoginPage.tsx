@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoginLogo from "../assets/login.png";
+import AuthService from "../Shared/Auth/AuthService";
 import "./LoginPage.css"
 
 function LoginPage(){
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
 
@@ -13,8 +17,40 @@ function LoginPage(){
     }, []);
 
 
-    function handleLogin() {
+    function handleRegister() {
       navigate("/RegisterPage");
+    }
+
+    function handleLogin() {
+        const usernameInput = document.querySelector('.Username') as HTMLInputElement;
+        const passwordInput = document.querySelector('.Password') as HTMLInputElement;
+        const rememberMe = document.querySelector('#RememberMe') as HTMLInputElement;
+    
+        if (!usernameInput?.value || !passwordInput?.value) {
+            alert('Please enter both username and password');
+            return;
+        }
+    
+        const loginData = {
+            nim: usernameInput.value,
+            password: passwordInput.value
+        };
+    
+        AuthService.login(loginData)
+            .then(response => {
+                const token = response.access_token;
+                
+                if (rememberMe.checked) {
+                    localStorage.setItem('token', token);
+                } else {
+                    sessionStorage.setItem('token', token);
+                }
+                
+                // navigate('/home');
+            })
+            .catch(error => {
+                alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
+            });
     }
 
     return(
@@ -23,15 +59,25 @@ function LoginPage(){
                     <h2 className="LoginTxt">Login to your account</h2>
                     
                     <div className="Txt_Input_Box">
-                        <p className="InputTxt">Username</p>
-                        <input className="Username" type="Username"></input>
+                        <p className="InputTxt">NIM</p>
+                        <input 
+                            className="Username" 
+                            type="text" 
+                            value={username} 
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
                     </div>
 
                     <br></br>
 
                     <div className="Txt_Input_Box">
                         <p className="InputTxt">Password</p>
-                        <input className="Password" type="Password"></input>
+                        <input 
+                            className="Password" 
+                            type="password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
                     </div>
 
 
@@ -50,12 +96,12 @@ function LoginPage(){
 
 
                     <div className="ButtonBox">
-                        <button className="LoginBtn">Login</button>
+                        <button className="LoginBtn" onClick={handleLogin}>Login</button>
                     </div>
 
 
                     <div className="RegisterBox">
-                        <a className="Register" href="#" onClick={handleLogin}>Create your account</a>
+                        <a className="Register" href="#" onClick={handleRegister}>Create your account</a>
                     </div>
 
                 </div>
