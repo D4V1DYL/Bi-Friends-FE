@@ -1,0 +1,143 @@
+body.RegisterPage {
+    margin: 6% 0 0 0;  
+  }
+
+  #TheTemplate{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 8rem 0 8rem;
+  }
+  
+  .LoginTxt{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .TheBox{
+    width: 25rem;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .Txt_Input_Box{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(228, 228, 228);
+    border-radius: 20px;
+    height: 3rem;
+    width: 70%;
+  }
+  
+  .InputTxt{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: x-small;
+    color: rgb(65, 64, 64);
+    margin: 0.4rem 0 0.1rem 1rem;
+  }
+  
+  .Username, .Password{
+    background-color: rgb(228, 228, 228);
+    margin: 0 0 0 0.8rem;
+    color: rgb(63, 63, 63);
+    border-radius: 20px;
+    border-width: 1px;
+    border: none;
+    width: 89%;
+  }
+  .Username:focus, .Password:focus{
+    outline: none;
+  }
+  
+  
+  
+  .RememberBox_ForgetPassword_Box{
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+  }
+  
+  .RememberBox{
+    font-weight: 400;
+    display: flex;
+    margin: 0 0 0 0.5rem;
+    justify-content: left;
+  }
+  
+  #RememberMe{
+    margin: 0.2rem 0.3rem 0 0;
+    width: 10px;
+  }
+  
+  #RememberMeTxt{
+    display: flex;
+    font-size: 10.5px;
+  }
+  
+  
+  .ForgetPasswordBox{
+    display: flex;
+    margin: 0 0.5rem 0 0;
+    align-items: center;
+  }
+  
+  #ForgetPassword{
+    display: flex;
+    text-decoration: none;
+    color: rgb(63, 63, 63);
+    font-size: x-small;
+  }
+  #ForgetPassword:hover{
+    color: black;
+  }
+  
+  
+  
+  
+  
+  .ButtonBox{
+    display: flex;
+    justify-content: center;
+    width: 70%;
+  }
+  .LoginBtn{
+    margin: 0.4rem 0 0 0;
+    height: 2.3rem;
+    width: 100%;
+    border: none;
+    border-radius: 15px;
+    background-color: rgb(255, 194, 81);
+    color: aliceblue;
+  }
+  .LoginBtn:hover{
+    background-color: rgb(255, 181, 44);
+  }
+  
+  .RegisterBox{
+    display: flex;
+    margin: 1rem 0 0 0;
+  }
+  
+  .Register{
+    text-decoration: none;
+    color: rgb(63, 63, 63);
+    font-size: 11px;
+    font-weight: 400;
+  }
+  .Register:hover {
+    color: black;
+  }
+  
+  
+  #TheImage{
+    display: flex;
+    height: 25rem;
+    width: 25rem;
+    margin: 1rem 0 0 0;
+  }
