@@ -1,4 +1,4 @@
-import { useState, CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import Picture from '../../assets/Friends.png';
 import logo from '../../assets/logo.png';
 
