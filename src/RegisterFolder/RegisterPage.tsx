@@ -147,6 +147,8 @@ function RegisterPage() {
                             />
                         </div>
 
+                        {error && <p style={{ color: "red" }}>{error}</p>}
+
                         <div className="DirectToLogin">
                             <p>Already have an account? <b><Link id="GoToLogin" to="/">Login</Link></b> </p> 
                         </div>
