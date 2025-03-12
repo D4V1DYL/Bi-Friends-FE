@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png';
 
 import { ReactNode } from 'react';
 
-const GradientBackground = ({ children }: { children: ReactNode }) => {
+export const GradientBackground = ({ children }: { children: ReactNode }) => {
   const gradientStyle: CSSProperties = {
     background: "linear-gradient(43deg, #B1F0F7, #6CA7C1)",
     height: "100vh",
