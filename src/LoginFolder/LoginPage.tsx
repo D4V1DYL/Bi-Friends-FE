@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoginLogo from "../assets/login.png";
+import { Link } from "react-router-dom";
 import AuthService from "../Shared/Auth/AuthService";
 import "./LoginPage.css"
 
@@ -88,7 +89,7 @@ function LoginPage(){
                         </div>
 
                         <div className="ForgetPasswordBox">
-                            <a id="ForgetPassword" href="#">Forget Password?</a>
+                            <Link id="ForgetPassword" to="./ForgotPassword">Forget Password?</Link>
                         </div>
                     </div>
 

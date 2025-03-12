@@ -1,33 +1,39 @@
 import LockImg from "../assets/LockImg.svg";
 import "./ForgotPasswordPage.css"
+import { useEffect } from "react";
 
-function ForgetPassword(){
+
+function ForgetPasswordPage(){
+    
+    useEffect(() => {
+        document.body.classList.add("ForgetPasswordPage");
+        return () => document.body.classList.remove("ForgetPasswordPage"); 
+    }, []);
+    
     return(
         <div className="TheTemplate">
             
             <img id="LockImg" src={LockImg} alt="LockImg" />
             
-            <div className="TheBox">
-                <div>
-                    <h2 className="ForgortTxt">Forgot Password?</h2>
+            <div className="Box">
+                <div className="Forgot_Box">
+                    <h2 className="ForgotTxt">Forgot Password?</h2>
                 </div>
 
                 <div className="Email_Box">
-                    <p className="EailTxt">Email</p>
-                    <input className="Email" type="email"></input>
+                    <input className="Email" type="email" placeholder="E-mail"></input>
                 </div>
 
-                <div>
-                    <a id="SendCode" href=""></a>
+                <div id="SendCodeBox">
+                    <a id="SendCode" href="#">Send Code</a>
                 </div>
 
                 <div className="Code_Box">
-                    <p className="CodeTxt">Code</p>
-                    <input className="Code" type="text"></input>
+                    <input className="Code" type="text" placeholder="Enter Code"></input>
                 </div>
 
                 <div>
-                    <button id="ResetPassword">Reset Password</button>
+                    <button id="ResetPasswordBtn"><b>Reset Password</b></button>
                 </div>
 
             </div>
@@ -35,4 +41,4 @@ function ForgetPassword(){
     );
 }
 
-export default ForgetPassword
+export default ForgetPasswordPage
