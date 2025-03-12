@@ -47,7 +47,7 @@ function LoginPage(){
                     sessionStorage.setItem('token', token);
                 }
                 
-                // navigate('/home');
+                navigate('/404');
             })
             .catch(error => {
                 alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));

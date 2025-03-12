@@ -1,3 +1,4 @@
+import MaintainanceScreen from './Components/MaintainanceComponent/MaintananceScreen';
 import LoginPage from './LoginFolder/LoginPage'
 import RegisterPage from './RegisterFolder/RegisterPage'
 import ForgotPassword from './ForgotPasswordFolder/ForgotPasswordPage'
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/RegisterPage" element={<RegisterPage />} />
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/404" element={<MaintainanceScreen />} />
       </Routes>
     </Router>
   );
