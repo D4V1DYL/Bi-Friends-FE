@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import LogPhone from "../assets/LogPhone.svg";
-import { Link } from "react-router-dom";
-import AuthService from "../Shared/Auth/AuthService";
-import icon from  "../assets/IconSignIn.svg";
 import "../LoginFolder/LoginPage.css"
+import LogPhone from "../assets/LogPhone.svg";
+import icon from  "../assets/IconSignIn.svg";
 import bluebg from "../assets/blueBg.svg";
 import SecondLayer from "../assets/SecondLayer.svg";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import AuthService from "../Shared/Auth/AuthService";
 
 function LoginPage(){
 
@@ -27,7 +27,7 @@ function LoginPage(){
 
     function handleLogin() {
         const usernameInput = document.querySelector('.Username') as HTMLInputElement;
-        const passwordInput = document.querySelector('.Password') as HTMLInputElement;
+        const passwordInput = document.querySelector('.password') as HTMLInputElement;
         const rememberMe = document.querySelector('#RememberMe') as HTMLInputElement;
     
         if (!usernameInput?.value || !passwordInput?.value) {
@@ -124,11 +124,9 @@ function LoginPage(){
 
 
 
-                {/* <div className="container2"> */}
-                    <div id="TheImage">
-                        <img src={LogPhone} alt="loginImg" />
-                    </div>
-                {/* </div> */}
+                <div id="TheImage">
+                    <img src={LogPhone} alt="loginImg" />
+                </div>
 
 
             </div>

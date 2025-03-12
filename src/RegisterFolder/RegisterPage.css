@@ -136,7 +136,7 @@ body.RegisterPage {
     margin-bottom: 1rem;
 }
 
-.Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email{
+.Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email, .gender{
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
