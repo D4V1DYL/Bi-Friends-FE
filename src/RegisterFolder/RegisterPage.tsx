@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import RegisterLogo from "../assets/Register.png";
-import "./RegisterPage.css"
+import PhonePic from "../assets/PhonePic.svg"
+import Bg from "../assets/Bg.svg";
+import balls from "../assets/balls.svg";
+import glad from "../assets/gladtxt.svg";
+import oneball from "../assets/oneball.svg";
+import logotxt from "../assets/Logo_Text2.svg";
+import icon from  "../assets/IconSignIn.svg";
+import { Link } from "react-router-dom";
+import "../RegisterFolder/RegisterPage.css";
 
 function RegisterPage() {
     
@@ -19,41 +26,50 @@ function RegisterPage() {
     return (
         <div id="TheTemplate">
 
+                <img id="background" src={Bg} alt="Bg" />
+                <img id="logotxt" src={logotxt} alt="logotxt" />
+                <img id="oneball" src={oneball} alt="oneball" />
+                <img id="glad" src={glad} alt="Glad" />
+                <img id="balls" src={balls} alt="balls"></img>
                 <div id="TheImage_Register">
-                    <img src={RegisterLogo} alt="RegisterImg" /> 
+                    <img src={PhonePic} alt="RegisterImg" /> 
                 </div>
 
-               <div className="TheBox">
-                    <h2 className="RegisterTxt">Create an account</h2>
-                    
-                    <div className="Txt_Input_Box">
-                        <p className="InputTxt">Name</p>
-                        <input className="Name" type="Username"></input>
-                    </div>
+                <div className="boxwrap">
+                    <div className="TheBox">
+                        <h2 className="RegisterTxt">Sign Up</h2>
+                        <img id="icon" src={icon} alt="icon"></img>
 
-                    <br></br>
-
-                    <div className="Txt_Input_Box">
-                        <p className="InputTxt">NIM</p>
-                        <input className="NIM" type="text"></input>
-                    </div>
-
-                    <br></br>
-
-                    <div className="Txt_pw_box">
-                        <div className="Txt_Input_Box_pw1">
-                            <p className="InputTxt">Password</p>
-                            <input className="Password_Register" type="Password"></input>
+                        <div className="Txt_Input_Box">
+                            <input className="Name" type="Username" placeholder="Username"></input>
                         </div>
 
-                        <div className="Txt_Input_Box_pw2">
-                            <p className="InputTxt">Confirmation Password</p>
-                            <input className="Password_Confirm" type="Password"></input>
+                        <div className="Txt_Input_Box">
+                            <input className="email" type="email" placeholder="Email"></input>
                         </div>
-                    </div>
 
-                    <div className="RegisterBox">
-                        <button className="RegisterBtn" onClick={handleRegister}>Register</button>
+                        <div className="Txt_Input_Box">
+                            <input className="NIM" type="text" placeholder="NIM"></input>
+                        </div>
+
+                        <div className="Txt_Input_Box">
+                            <input className="Password_Register" type="Password" placeholder="Password"></input>
+                        </div>
+
+                        <div className="Txt_Input_Box" id="LastSection">
+                            <input className="Password_Confirm" type="Password" placeholder="Confirm Password"></input>
+                        </div>
+
+                        <div className="DirectToLogin">
+                            <p>Already have an account? <b><Link id="GoToLogin" to="/">Login</Link></b> </p> 
+                        </div>
+
+                        <div className="RegisterBox">
+                            <button className="RegisterBtn" onClick={handleRegister}>Register</button>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>

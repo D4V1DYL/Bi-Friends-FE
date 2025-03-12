@@ -1,15 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import LockImg from "../assets/LockImg.svg";
-import "./ForgotPasswordPage.css"
 import { useEffect } from "react";
+import "./ForgotPasswordPage.css"
 
 
 function ForgetPasswordPage(){
     
+    const navigate = useNavigate();
+
     useEffect(() => {
         document.body.classList.add("ForgetPasswordPage");
         return () => document.body.classList.remove("ForgetPasswordPage"); 
     }, []);
     
+    function handleRecovery() {
+        navigate("/RecoveryPassword");
+      }
+
     return(
         <div className="TheTemplate">
             
@@ -33,7 +40,7 @@ function ForgetPasswordPage(){
                 </div>
 
                 <div>
-                    <button id="ResetPasswordBtn"><b>Reset Password</b></button>
+                    <button id="ResetPasswordBtn" onClick={handleRecovery}><b>Reset Password</b></button>
                 </div>
 
             </div>

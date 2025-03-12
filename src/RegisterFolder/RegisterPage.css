@@ -1,117 +1,192 @@
 body.RegisterPage {
-    margin: 6% 0 0 0;  
+    margin: 0;
+    width: 100%;
+}
+
+#TheTemplate{
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(to bottom, #B1F0F7, #6DA8C2);
+}
+
+
+
+
+#background{
+    display: flex;
+    position: absolute;
+    left: 0px;
+    top: 0;
+    height: 594px;
+    z-index: 1;
+}
+
+#logotxt{
+    display: flex;
+    position: absolute;
+    height: 5rem;
+    width: 8rem;
+    margin: 0 0 5rem 1rem;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+#oneball{
+    display: flex;
+    position: absolute;
+    height: 5rem;
+    width: 5rem;
+    margin: 8.5rem 0 0 19rem;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+#glad{
+    display: flex;
+    position: absolute;
+    height: 17rem;
+    width: 25rem;
+    margin: 1rem 0 0 5rem;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+#balls{
+    display: flex;
+    position: absolute;
+    height: 18rem;
+    width: 18rem;
+    margin: 16rem 0 3rem 5rem;
+    left: 0;
+    z-index: 4;
 }
 
 #TheImage_Register{
     display: flex;
-    height: 21rem;
-    width: 21rem;
-    margin: 3rem 0 0 0;
+    height: 23rem;
+    width: 100%;
+    margin: 14rem 0 0 2rem;
+    z-index: 5;
 }
   
+
+
+
+
+
   
 .RegisterTxt{
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: 700;
     text-align: center;
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
   
-.TheBox{
-    width: 25rem;
+#icon{
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 1rem;
+}
+
+
+
+
+
+
+
+.boxwrap{
+    width: 100%;
     height: 60%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    margin: 6% 0 0 0;
 }
-  
+
+.TheBox{
+    width: 70%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 6% 0 0 0;
+}
+
 .Txt_Input_Box{
     display: flex;
-    flex-direction: column;
-    background-color: rgb(228, 228, 228);
-    border-radius: 20px;
-    height: 3rem;
-    width: 70%;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    background-color: #D9D9D9;
+    opacity: 0.7;
+    border-radius: 15px;
+    border: solid;
+    border-width: 1.5px;
+    border-color: #888888;
+    margin-bottom: 1rem;
 }
-  
-.InputTxt{
+
+.Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email{
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-weight: 400;
-    font-size: x-small;
-    color: rgb(65, 64, 64);
-    margin: 0.4rem 0 0.1rem 1rem;
-}
-  
-.Txt_pw_box{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-radius: 20px;
-    height: 3rem;
-    width: 70%;
-}
-  
-.Txt_Input_Box_pw1{
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(228, 228, 228);
-    border-radius: 20px;
-    height: 3rem;
-    width: 49%;
-}
-  
-.Txt_Input_Box_pw2{
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(228, 228, 228);
-    border-radius: 20px;
-    height: 3rem;
-    width: 49%;
-}
-  
-  
-.Name, .NIM, .Password{
-    background-color: rgb(228, 228, 228);
-    margin: 0 0 0 0.8rem;
-    color: rgb(63, 63, 63);
-    border-radius: 20px;
-    border-width: 1px;
+    justify-content: center;
+    height: 28px;
+    width: 92%;
     border: none;
-    width: 89%;
+    outline: none;
 }
   
-.Password_Register, .Password_Confirm{
-    display: flex;
-    background-color: rgb(228, 228, 228);
-    margin: 0 0 0 0.8rem;
-    color: rgb(63, 63, 63);
-    border-radius: 20px;
-    border-width: 1px;
-    border: none;
-    width: 79%;
-}
-  
-.Name:focus,  .NIM:focus, .Password_Register:focus, .Password_Confirm:focus{
+.Email:focus, .Name:focus,  .NIM:focus, .Password_Register:focus, .Password_Confirm:focus{
     outline: none;
 }
   
   
+
+
+#LastSection{
+    margin-bottom: 0;
+}
+
+.DirectToLogin{
+    display: flex;
+    margin: 0 10rem 0 0;
+    font-size: x-small;
+}
+
+
+
+
+
+
 .RegisterBox{
     display: flex;
     justify-content: center;
-    width: 70%;
+    text-align: center;
+    align-items: center;
+    margin-left: 50%;
+    width: 25%;
+    height: 1rem;
 }
 .RegisterBtn{
     margin: 0.4rem 0 0 0;
-    height: 2.3rem;
+    height: 1.8rem;
     width: 100%;
     border: none;
     border-radius: 15px;
-    background-color: rgb(255, 194, 81);
-    color: aliceblue;
+    font-weight: 600;
+    background-color: #F5F0CD;
+    color: black;
 }
 .RegisterBtn:hover{
-    background-color: rgb(255, 181, 44);
+    background-color: #e3dfc0;
 }
