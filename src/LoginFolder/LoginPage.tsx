@@ -58,7 +58,6 @@ function LoginPage(){
                     navigate('/404');
                 })
                 .catch(error => {
-                    console.log(error);
                     setIsLoading(false);
                     setTimeout(() => {
                         toast.error('Login failed: ' + (error.response?.data?.detail || 'Unknown error'));

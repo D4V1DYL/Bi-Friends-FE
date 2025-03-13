@@ -32,7 +32,7 @@ function RegisterPage() {
     const [gender, setGender] = useState('');
     // const [ProfilePicture, setProfilePicture] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
 
     function handleRegistering(){
         const usernameInput = document.querySelector('.Name') as HTMLInputElement;
@@ -42,8 +42,13 @@ function RegisterPage() {
         const PasswordInput = document.querySelector('.Password_Register') as HTMLInputElement;
         const PasswordConfirmInput = document.querySelector('.Password_Confirm') as HTMLInputElement;
 
-        if (usernameInput.value == null || EmailInput.value == null || NIMInput.value == null || 
-            GenderInput.value == null || PasswordInput.value == null || PasswordConfirmInput.value == null) {
+        if (!usernameInput?.value.trim() || 
+        !EmailInput?.value.trim() || 
+        !NIMInput?.value.trim() || 
+        !GenderInput?.value.trim() || 
+        !PasswordInput?.value.trim() || 
+        !PasswordConfirmInput?.value.trim())         
+        {
             toast.error("All fields are required!");
             return;
         }
@@ -73,7 +78,6 @@ function RegisterPage() {
                     }, 2000);
                 })
                 .catch((error) => {
-                    console.log(error);
                     setIsLoading(false);
                     setTimeout(() => {
                         toast.error('Registration failed: ' + (error.response?.data?.detail || 'Unknown error'));
@@ -161,7 +165,6 @@ function RegisterPage() {
                             />
                         </div>
 
-                        {error && <p style={{ color: "red" }}>{error}</p>}
                         <div className="DTL_Box">
                             <div className="DirectToLogin">
                                 <p>Already have an account? <b><Link id="GoToLogin" to="/">Login</Link></b> </p> 
