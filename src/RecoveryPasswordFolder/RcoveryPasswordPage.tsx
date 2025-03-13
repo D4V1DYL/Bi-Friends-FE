@@ -24,7 +24,7 @@ function ForgetPasswordPage(){
     return(
         <div className="TheTemplate">
             
-            <img id="LockImg" src={LockImg} alt="LockImg" loading="eager"/>
+            <img id="LockImg" src={LockImg} alt="LockImg" loading="lazy"/>
             
             <div className="Box">
                 <div className="Recovery_Box">

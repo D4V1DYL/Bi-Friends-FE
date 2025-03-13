@@ -97,18 +97,18 @@ function RegisterPage() {
     return (
         <div id="TheTemplate">
             <div className="AllImg">
-                <img id="background" src={Bg} alt="Bg" loading="eager"/>
-                <img id="logotxt" src={logotxt} alt="logotxt" loading="eager"/>
-                <img id="oneball" src={oneball} alt="oneball" loading="eager"/>
-                <img id="glad" src={glad} alt="Glad" loading="eager"/>
-                <img id="balls" src={balls} alt="balls" loading="eager"></img>
-                <img id="TheImage_Register" src={PhonePic} alt="RegisterImg" loading="eager"></img>
+                <img id="background" src={Bg} alt="Bg" loading="lazy"/>
+                <img id="logotxt" src={logotxt} alt="logotxt" loading="lazy"/>
+                <img id="oneball" src={oneball} alt="oneball" loading="lazy"/>
+                <img id="glad" src={glad} alt="Glad" loading="lazy"/>
+                <img id="balls" src={balls} alt="balls" loading="lazy"></img>
+                <img id="TheImage_Register" src={PhonePic} alt="RegisterImg" loading="lazy"></img>
             </div>
             
                 <div className="boxwrap">
                     <div className="TheBox">
                         <h2 className="RegisterTxt">Sign Up</h2>
-                        <img id="icon" src={icon} alt="icon" loading="eager"></img>
+                        <img id="icon" src={icon} alt="icon" loading="lazy"></img>
 
                         <div className="Txt_Input_Box">
                             <input className="Name" 

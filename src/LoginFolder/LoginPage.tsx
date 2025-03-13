@@ -77,16 +77,16 @@ function LoginPage(){
             <div id="TheTemplate_Login">
 
                 <div className="AllImg">
-                    <img id="BlueBg" src={BlueBg} alt="BlueBg" loading="eager"/>
-                    <img id="TheImage" src={LogPhone} alt="loginImg" loading="eager"/>
-                    <img id="SL" src={SecondLayer} alt="SecondLayer" loading="eager"></img>
+                    <img id="BlueBg" src={BlueBg} alt="BlueBg" loading="lazy"/>
+                    <img id="TheImage" src={LogPhone} alt="loginImg" loading="lazy"/>
+                    <img id="SL" src={SecondLayer} alt="SecondLayer" loading="lazy"></img>
                 </div>
 
                 <div className="container1">
                 
                     <div className="TheBox_Log">
                         <h2 className="LoginTxt">Sign In</h2>
-                        <img id="icon" src={icon} alt="icon" loading="eager"></img>
+                        <img id="icon" src={icon} alt="icon" loading="lazy"></img>
 
                         <div className="Txt_Input_Box_Log">
                             <input 
