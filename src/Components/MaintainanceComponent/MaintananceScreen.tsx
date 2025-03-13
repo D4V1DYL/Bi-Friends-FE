@@ -53,10 +53,11 @@ function MaintainanceScreen() {
             Please check again in a little while. Thank you!
           </p>
           <p className="text-sm max-w-lg text-black font-semibold flex items-center justify-center">
-            <img src={logo} alt="Friends" className="w-1/20 mr-2" /> BiFriends
+            <img src={logo} alt="Friends" className="w-1/20 mr-2" loading='lazy'/> BiFriends
           </p>
           {/* <img src={Picture} alt="Friends" className="w-1/1" /> */}
           <img 
+            loading='lazy'
             src={Picture} 
             alt="Friends" 
             className="w-full max-w-[800px] h-auto object-cover absolute bottom-0 left-1/2 -translate-x-1/2"

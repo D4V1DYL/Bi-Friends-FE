@@ -9,7 +9,7 @@ const LoadingScreen: React.FC = () => {
         <GradientBackground>
             <div className="loading-screen flex flex-col items-center justify-center min-h-screen">
                 <div className="flex flex-col items-center">
-                    <img src={beeLogo} alt="Friends" className="w-16 h-16" />
+                    <img src={beeLogo} alt="Friends" className="w-16 h-16" loading='lazy'/>
                     <svg width="250" height="50" className="mx-auto">
                         <path 
                             d="M 240 25 L 10 25"
