@@ -4,6 +4,8 @@ import RegisterPage from './RegisterFolder/RegisterPage'
 import ForgotPassword from './ForgotPasswordFolder/ForgotPasswordPage'
 import RecoveryPassword from './RecoveryPasswordFolder/RcoveryPasswordPage'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (

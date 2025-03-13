@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuthService from "../Shared/Auth/AuthService";
 import LoadingScreen from "../Components/LoadingComponent/LoadingScreen";
+import { ToastContainer,toast } from "react-toastify";
 
 function LoginPage(){
 
@@ -33,7 +34,7 @@ function LoginPage(){
         const rememberMe = document.querySelector('#RememberMe') as HTMLInputElement;
     
         if (!usernameInput?.value || !passwordInput?.value) {
-            alert('Please enter both username and password');
+            toast.error('Please enter both username and password');
             return;
         }
         setIsLoading(true);
@@ -57,7 +58,11 @@ function LoginPage(){
                     navigate('/404');
                 })
                 .catch(error => {
-                    alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
+                    console.log(error);
+                    setIsLoading(false);
+                    setTimeout(() => {
+                        toast.error('Login failed: ' + (error.response?.data?.detail || 'Unknown error'));
+                    }, 100);                 
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -73,16 +78,16 @@ function LoginPage(){
             <div id="TheTemplate_Login">
 
                 <div className="AllImg">
-                    <img id="BlueBg" src={BlueBg} alt="BlueBg" />
-                    <img id="TheImage" src={LogPhone} alt="loginImg" />
-                    <img id="SL" src={SecondLayer} alt="SecondLayer"></img>
+                    <img id="BlueBg" src={BlueBg} alt="BlueBg" loading="eager"/>
+                    <img id="TheImage" src={LogPhone} alt="loginImg" loading="eager"/>
+                    <img id="SL" src={SecondLayer} alt="SecondLayer" loading="eager"></img>
                 </div>
 
                 <div className="container1">
                 
                     <div className="TheBox_Log">
                         <h2 className="LoginTxt">Sign In</h2>
-                        <img id="icon" src={icon} alt="icon"></img>
+                        <img id="icon" src={icon} alt="icon" loading="eager"></img>
 
                         <div className="Txt_Input_Box_Log">
                             <input 
@@ -136,10 +141,18 @@ function LoginPage(){
                     </div>
                 </div>
 
-
-
-
-
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
 
             </div>
     );

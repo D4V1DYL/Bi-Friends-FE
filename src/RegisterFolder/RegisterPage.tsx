@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import "../RegisterFolder/RegisterPage.css";
 import AuthService from "../Shared/Auth/AuthService";
 import LoadingScreen from "../Components/LoadingComponent/LoadingScreen";
+import { ToastContainer,toast } from "react-toastify";
+
 
 function RegisterPage() {
     
@@ -33,24 +35,21 @@ function RegisterPage() {
     const [error, setError] = useState<string | null>(null);
 
     function handleRegistering(){
-
         const usernameInput = document.querySelector('.Name') as HTMLInputElement;
         const EmailInput = document.querySelector('.email') as HTMLInputElement;
         const NIMInput = document.querySelector('.NIM') as HTMLInputElement;
         const GenderInput = document.querySelector('.gender') as HTMLInputElement;
         const PasswordInput = document.querySelector('.Password_Register') as HTMLInputElement;
         const PasswordConfirmInput = document.querySelector('.Password_Confirm') as HTMLInputElement;
-        // const ProfilePictureInput = "aaa";
-        
 
-
-        if (usernameInput.value == null || EmailInput.value == null || NIMInput.value == null || GenderInput.value == null || PasswordInput.value == null || PasswordConfirmInput.value == null) {
-            setError("All fields are required!");
+        if (usernameInput.value == null || EmailInput.value == null || NIMInput.value == null || 
+            GenderInput.value == null || PasswordInput.value == null || PasswordConfirmInput.value == null) {
+            toast.error("All fields are required!");
             return;
         }
     
-        if (password != confirmPassword) {
-            setError("Password and Confirmation Password is not the same!");
+        if (password !== confirmPassword) {
+            toast.error("Password and Confirmation Password do not match!");
             return;
         }
 
@@ -65,20 +64,25 @@ function RegisterPage() {
             ProfilePicture: "Human"
         };
 
-        setTimeout(()=>{
+        setTimeout(() => {
             AuthService.register(registerData)
-            .then(() => {
-                alert("Registration Success!");
-                navigate("/"); 
-            })
-            .catch((error) => {
-                alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
-                setError("Registration Failed! Try Again")
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-        }, 3000)
+                .then(() => {
+                    toast.success("Registration successful!");
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 2000);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsLoading(false);
+                    setTimeout(() => {
+                        toast.error('Registration failed: ' + (error.response?.data?.detail || 'Unknown error'));
+                    }, 100);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }, 3000);
     }
 
     if(isLoading){
@@ -89,18 +93,18 @@ function RegisterPage() {
     return (
         <div id="TheTemplate">
             <div className="AllImg">
-                <img id="background" src={Bg} alt="Bg" />
-                <img id="logotxt" src={logotxt} alt="logotxt" />
-                <img id="oneball" src={oneball} alt="oneball" />
-                <img id="glad" src={glad} alt="Glad" />
-                <img id="balls" src={balls} alt="balls"></img>
-                <img id="TheImage_Register" src={PhonePic} alt="RegisterImg"></img>
+                <img id="background" src={Bg} alt="Bg" loading="eager"/>
+                <img id="logotxt" src={logotxt} alt="logotxt" loading="eager"/>
+                <img id="oneball" src={oneball} alt="oneball" loading="eager"/>
+                <img id="glad" src={glad} alt="Glad" loading="eager"/>
+                <img id="balls" src={balls} alt="balls" loading="eager"></img>
+                <img id="TheImage_Register" src={PhonePic} alt="RegisterImg" loading="eager"></img>
             </div>
             
                 <div className="boxwrap">
                     <div className="TheBox">
                         <h2 className="RegisterTxt">Sign Up</h2>
-                        <img id="icon" src={icon} alt="icon"></img>
+                        <img id="icon" src={icon} alt="icon" loading="eager"></img>
 
                         <div className="Txt_Input_Box">
                             <input className="Name" 
@@ -171,6 +175,18 @@ function RegisterPage() {
 
                     </div>
                 </div>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             </div>
     );
 }
