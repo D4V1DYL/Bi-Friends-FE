@@ -59,9 +59,12 @@ function LoginPage(){
 
     return(
             <div id="TheTemplate_Login">
-                
-                <img id="BlueBg" src={bluebg} alt="BlueBg"></img>
-                <img id="SL" src={SecondLayer} alt="SecondLayer"></img>
+
+                <div className="AllImg">
+                    <div className="BlueBg"></div>
+                    <img id="TheImage" src={LogPhone} alt="loginImg" />
+                    <img id="SL" src={SecondLayer} alt="SecondLayer"></img>
+                </div>
 
                 <div className="container1">
                 
@@ -104,19 +107,19 @@ function LoginPage(){
                         </div>
 
 
-
-                        <div className="DirectToRegister">
-                            <p>Don't Have an Account yet? <a className="Register" href="#" onClick={handleRegister}>Sign Up</a></p> 
+                        <div className="DirectToRegister_Box">
+                            <div className="DirectToRegister">
+                                <p className="DTRTxt">Don't Have an Account yet? <a className="Register" href="#" onClick={handleRegister}>Sign Up</a></p> 
+                            </div>
                         </div>
 
 
 
-
-
-                        <div className="ButtonBox">
-                            <button className="LoginBtn" onClick={handleLogin}>Login</button>
+                        <div className="Button_Box">
+                            <div className="ButtonBox">
+                                <button className="LoginBtn" onClick={handleLogin}>Login</button>
+                            </div>
                         </div>
-
 
                     </div>
                 </div>
@@ -124,9 +127,6 @@ function LoginPage(){
 
 
 
-                <div id="TheImage">
-                    <img src={LogPhone} alt="loginImg" />
-                </div>
 
 
             </div>

@@ -5,38 +5,38 @@ body.LoginPage {
 
 #TheTemplate_Login{
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   margin: 0;
-  height: 100vh;
+  height: 100vb;
   width: 100%;
   background: linear-gradient(160deg, #F5F0CD, #9b8a6e);
 }
 
-
-
-
-#BlueBg{
-  display: flex;
+.BlueBg {
+  width: 80vw;
+  height: 100vh;
+  background-color: #a6f0ff;
   position: absolute;
-  right: 0;
   top: 0;
-  height: 594px;
-  z-index: 1;  
+  right: 0;
+  clip-path: polygon(45% 0, 100% 0, 100% 100%, 60% 100%, 30% 30%);
 }
+
+
+
+
 #SL{
-  display: flex;
+  height: 100vh;
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
-  height: 36rem;
-  margin: 1rem 1rem 0 0;
   z-index: 2;
 }
 #TheImage{
-  display: flex;
-  height: 26.1rem;
-  width: 100%;
-  margin: 11rem 0 0 4rem;
+  height: 65vh;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   z-index: 3;
 }
 
@@ -46,18 +46,20 @@ body.LoginPage {
 
 
 
-.container1, .container2{
+.container1{
   display: flex;
   width: 100%; 
-  justify-content: center;
+  height: 100%;
+  justify-content: left;
   align-items: center;
   z-index: 4;
 }
 
 .TheBox_Log{
-  width: 700px;
-  height: 60%;
+  width: 50%;
+  height: 100%;
   display: flex;
+  margin: 5px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -104,7 +106,9 @@ body.LoginPage {
 .RememberBox_ForgetPassword_Box{
   display: flex;
   justify-content: space-between;
-  width: 430px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 60%;
 }
 
 .RememberBox{
@@ -153,6 +157,14 @@ body.LoginPage {
 
 
 
+
+
+.DirectToRegister_Box{
+  display: flex;
+  justify-content: right;
+  margin-left: 2%;
+  width: 60%;
+}
 .DirectToRegister{
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   display: flex;
@@ -166,14 +178,21 @@ body.LoginPage {
   color: black;
 }
 
+.DTRTxt{
+  width: 11rem;
+}
 
 
 
-
+.Button_Box{
+  display: flex;
+  justify-content: left;
+  margin-left: 2%;
+  width: 62%;
+}
 .ButtonBox{
   display: flex;
   justify-content: center;
-  margin: 0 19rem 0 0;
   width: 110px;
 }
 .LoginBtn{
@@ -193,4 +212,19 @@ body.LoginPage {
 .RegisterBox{
   display: flex;
   margin: 1rem 0 0 0;
+}
+
+
+
+
+
+
+@media (max-width: 1100px) {
+  .AllImg {
+    display: none;
+  }
+  #TheTemplate_Login, .container1 {
+    justify-content: center;
+    height: 800px;
+  }
 }
