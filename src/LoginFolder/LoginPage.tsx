@@ -2,7 +2,7 @@ import "../LoginFolder/LoginPage.css"
 import LogPhone from "../assets/LogPhone.svg";
 import icon from  "../assets/IconSignIn.svg";
 import SecondLayer from "../assets/SecondLayer.svg";
-import BlueBg from "../assets/BlueBg.svg";
+import BlueBg from "../assets/blueBg.svg";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
