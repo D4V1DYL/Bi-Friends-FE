@@ -9,7 +9,7 @@ body.LoginPage {
   margin: 0;
   height: 100vb;
   width: 100%;
-  background: linear-gradient(160deg, #F5F0CD, #9b8a6e);
+  background: linear-gradient(160deg, #F5F0CD, #e0c099);
 }
 
 .BlueBg {
@@ -213,7 +213,6 @@ body.LoginPage {
   display: flex;
   margin: 1rem 0 0 0;
 }
-
 
 
 

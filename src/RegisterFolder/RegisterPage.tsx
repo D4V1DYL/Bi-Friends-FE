@@ -77,16 +77,15 @@ function RegisterPage() {
 
     return (
         <div id="TheTemplate">
-
+            <div className="AllImg">
                 <img id="background" src={Bg} alt="Bg" />
                 <img id="logotxt" src={logotxt} alt="logotxt" />
                 <img id="oneball" src={oneball} alt="oneball" />
                 <img id="glad" src={glad} alt="Glad" />
                 <img id="balls" src={balls} alt="balls"></img>
-                <div id="TheImage_Register">
-                    <img src={PhonePic} alt="RegisterImg" /> 
-                </div>
-
+                <img id="TheImage_Register" src={PhonePic} alt="RegisterImg"></img>
+            </div>
+            
                 <div className="boxwrap">
                     <div className="TheBox">
                         <h2 className="RegisterTxt">Sign Up</h2>
@@ -148,11 +147,11 @@ function RegisterPage() {
                         </div>
 
                         {error && <p style={{ color: "red" }}>{error}</p>}
-
-                        <div className="DirectToLogin">
-                            <p>Already have an account? <b><Link id="GoToLogin" to="/">Login</Link></b> </p> 
+                        <div className="DTL_Box">
+                            <div className="DirectToLogin">
+                                <p>Already have an account? <b><Link id="GoToLogin" to="/">Login</Link></b> </p> 
+                            </div>
                         </div>
-
                         <div className="RegisterBox">
                             <button className="RegisterBtn" onClick={handleRegistering}>Register</button>
                         </div>

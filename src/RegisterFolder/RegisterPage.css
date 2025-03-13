@@ -5,9 +5,9 @@ body.RegisterPage {
 
 #TheTemplate{
     display: flex;
-    justify-content: center;
+    justify-content: right;
     margin: 0;
-    height: 100vh;
+    height: 100vb;
     width: 100%;
     background: linear-gradient(to bottom, #B1F0F7, #6DA8C2);
 }
@@ -16,62 +16,50 @@ body.RegisterPage {
 
 
 #background{
-    display: flex;
+    height: 100vh;
     position: absolute;
-    left: 0px;
     top: 0;
-    height: 594px;
+    left: 0;
     z-index: 1;
 }
 
 #logotxt{
-    display: flex;
+    height: 8vh;
     position: absolute;
-    height: 5rem;
-    width: 8rem;
-    margin: 0 0 5rem 1rem;
-    top: 0;
-    left: 0;
+    top: 2%;
+    left: 1%;
     z-index: 3;
 }
 
 #oneball{
-    display: flex;
+    height: 15vh;
     position: absolute;
-    height: 5rem;
-    width: 5rem;
-    margin: 8.5rem 0 0 19rem;
-    top: 0;
-    left: 0;
+    top: 20%;
+    left: 20%;
     z-index: 2;
 }
 
 #glad{
-    display: flex;
+    height: 15vh;
     position: absolute;
-    height: 17rem;
-    width: 25rem;
-    margin: 1rem 0 0 5rem;
-    top: 0;
-    left: 0;
-    z-index: 3;
+    top: 15%;
+    left: 5%;
+    z-index: 4;
 }
 
 #balls{
-    display: flex;
+    height: 65vh;
     position: absolute;
-    height: 18rem;
-    width: 18rem;
-    margin: 16rem 0 3rem 5rem;
+    bottom: 0;
     left: 0;
     z-index: 4;
 }
 
 #TheImage_Register{
-    display: flex;
-    height: 23rem;
-    width: 100%;
-    margin: 14rem 0 0 2rem;
+    height: 65vh;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     z-index: 5;
 }
   
@@ -103,17 +91,16 @@ body.RegisterPage {
 
 
 .boxwrap{
-    width: 100%;
+    width: 50%;
     height: 60%;
     display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
     margin: 6% 0 0 0;
 }
 
 .TheBox{
-    width: 70%;
+    width: 100%;
     height: 60%;
     display: flex;
     justify-content: center;
@@ -167,7 +154,12 @@ body.RegisterPage {
 
 
 
-
+.DTL_Box{
+    display: flex;
+    justify-content: left;
+    margin-left: 2%;
+    width: 75%;
+}
 .RegisterBox{
     display: flex;
     justify-content: center;
@@ -189,4 +181,15 @@ body.RegisterPage {
 }
 .RegisterBtn:hover{
     background-color: #e3dfc0;
+}
+
+
+@media (max-width: 1100px) {
+    .AllImg {
+      display: none;
+    }
+    #TheTemplate{
+      justify-content: center;
+      height: 800px;
+    }
 }
