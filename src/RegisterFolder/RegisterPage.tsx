@@ -10,6 +10,7 @@ import icon from  "../assets/IconSignIn.svg";
 import { Link } from "react-router-dom";
 import "../RegisterFolder/RegisterPage.css";
 import AuthService from "../Shared/Auth/AuthService";
+import LoadingScreen from "../Components/LoadingComponent/LoadingScreen";
 
 function RegisterPage() {
     
@@ -28,6 +29,7 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [gender, setGender] = useState('');
     // const [ProfilePicture, setProfilePicture] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     function handleRegistering(){
@@ -52,6 +54,8 @@ function RegisterPage() {
             return;
         }
 
+        setIsLoading(true);
+
         const registerData = {
             username: usernameInput.value,
             email: EmailInput.value,
@@ -61,7 +65,8 @@ function RegisterPage() {
             ProfilePicture: "Human"
         };
 
-        AuthService.register(registerData)
+        setTimeout(()=>{
+            AuthService.register(registerData)
             .then(() => {
                 alert("Registration Success!");
                 navigate("/"); 
@@ -70,8 +75,14 @@ function RegisterPage() {
                 alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
                 setError("Registration Failed! Try Again")
             })
+            .finally(() => {
+                setIsLoading(false);
+            });
+        }, 3000)
+    }
 
-
+    if(isLoading){
+        return <LoadingScreen/>
     }
 
 

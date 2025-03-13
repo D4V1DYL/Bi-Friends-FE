@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuthService from "../Shared/Auth/AuthService";
+import LoadingScreen from "../Components/LoadingComponent/LoadingScreen";
 
 function LoginPage(){
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -34,27 +36,37 @@ function LoginPage(){
             alert('Please enter both username and password');
             return;
         }
+        setIsLoading(true);
     
         const loginData = {
             nim: usernameInput.value,
             password: passwordInput.value
         };
     
-        AuthService.login(loginData)
-            .then(response => {
-                const token = response.access_token;
-                
-                if (rememberMe.checked) {
-                    localStorage.setItem('token', token);
-                } else {
-                    sessionStorage.setItem('token', token);
-                }
-                
-                navigate('/404');
-            })
-            .catch(error => {
-                alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
-            });
+        setTimeout(() => {
+            AuthService.login(loginData)
+                .then(response => {
+                    const token = response.access_token;
+                    
+                    if (rememberMe.checked) {
+                        localStorage.setItem('token', token);
+                    } else {
+                        sessionStorage.setItem('token', token);
+                    }
+                    
+                    navigate('/404');
+                })
+                .catch(error => {
+                    alert('Login failed: ' + (error.response?.data?.message || 'Unknown error'));
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }, 3000); // 3 seconds delay
+    }
+
+    if(isLoading) {
+        return <LoadingScreen/>
     }
 
     return(
