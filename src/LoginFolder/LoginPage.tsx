@@ -1,7 +1,6 @@
 import "../LoginFolder/LoginPage.css"
 import LogPhone from "../assets/LogPhone.svg";
 import icon from  "../assets/IconSignIn.svg";
-import bluebg from "../assets/blueBg.svg";
 import SecondLayer from "../assets/SecondLayer.svg";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
