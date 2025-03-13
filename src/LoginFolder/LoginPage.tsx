@@ -2,6 +2,7 @@ import "../LoginFolder/LoginPage.css"
 import LogPhone from "../assets/LogPhone.svg";
 import icon from  "../assets/IconSignIn.svg";
 import SecondLayer from "../assets/SecondLayer.svg";
+import BlueBg from "../assets/BlueBg.svg";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -60,7 +61,7 @@ function LoginPage(){
             <div id="TheTemplate_Login">
 
                 <div className="AllImg">
-                    <div className="BlueBg"></div>
+                    <img id="BlueBg" src={BlueBg} alt="BlueBg" />
                     <img id="TheImage" src={LogPhone} alt="loginImg" />
                     <img id="SL" src={SecondLayer} alt="SecondLayer"></img>
                 </div>

@@ -12,14 +12,13 @@ body.LoginPage {
   background: linear-gradient(160deg, #F5F0CD, #e0c099);
 }
 
-.BlueBg {
-  width: 80vw;
+#BlueBg {
+  display: flex;
   height: 100vh;
-  background-color: #a6f0ff;
   position: absolute;
   top: 0;
   right: 0;
-  clip-path: polygon(45% 0, 100% 0, 100% 100%, 60% 100%, 30% 30%);
+  z-index: 1;
 }
 
 
