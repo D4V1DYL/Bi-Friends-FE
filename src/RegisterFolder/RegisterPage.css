@@ -123,6 +123,16 @@ body.RegisterPage {
     margin-bottom: 1rem;
 }
 
+.RadioBox{
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    margin-bottom: 1rem;
+}
+
 .Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email, .gender{
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     display: flex;

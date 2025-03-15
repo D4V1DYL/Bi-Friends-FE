@@ -38,7 +38,7 @@ function RegisterPage() {
         const usernameInput = document.querySelector('.Name') as HTMLInputElement;
         const EmailInput = document.querySelector('.email') as HTMLInputElement;
         const NIMInput = document.querySelector('.NIM') as HTMLInputElement;
-        const GenderInput = document.querySelector('.gender') as HTMLInputElement;
+        const GenderInput = document.querySelector('input[name="gender"]:checked') as HTMLInputElement;
         const PasswordInput = document.querySelector('.Password_Register') as HTMLInputElement;
         const PasswordConfirmInput = document.querySelector('.Password_Confirm') as HTMLInputElement;
 
@@ -137,14 +137,30 @@ function RegisterPage() {
                             />
                         </div>
 
-                        
-                        <div className="Txt_Input_Box">
-                            <input className="gender" 
-                                type="text" 
-                                placeholder="Gender"
-                                value={gender}
-                                onChange={(e) => setGender(e.target.value)}
-                            />
+                        <div className="RadioBox">
+
+                            <label>Gender:</label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="Male"
+                                    checked={gender == "Male"}
+                                    onChange={(e) => setGender(e.target.value)}
+                                />
+                                Male
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="Female"
+                                    checked={gender == "Female"}
+                                    onChange={(e) => setGender(e.target.value)}
+                                />
+                                Female
+                            </label>
                         </div>
 
                         <div className="Txt_Input_Box">
