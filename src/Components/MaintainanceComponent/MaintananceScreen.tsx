@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import Picture from '../../assets/Friends.png';
-import logo from '../../assets/logo.png';
+import Picture from '../../assets/Friends.webp';
+import logo from '../../assets/logo.webp';
 
 import { ReactNode } from 'react';
 
