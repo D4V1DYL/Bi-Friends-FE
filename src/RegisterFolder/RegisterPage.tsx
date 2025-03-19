@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import PhonePic from "../assets/PhonePic.svg"
+import PhonePic from "../assets/PhonePic.webp"
 import Bg from "../assets/Bg.svg";
 import balls from "../assets/balls.svg";
 import glad from "../assets/gladtxt.svg";

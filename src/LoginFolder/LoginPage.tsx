@@ -1,5 +1,5 @@
 import "../LoginFolder/LoginPage.css"
-import LogPhone from "../assets/LogPhone.svg";
+import LogPhone from "../assets/LogPhone.webp";
 import icon from  "../assets/IconSignIn.svg";
 import SecondLayer from "../assets/SecondLayer.svg";
 import BlueBg from "../assets/blueBg.svg";

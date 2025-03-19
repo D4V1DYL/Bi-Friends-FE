@@ -1,6 +1,6 @@
 import React from 'react';
 import './LoadingScreen.css';
-import beeLogo from '../../assets/logo.png'
+import beeLogo from '../../assets/logo.webp'
 import { GradientBackground } from '../MaintainanceComponent/MaintananceScreen';
 
 
