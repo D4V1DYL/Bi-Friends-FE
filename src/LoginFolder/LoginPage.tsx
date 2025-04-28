@@ -55,7 +55,7 @@ function LoginPage(){
                         sessionStorage.setItem('token', token);
                     }
                     
-                    navigate('/404');
+                    navigate('/HomePage');
                 })
                 .catch(error => {
                     setIsLoading(false);
