@@ -26,12 +26,25 @@
   }
   
   .nav-icon {
-    width: 24px;
-    height: 24px;
     margin-left: 20px;
     cursor: pointer;
   }
   
+  #chat-logo{
+    width: 33px;
+    height: 35px;
+  }
+
+  #calender-logo{
+    width: 27px;
+    height: 27px;
+  }
+
+  #notification-logo{
+    width: 30px;
+    height: 30px;
+  }
+
   .nav-avatar {
     width: 36px;
     height: 36px;

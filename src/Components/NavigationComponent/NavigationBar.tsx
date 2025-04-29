@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import chatLogo from '../../assets/chatLogo.png'
-import beeLogo from '../../assets/logo.webp'
-import notificationLogo from '../../assets/notificationLogo.png'
-import profileLogo from '../../assets/profileLogo.png'
+import chatLogo from '../../assets/chatLogo.svg';
+import beeLogo from '../../assets/logo.webp';
+import calenderLogo from '../../assets/Calender.svg';
+import notificationLogo from '../../assets/notificationLogo.svg';
+import profileLogo from '../../assets/profileLogo.png';
 import './NavigationBar.css';
 
 const user = {
@@ -23,9 +24,15 @@ const NavigationBar: React.FC = () => {
 
       <div className="nav-right">
         <Link to ="/ChatPage">
-            <img src={chatLogo} alt="Messages" className="nav-icon" />
+            <img src={chatLogo} alt="Messages" className="nav-icon" id='chat-logo'/>
         </Link>
-            <img src={notificationLogo} alt="Notifications" className="nav-icon" />
+        
+        <Link to ="/CalenderPage">
+            <img src={calenderLogo} alt="Calender" className="nav-icon" id='calender-logo'/>
+        </Link>
+
+            <img src={notificationLogo} alt="Notifications" className="nav-icon" id='notification-logo'/>
+        
         <Link to="/ProfilePage">
           <img src={profileImage} alt="Profile" className="nav-avatar" />
         </Link>
