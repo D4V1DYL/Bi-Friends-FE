@@ -1,0 +1,32 @@
+.event-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .event-widget {
+    background-color: #F5F0CD;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 320px;
+    margin: 16px auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .event-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  .event-card h4 {
+    margin: 8px 0;
+    font-weight: bold;
+  }
+  
+  .event-card p {
+    margin: 4px 0;
+    color: #555;
+  }
+  
