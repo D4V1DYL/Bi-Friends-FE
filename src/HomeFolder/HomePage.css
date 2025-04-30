@@ -30,4 +30,64 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  .inputForm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Untuk center secara horizontal */
+    gap: 10px;
+    margin-top: 20px;
+    flex-direction: column;
+
+  }
   
+  .profile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+  }
+  
+  #textinput {
+    border: none;
+    outline: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #f0f0f0; /* Biar tetap ada background */
+    font-size: 14px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  #textinput:focus {
+    border: none;
+    outline: none;
+  }
+
+  #submitButton {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 4px 24px;       
+    border-radius: 25px;    
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    min-width: 100px;        
+    height: 32px;            
+  }
+  
+  #submitButton:hover {
+    background-color: #525252;
+  }
+
+  .divAtas{
+    flex-direction: row;
+    display: flex;
+  }
+
+  .divBawah{
+    display: flex;
+    padding-left: 150px;
+  }
