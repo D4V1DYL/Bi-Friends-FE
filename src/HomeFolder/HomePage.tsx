@@ -6,20 +6,17 @@ import profile from '../assets/profileLogo.png';
 import pin from '../assets/pinn.png';
 
 const HomePage: React.FC = () => {
-  const [media, setMedia] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image')) { // Pastikan hanya gambar yang diterima
-      setMedia(file);
+    if (file && file.type.startsWith('image')) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setMediaPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     } else {
-      // Menangani jika file bukan gambar
       alert('Please upload an image file.');
     }
   };
