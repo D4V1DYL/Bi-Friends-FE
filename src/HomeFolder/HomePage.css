@@ -34,35 +34,44 @@
   .inputForm {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Untuk center secara horizontal */
+    justify-content: space-between; 
     gap: 10px;
     margin-top: 20px;
     flex-direction: column;
-
+    margin-left: 250px;
   }
   
   .profile-icon {
-    width: 36px;
-    height: 36px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid #ccc;
   }
   
   #textinput {
+    resize: none; 
     border: none;
     outline: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background-color: #f0f0f0; /* Biar tetap ada background */
-    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    font-size: 15px;
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
+    line-height: 1.4;
+    overflow-y: auto;
+    min-height: 48px;
+    max-height: 200px;
   }
 
   #textinput:focus {
     border: none;
     outline: none;
+  }
+  #textinput::placeholder {
+    font-size: 19px; 
+    color: #888; 
   }
 
   #submitButton {
@@ -85,9 +94,45 @@
   .divAtas{
     flex-direction: row;
     display: flex;
+    width: 500px;
   }
 
   .divBawah{
     display: flex;
-    padding-left: 150px;
+    padding-left: 360px;
   }
+
+  #eventButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    width: 32px;
+    height: 22px;
+    border-radius: 50%;
+    padding-top: 10px;
+  }
+  
+  #eventButton .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  #eventButton:hover{
+    opacity: 0.7;
+  }
+
+
+  .media-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .media-thumbnail {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: contain;
+  }
+  
