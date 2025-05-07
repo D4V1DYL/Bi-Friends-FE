@@ -193,6 +193,12 @@ body.RegisterPage {
     background-color: #e3dfc0;
 }
 
+.AllImg{
+    z-index: 0;
+}
+.boxwrap{
+    z-index: 1;
+}
 
 @media (max-width: 1100px) {
     .AllImg {
