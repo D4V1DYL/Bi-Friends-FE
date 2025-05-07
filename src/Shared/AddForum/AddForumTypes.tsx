@@ -11,4 +11,3 @@ export interface ForumInput{
     location_latitude: number;
     location_longitude: number;
 }
-

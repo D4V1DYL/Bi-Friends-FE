@@ -6,13 +6,16 @@
 
   .homepage-content {
     display: flex;
-    flex: 1;
+    justify-content: space-between;
     padding: 16px;
+    gap: 24px;
   }
   
   .main-content {
-    flex: 3;
-    padding-right: 16px;
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .event-title {
@@ -24,11 +27,12 @@
   
   .event-section {
     flex-direction: column; 
-    align-items: center;     
+    flex-shrink: 0;
+    max-width: 250px;   
     margin-top: 24px;
     flex: 1;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .inputForm {
@@ -135,4 +139,52 @@
     border-radius: 10px;
     object-fit: contain;
   }
-  
+
+ .forum-list {
+  flex: 2; 
+  flex-direction: column;
+  padding: 12px 16px;
+  background-color: #F5F0CD;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  max-width: 600px;
+  overflow-y: auto;
+  margin-top: 20px;
+  margin-left: 620px;
+}
+
+.forum-card {
+  background-color: white;
+  padding: 8px 12px; /* Padding lebih kecil */
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 12px; /* Ukuran font lebih kecil */
+}
+
+.forum-card:hover {
+  transform: translateY(-5px); /* Efek sedikit terangkat saat hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Shadow lebih gelap saat hover */
+}
+
+.forum-card h4 {
+  font-size: 0.9rem; /* Ukuran font lebih kecil untuk judul */
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px; /* Lebih sedikit jarak antara judul dan konten */
+}
+
+.forum-card p {
+  font-size: 0.8rem; /* Ukuran font lebih kecil untuk deskripsi */
+  color: #555;
+  margin-bottom: 8px; /* Lebih sedikit jarak antara paragraf */
+}
+
+.forum-card hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin-top: 8px; /* Mengurangi jarak antara garis horizontal dan konten */
+}
