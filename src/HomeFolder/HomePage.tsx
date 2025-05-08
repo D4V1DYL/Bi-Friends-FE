@@ -3,7 +3,6 @@ import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
 import profile from '../assets/profileLogo.png';
-import pin from '../assets/pinn.png';
 import GetForumService from "../Shared/GetForum/GetForumService";
 import upload from '../assets/upload.png';
 import event from '../assets/event.png';
