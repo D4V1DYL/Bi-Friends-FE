@@ -4,9 +4,43 @@ import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
 import profile from '../assets/profileLogo.png';
 import pin from '../assets/pinn.png';
+import GetForumService from "../Shared/GetForum/GetForumService";
+import upload from '../assets/upload.png';
+import event from '../assets/event.png';
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [forums, setForums] = useState<any[]>([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const dummyPosts = [
+    {
+      title: "Belajar bersama Binusian",
+      description: "Belajar bareng di Binus University",
+      forum_text: "Acara belajar bersama mahasiswa Binusian. Tempat dan waktu akan diumumkan.",
+      subject_name: "Belajar",
+      event_name: "Study Together",
+      event_date: "2025-05-12",
+      location_name: "Binus University",
+      location_address: "Jl. Kemandoran Raya, Jakarta",
+      location_capacity: 100,
+      location_latitude: -6.158623,
+      location_longitude: 106.734428
+    },
+    {
+      title: "Test Forum 2",
+      description: "Ini hanya test doang ges",
+      forum_text: "Sekedar testing forum, tidak ada event penting di sini.",
+      subject_name: "Yey123",
+      event_name: "Study Together",
+      event_date: "2005-12-12",
+      location_name: "Binus Square",
+      location_address: "Binus Square Building, Jakarta",
+      location_capacity: 50,
+      location_latitude: -6.158123,
+      location_longitude: 106.734028
+    }
+  ];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -29,6 +63,7 @@ const HomePage: React.FC = () => {
           <div className='inputForm'>
             <div className='divAtas'>
               <img src={profile} alt="Profile" className="profile-icon" />
+              
               <textarea
                 id="textinput"
                 placeholder="What's new?"
@@ -41,8 +76,14 @@ const HomePage: React.FC = () => {
               ></textarea>
 
               
+              {/* Event Icon Button */}
+              <button onClick={() => setShowPopup(true)} id="eventPopupButton">
+                <img src={event} alt="Event Icon" className="icon" />
+              </button>
+
+              {/* Upload Button */}
               <label htmlFor="file-upload" id="eventButton">
-                <img src={pin} alt="Event Icon" className="icon" />
+                <img src={upload} alt="Upload Icon" className="icon" />
               </label>
               <input
                 type="file"
@@ -70,6 +111,53 @@ const HomePage: React.FC = () => {
           <EventWidget />
         </div>
       </div>
+
+      {/* Popup */}
+      {showPopup && (
+        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Make An Event</h3>
+
+            <label htmlFor="event-name">Event Name:</label>
+            <input
+              type="text"
+              id="event-name"
+              className="popup-input"
+              placeholder="Enter event name"
+            />
+
+            <label htmlFor="event-location">Location:</label>
+            <input
+              type="text"
+              id="event-location"
+              className="popup-input"
+              placeholder="Enter event location"
+            />
+
+            <label htmlFor="event-description">Description:</label>
+            <input
+              type="text"
+              id="event-description"
+              className="popup-input"
+              placeholder="Where the party at"
+            />
+
+            <div className="popup-buttons">
+              <button className="cancel-button" onClick={() => setShowPopup(false)}>
+                Close
+              </button>
+
+              <button className="submit-button" onClick={() => setShowPopup(false)}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
+
     </div>
   );
 };

@@ -84,7 +84,8 @@
     font-size: 14px;
     transition: background-color 0.2s ease;
     min-width: 100px;        
-    height: 32px;            
+    height: 32px;      
+    margin-left: 39px;     
   }
   
   #submitButton:hover {
@@ -122,6 +123,26 @@
     opacity: 0.7;
   }
 
+  #eventPopupButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    width: 42px;
+    height: 22px;
+    border-radius: 50%;
+    padding-top: 10px;
+  }
+  
+  #eventPopupButton .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  #eventPopupButton:hover{
+    opacity: 0.7;
+  }
+
 
   .media-preview {
     margin-top: 10px;
@@ -136,3 +157,161 @@
     object-fit: contain;
   }
   
+
+ .forum-list {
+  flex: 2; 
+  flex-direction: column;
+  padding: 12px 16px;
+  background-color: #F5F0CD;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  max-width: 600px;
+  overflow-y: auto;
+  margin-top: 20px;
+  margin-left: 620px;
+}
+
+.forum-card {
+  background-color: white;
+  padding: 8px 12px; /* Padding lebih kecil */
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 12px; /* Ukuran font lebih kecil */
+}
+
+.forum-card:hover {
+  transform: translateY(-5px); /* Efek sedikit terangkat saat hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Shadow lebih gelap saat hover */
+}
+
+.forum-card h4 {
+  font-size: 0.9rem; /* Ukuran font lebih kecil untuk judul */
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px; /* Lebih sedikit jarak antara judul dan konten */
+}
+
+.forum-card p {
+  font-size: 0.8rem; /* Ukuran font lebih kecil untuk deskripsi */
+  color: #555;
+  margin-bottom: 8px; /* Lebih sedikit jarak antara paragraf */
+}
+
+.forum-card hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin-top: 8px; /* Mengurangi jarak antara garis horizontal dan konten */
+}
+
+/* Overlay gelap */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Kontainer popup */
+.popup-content {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Judul popup */
+.popup-content h3 {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Label input */
+.popup-content label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Input styling */
+.popup-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+.popup-input:focus {
+  background-color: #eaeaea;
+}
+
+/* Tombol */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancel-button,
+.submit-button {
+  flex: 1;
+  padding: 10px;
+  margin: 0 4px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #0062cc;
+}
+
+/* Animasi masuk */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
