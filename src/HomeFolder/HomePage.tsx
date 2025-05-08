@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
@@ -55,6 +55,21 @@ const HomePage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchForums = async () => {
+      try {
+        const data = await GetForumService.getAllForums();
+        console.log("Data dari API:", data);
+        setForums(data);
+      } catch (error) {
+        console.error('Gagal mengambil data forum:', error);
+        setForums(dummyPosts);
+      }
+    };
+
+    fetchForums();
+  }, []);
+
   return (
     <div className="homepage">
       <NavigationBar />
@@ -88,7 +103,7 @@ const HomePage: React.FC = () => {
               <input
                 type="file"
                 id="file-upload"
-                accept="image/*"  
+                accept="image/*"
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
               />
@@ -101,8 +116,30 @@ const HomePage: React.FC = () => {
             )}
 
             <div className='divBawah'>
-              <button id="submitButton">post</button>
+              <button id="submitButton">Post</button>
             </div>
+          </div>
+
+          <div className="forum-list">
+            {forums.length === 0 ? (
+              <p>Tidak ada forum untuk ditampilkan</p>
+            ) : (
+              forums.map((forum, index) => (
+                <div key={forum.post_id ?? index} className="forum-card">
+                  <h4>{forum.title}</h4>
+                  <p>{forum.description}</p>
+                  {forum.msuser?.username && (
+                    <p><strong>Oleh:</strong> {forum.msuser.username}</p>
+                  )}
+                  <p><strong>Subjek:</strong> {forum.subject_name ?? forum.mssubject?.subject_name}</p>
+                  <p>
+                    <strong>Event:</strong> {forum.event_name ?? forum.msevent?.event_name} (
+                    {forum.event_date ?? forum.msevent?.event_date})
+                  </p>
+                  <hr />
+                </div>
+              ))
+            )}
           </div>
         </div>
 
