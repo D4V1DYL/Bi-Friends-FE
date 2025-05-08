@@ -150,46 +150,48 @@ const HomePage: React.FC = () => {
 
       {/* Popup */}
       {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Make An Event</h3>
+  <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+    <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+      <h3>Make An Event</h3>
 
-            <label htmlFor="event-name">Event Name:</label>
-            <input
-              type="text"
-              id="event-name"
-              className="popup-input"
-              placeholder="Enter event name"
-            />
+      <label htmlFor="event-name">Event Name:</label>
+      <input
+        type="text"
+        id="event-name"
+        className="popup-input"
+        placeholder="Enter event name"
+      />
 
-            <label htmlFor="event-location">Location:</label>
-            <input
-              type="text"
-              id="event-location"
-              className="popup-input"
-              placeholder="Enter event location"
-            />
+      <label htmlFor="event-location">Location:</label>
+      <input
+        type="text"
+        id="event-location"
+        className="popup-input"
+        placeholder="Enter event location"
+      />
 
-            <label htmlFor="event-description">Description:</label>
-            <input
-              type="text"
-              id="event-description"
-              className="popup-input"
-              placeholder="Where the party at"
-            />
+      <label htmlFor="event-description">Description:</label>
+      <input
+        type="text"
+        id="event-description"
+        className="popup-input"
+        placeholder="Where the party at"
+      />
 
-            <div className="popup-buttons">
-              <button className="cancel-button" onClick={() => setShowPopup(false)}>
-                Close
-              </button>
+      <div className="popup-buttons">
+        <button className="cancel-button" onClick={() => setShowPopup(false)}>
+          Close
+        </button>
 
-              <button className="submit-button" onClick={() => setShowPopup(false)}>
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        <button className="submit-button" onClick={() => setShowPopup(false)}>
+          Submit
+        </button>
+
+      </div>
+    </div>
+  </div>
+)}
+
 
 
 
