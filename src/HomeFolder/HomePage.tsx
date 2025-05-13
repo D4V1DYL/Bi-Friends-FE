@@ -125,7 +125,7 @@ const HomePage: React.FC = () => {
   ) : (
     forums.map((forum, index) => {
       const user = forum.msuser ?? {
-        username: "(Username)",
+        username: "Username",
         profile_image: profile, 
       };
       const subject = forum.subject_name ?? forum.mssubject?.subject_name;
