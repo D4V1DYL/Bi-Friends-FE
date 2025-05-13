@@ -120,26 +120,65 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="forum-list">
-            {forums.length === 0 ? (
-              <p>Tidak ada forum untuk ditampilkan</p>
-            ) : (
-              forums.map((forum, index) => (
-                <div key={forum.post_id ?? index} className="forum-card">
-                  <h4>{forum.title}</h4>
-                  <p>{forum.description}</p>
-                  {forum.msuser?.username && (
-                    <p><strong>Oleh:</strong> {forum.msuser.username}</p>
-                  )}
-                  <p><strong>Subjek:</strong> {forum.subject_name ?? forum.mssubject?.subject_name}</p>
-                  <p>
-                    <strong>Event:</strong> {forum.event_name ?? forum.msevent?.event_name} (
-                    {forum.event_date ?? forum.msevent?.event_date})
-                  </p>
-                  <hr />
-                </div>
-              ))
-            )}
-          </div>
+  {forums.length === 0 ? (
+    <p>Tidak ada forum untuk ditampilkan</p>
+  ) : (
+    forums.map((forum, index) => {
+      const user = forum.msuser ?? {
+        username: "(Username)",
+        profile_image: profile, 
+      };
+      const subject = forum.subject_name ?? forum.mssubject?.subject_name;
+      const eventName = forum.event_name ?? forum.msevent?.event_name;
+      const eventDate = forum.event_date ?? forum.msevent?.event_date;
+      const participants = forum.participants ?? forum.total_participants;
+
+      const isEventForum = eventName && eventDate;
+
+      return (
+        <div key={forum.post_id ?? index} className="forum-card">
+
+          {/* Tampilin user */}
+          {user && (
+            <div className="forum-user-info">
+              <img
+                src={user.profile_image ?? profile} // fallback ke default jika null
+                alt="User"
+                className="user-avatar-small"
+              />
+              <div className="user-meta">
+                <p className="username">{user.username}</p>
+                {user.major && <p className="major">{user.major}</p>}
+              </div>
+            </div>
+          )}
+
+          {/* Forum Biasa */}
+          <h4>{forum.title}</h4>
+          <p>{forum.description}</p>
+          {subject && <p><strong>Subjek:</strong> {subject}</p>}
+
+          {/* Event */}
+          {isEventForum ? (
+            <div className="event-info">
+              <p><strong>Event:</strong> {eventName} ({eventDate})</p>
+              <p><strong>Lokasi:</strong> {forum.location_name ?? 'Tidak disebutkan'}</p>
+              {participants && <p><strong>Partisipan:</strong> {participants} orang</p>}
+            </div>
+          ) : (
+            <div className="text-forum-content">
+              <p>{forum.forum_text}</p>
+            </div>
+          )}
+
+          <hr />
+        </div>
+      );
+    })
+  )}
+</div>
+ 
+
         </div>
 
         <div className="event-section">
