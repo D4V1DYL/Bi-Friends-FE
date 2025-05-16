@@ -6,6 +6,7 @@ import profile from '../assets/profileLogo.png';
 import GetForumService from "../Shared/GetForum/GetForumService";
 import upload from '../assets/upload.png';
 import event from '../assets/event.png';
+import search from '../assets/SearchIcon.svg';
 
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
@@ -69,10 +70,61 @@ const HomePage: React.FC = () => {
     fetchForums();
   }, []);
 
+
+const dummySubjects = [
+  { id: 1, name: "Netflix n Chill" },
+  { id: 2, name: "Sport" },
+  { id: 3, name: "Basketball" },
+  { id: 4, name: "Writing" },
+  { id: 5, name: "Coding Geeks" },
+  { id: 6, name: "JollayBay" },
+  { id: 7, name: "Marketing Gods" },
+  { id: 8, name: "Gaming" },
+  { id: 9, name: "Memes" },
+  { id: 10, name: "Night Club" },
+];
+
+const Sidebar: React.FC = () => {
+  const [subjects, setSubjects] = useState<{ id: number; name: string }[]>([]);
+
+  useEffect(() => {
+    setSubjects(dummySubjects);
+  }, []);
+
+  return (
+    <div className="sidebar">
+
+      <div className='sidebar-content'>
+          <div className="search-bar">
+            
+            <img src={search} alt="Search_Icon" className='search-icon'/>
+
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search"
+            />
+          </div>
+
+          <div className="subject-collection">
+            {subjects.map((subject) => (
+              <p key={subject.id} className="subject-name">
+                {subject.name}
+              </p>
+            ))}
+          </div>
+      </div>
+
+    </div>
+  );
+};
+  
   return (
     <div className="homepage">
       <NavigationBar />
       <div className="homepage-content">
+      <Sidebar />
+      
         <div className="main-content">
           <div className='inputForm'>
             <div className='divAtas'>
