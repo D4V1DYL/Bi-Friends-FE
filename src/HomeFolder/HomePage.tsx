@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
@@ -7,11 +7,17 @@ import GetForumService from "../Shared/GetForum/GetForumService";
 import upload from '../assets/upload.png';
 import event from '../assets/event.png';
 import search from '../assets/SearchIcon.svg';
+import dots from '../assets/3dot.png';
+import Swal from 'sweetalert2';
+
 
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [forums, setForums] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
+  const contextMenuRef = useRef<HTMLDivElement | null>(null);
+
 
   const dummyPosts = [
     {
@@ -90,6 +96,23 @@ const Sidebar: React.FC = () => {
   useEffect(() => {
     setSubjects(dummySubjects);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        contextMenuRef.current &&
+        !contextMenuRef.current.contains(event.target as Node)
+      ) {
+        setActiveMenuPostId(null); // Tutup context menu kalau klik di luar
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <div className="sidebar">
@@ -189,7 +212,7 @@ const Sidebar: React.FC = () => {
 
       return (
         <div key={forum.post_id ?? index} className="forum-card">
-
+          
           {/* Tampilin user */}
           {user && (
             <div className="forum-user-info">
@@ -202,6 +225,48 @@ const Sidebar: React.FC = () => {
                 <p className="username">{user.username}</p>
                 {user.major && <p className="major">{user.major}</p>}
               </div>
+              
+              <div className="menu-wrapper">
+              <button
+                className="dots-button"
+                onClick={() => setActiveMenuPostId(forum.post_id ?? index)}
+              >
+                <img src={dots} alt="Options" className="dots-icon" />
+              </button>
+
+              {activeMenuPostId === (forum.post_id ?? index) && (
+                <div className="context-menu" ref={contextMenuRef}>
+                  <button
+                    className="context-menu-item"
+                    onClick={async () => {
+                      const result = await Swal.fire({
+                        title: 'Yakin ingin menghapus?',
+                        text: "Post ini akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal',
+                      });
+
+                      if (result.isConfirmed) {
+                        console.log("Confirmed delete for post:", forum.post_id ?? index);
+                        // TODO: Hapus post dari state atau panggil API di sini
+                        await Swal.fire('Dihapus!', 'Post telah dihapus.', 'success');
+                      }
+
+                      setActiveMenuPostId(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+
+            </div>
+            
+              
             </div>
           )}
 
