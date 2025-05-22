@@ -318,6 +318,14 @@ const Sidebar: React.FC = () => {
         placeholder="Enter event name"
       />
 
+      <label htmlFor="event-description">Description:</label>
+      <input
+        type="text"
+        id="event-description"
+        className="popup-input"
+        placeholder="Where the party at"
+      />
+
       <label htmlFor="event-location">Location:</label>
       <input
         type="text"
@@ -326,12 +334,39 @@ const Sidebar: React.FC = () => {
         placeholder="Enter event location"
       />
 
-      <label htmlFor="event-description">Description:</label>
+      
+
+      <label htmlFor="event-date">Date:</label>
       <input
         type="text"
-        id="event-description"
+        id="event-date"
         className="popup-input"
-        placeholder="Where the party at"
+        placeholder="When is the party starting?"
+      />
+
+
+      <label htmlFor="event-capasity">Capasity:</label>
+      <input
+        type="number"
+        id="event-capasity"
+        className="popup-input"
+        placeholder="How many people?"
+      />
+
+      <label htmlFor="event-lantitude">Lantitude:</label>
+      <input
+        type="number"
+        id="event-lantitude"
+        className="popup-input"
+        placeholder="give the lantitude"
+      />
+
+      <label htmlFor="event-longtitude">Longtitude:</label>
+      <input
+        type="number"
+        id="event-longtitude"
+        className="popup-input"
+        placeholder="give the longtitude"
       />
 
       <div className="popup-buttons">
