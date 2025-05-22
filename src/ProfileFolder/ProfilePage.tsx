@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import './ProfilePage.css';
-import profileLogo from '../assets/profileLogo.png'; // Gambar default avatar
+import profileLogo from '../assets/profileLogo.png';
+import ProfileService from '../Shared/Profile/ProfileService';
+import { getUserIdFromToken } from '../Utils/jwt';
+import { Profile } from '../Shared/Profile/ProfileTypes';
 
 const ProfilePage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +12,28 @@ const ProfilePage: React.FC = () => {
   const [bio, setBio] = useState('');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const email = 'user@email.com';
+
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+  const userId = getUserIdFromToken(token);
+
+  useEffect(() => {
+    if (userId && token) {
+      const fetchData = async () => {
+        try {
+          const res = await ProfileService.getProfile(userId, token);
+          const data: Profile = res.data;
+
+          setUsername(data.username);
+          setGender(data.gender as "" | "Male" | "Female");
+          setAvatarPreview(data.profile_picture);
+        } catch (error) {
+          console.error('Failed to fetch profile:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [userId, token]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
