@@ -178,7 +178,6 @@ return (
           <div className='inputForm'>
             <div className='divAtas'>
               <img src={avatarPreview || profile} alt="Profile" className="profile-icon" /> 
-              {/* HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
               <textarea
                 id="textinput"
                 placeholder="What's new?"
