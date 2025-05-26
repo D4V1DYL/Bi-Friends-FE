@@ -14,16 +14,7 @@ pipeline {
         githubPush()
     }
 
-
     stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', 
-                    credentialsId: 'github-ssh-key',
-                    url: 'git@github.com:D4V1DYL/Bi-Friends-FE.git'
-            }
-        }
-        
         stage('Check Branch') {
             steps {
                 script {
@@ -38,6 +29,14 @@ pipeline {
                     echo "Current branch: ${branchName}"
 
                 }
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', 
+                    credentialsId: 'github-ssh-key',
+                    url: 'git@github.com:D4V1DYL/Bi-Friends-FE.git'
             }
         }
 
