@@ -9,7 +9,9 @@ import event from '../assets/event.png';
 import search from '../assets/SearchIcon.svg';
 import dots from '../assets/3dot.png';
 import Swal from 'sweetalert2';
-
+import ProfileService from '../Shared/Profile/ProfileService';
+import { getUserIdFromToken } from '../Utils/jwt';
+import { Profile } from '../Shared/Profile/ProfileTypes';
 
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
@@ -114,6 +116,8 @@ const Sidebar: React.FC = () => {
   }, []);
 
 
+  
+  
   return (
     <div className="sidebar">
 
@@ -142,8 +146,30 @@ const Sidebar: React.FC = () => {
   );
 };
   
-  return (
-    <div className="homepage">
+
+const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+    const userId = getUserIdFromToken(token);
+
+    useEffect(() => {
+      if (userId && token) {
+        const fetchData = async () => {
+          try {
+            const res = await ProfileService.getProfile(userId, token);
+            const data: Profile = res.data;
+
+            setAvatarPreview(data.profile_picture);
+          } catch (error) {
+            console.error('Failed to fetch profile:', error);
+          }
+        };
+
+        fetchData();
+      }
+    }, [userId, token]);
+
+return (
+  <div className="homepage">
       <NavigationBar />
       <div className="homepage-content">
       <Sidebar />
@@ -151,8 +177,7 @@ const Sidebar: React.FC = () => {
         <div className="main-content">
           <div className='inputForm'>
             <div className='divAtas'>
-              <img src={profile} alt="Profile" className="profile-icon" />
-              
+              <img src={avatarPreview || profile} alt="Profile" className="profile-icon" /> 
               <textarea
                 id="textinput"
                 placeholder="What's new?"
