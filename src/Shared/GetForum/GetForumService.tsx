@@ -9,7 +9,7 @@ const GetForumService = {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data.data; // ← hanya ambil array forum
+      return response.data.data; 
     } catch (error) {
       console.error("Gagal mengambil forum:", error);
       throw error;
