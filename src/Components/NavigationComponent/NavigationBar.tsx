@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import chatLogo from '../../assets/chatLogo.svg';
-import beeLogo from '../../assets/logo.webp';
+import beeLogo from '../../assets/Logo_Text2.svg';
 import calenderLogo from '../../assets/Calender.svg';
 import notificationLogo from '../../assets/notificationLogo.svg';
 import profileLogo from '../../assets/profileLogo.png';
