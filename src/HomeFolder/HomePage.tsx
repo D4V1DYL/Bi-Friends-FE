@@ -339,8 +339,6 @@ return (
         placeholder="Enter event location"
       />
 
-      
-
       <label htmlFor="event-date">Date:</label>
       <input
         type="text"
@@ -358,12 +356,12 @@ return (
         placeholder="How many people?"
       />
 
-      <label htmlFor="event-lantitude">Lantitude:</label>
+      <label htmlFor="event-latitude">Lantitude:</label>
       <input
         type="number"
-        id="event-lantitude"
+        id="event-latitude"
         className="popup-input"
-        placeholder="give the lantitude"
+        placeholder="give the latitude"
       />
 
       <label htmlFor="event-longtitude">Longtitude:</label>
