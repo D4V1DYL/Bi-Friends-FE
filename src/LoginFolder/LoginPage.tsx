@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import AuthService from "../Shared/Auth/AuthService";
 import LoadingScreen from "../Components/LoadingComponent/LoadingScreen";
 import { ToastContainer,toast } from "react-toastify";
+import Checkbox from "../Components/Textbox/textbox";
 
 function LoginPage(){
 
@@ -108,15 +109,12 @@ function LoginPage(){
                             />
                         </div>
 
-
-
-
                         <div className="RememberBox_ForgetPassword_Box">
-                            <div className="RememberBox">
-                                <input id="RememberMe" type="checkbox"></input>
-                                <p id="RememberMeTxt" >Remember me</p>
+                            <div className="RememberBox" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <Checkbox />
+                                <p id="RememberMeTxt" style={{ fontWeight: '600', color: 'black' }}>Remember me</p>
                             </div>
-
+                            
                             <div className="ForgetPasswordBox">
                                 <Link id="ForgetPassword" to="./ForgotPassword">Forget Password?</Link>
                             </div>

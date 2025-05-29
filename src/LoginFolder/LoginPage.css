@@ -49,7 +49,7 @@ body.LoginPage {
   width: 50%;
   height: 100%;
   display: flex;
-  margin: 5px;
+  margin: -20px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -63,7 +63,6 @@ body.LoginPage {
   margin-bottom: 1rem;
   color: black;
 }
-
 
 .Txt_Input_Box_Log{
   display: flex;
@@ -105,15 +104,21 @@ body.LoginPage {
   justify-content: left;
 }
 
+.checkboxLabel {
+  height: 2rem;
+  aspect-ratio: 1/1;
+}
+
 #RememberMe{
   margin: 0.2rem 0.3rem 0 0;
   width: 10px;
 }
 
 #RememberMeTxt{
-  display: flex;
-  font-size: 10.5px;
+  font-size: 0.9rem;
+  font-weight: 600;
   color: black;
+  user-select: none;
 }
 
 #LastSection_Log{
