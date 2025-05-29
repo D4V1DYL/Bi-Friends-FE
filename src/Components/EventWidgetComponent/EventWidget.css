@@ -31,3 +31,15 @@
     color: #555;
   }
   
+  label {
+  color: black !important;
+}
+
+  input,textarea {
+  color: black;              /* untuk teks user yang diketik */
+  background-color: #f2f2f2; /* warna latar input */
+}
+
+  input::placeholder, textarea::placeholder {
+  color: #999; /* placeholder bisa abu gelap, atau pakai black kalau mau */
+}
