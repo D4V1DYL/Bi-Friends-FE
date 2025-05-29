@@ -146,17 +146,21 @@ body.RegisterPage {
 }
 
 
-.Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email, .gender{
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif !important;
-    display: flex;
-    justify-content: center;
-    height: 28px;
-    width: 92%;
-    border: none;
-    outline: none !important;
-    color: black !important; /* ✅ teks jadi hitam */
-    font-size: 1rem;
+.Name, .NIM, .Password, .Password_Register, .Password_Confirm, .email, .gender {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* ✅ Tambah agar teks vertikal center */
+  height: 100%; /* ✅ Ganti dari 28px ke 100% agar isi container */
+  width: 92%;
+  border: none;
+  outline: none !important;
+  color: black !important;
+  font-size: 1rem;
+  background: transparent; /* ✅ Buat transparan agar mengikuti latar .Txt_Input_Box */
+  box-sizing: border-box;
 }
+
   
 .email:focus, .Name:focus,  .NIM:focus, .Password_Register:focus, .Password_Confirm:focus{
     outline: none !important;
