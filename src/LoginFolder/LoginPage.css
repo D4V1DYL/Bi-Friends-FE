@@ -183,19 +183,40 @@ body.LoginPage {
   justify-content: center;
   width: 110px;
 }
-.LoginBtn{
-  margin: 0.4rem 0 0 0;
-  height: 2rem;
-  width: 100%;
+
+.fancy-button {
+  --button_radius: 0.5em;
+  --button_color: #e8e8e8;
+  --button_outline_color: #000000;
+  font-size: 14px; /* <<< diperkecil */
+  font-weight: bold;
   border: none;
-  border-radius: 15px;
-  background-color: #A8EAF1;
-  font-weight: 700;
-  color: black;
+  border-radius: var(--button_radius);
+  background: var(--button_outline_color);
+  cursor: pointer;
+  padding: 0;
+  height: auto;
+  width: auto;
 }
 
-.LoginBtn:hover{
-  background-color: #9ee0e8;
+.fancy-button .button_top {
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid var(--button_outline_color);
+  border-radius: var(--button_radius);
+  padding: 0.5em 1.2em; /* <<< lebih kecil */
+  color: var(--button_outline_color);
+  transform: translateY(-0.15em); /* <<< lebih halus */
+  transition: transform 0.1s ease;
+  background: linear-gradient(45deg, #FF5F6D, #FFC371);
+}
+
+.fancy-button:hover .button_top {
+  transform: translateY(-0.25em);
+}
+
+.fancy-button:active .button_top {
+  transform: translateY(0);
 }
 
 .RegisterBox{

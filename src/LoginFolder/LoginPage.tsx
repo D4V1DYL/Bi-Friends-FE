@@ -99,7 +99,6 @@ function LoginPage(){
                             />
                         </div>
 
-
                         <div className="Txt_Input_Box_Log" id="LastSection_Log">
                             <input className="password"
                                 type="password" 
@@ -127,11 +126,11 @@ function LoginPage(){
                             </div>
                         </div>
 
-
-
                         <div className="Button_Box">
                             <div className="ButtonBox">
-                                <button className="LoginBtn" onClick={handleLogin}>Login</button>
+                                <button className="fancy-button" onClick={handleLogin}>
+                                <span className="button_top">Login</span>
+                                </button>
                             </div>
                         </div>
 
