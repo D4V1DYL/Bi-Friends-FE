@@ -23,6 +23,7 @@
   .event-card h4 {
     margin: 8px 0;
     font-weight: bold;
+    color: black;
   }
   
   .event-card p {
