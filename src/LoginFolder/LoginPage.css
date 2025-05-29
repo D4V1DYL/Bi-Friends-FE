@@ -78,15 +78,17 @@ body.LoginPage {
   margin-bottom: 1rem;
 }
 
-.Username, .password{
+.Username, .password {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   display: flex;
   justify-content: center;
-  height: 28px;
+  align-items: center;
+  height: 100%; /* <- Tambahkan ini agar mengisi full tinggi parent */
   width: 95%;
   border: none;
   outline: none;
   color: black;
+  background: transparent; /* <- Hindari warna default putih jika parent sudah kasih warna */
 }
 
 .RememberBox_ForgetPassword_Box{
