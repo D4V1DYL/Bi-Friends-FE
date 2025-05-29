@@ -27,19 +27,9 @@ export default function ChatPage() {
   // 2) state is now UIMessage[]
   const [messages, setMessages] = useState<UIMessage[]>([])
   const [input, setInput] = useState('')
-  const [myProfile] = useState<Contact | null>(null)
+  const [myProfile, setMyProfile] = useState<Contact | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
   const endRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    ChatService.getContacts()
-      .then(friends => {
-        setContacts(friends)
-        setFilteredContacts(friends) // ✅ penting supaya sidebar awalnya tidak kosong
-        if (friends.length) setSelected(friends[0])
-      })
-      .catch(console.error)
-  }, [])
 
   // Auto-scroll
   useEffect(() => {
@@ -51,10 +41,18 @@ export default function ChatPage() {
     ChatService.getContacts()
       .then(friends => {
         setContacts(friends)
+        setFilteredContacts(friends) // ✅ penting supaya sidebar awalnya tidak kosong
         if (friends.length) setSelected(friends[0])
       })
       .catch(console.error)
   }, [])
+
+  useEffect(() => {
+    ChatService.getUserProfile()
+      .then(setMyProfile)
+      .catch(console.error)
+  }, [])
+
 
   // When selected changes: load history & (re)connect WS
   useEffect(() => {
@@ -138,7 +136,8 @@ ws.onmessage = ev => {
       return
     }
 
-    const currentUserId = ChatService.getCurrentUserId()
+    const currentUserId = myProfile?.user_id
+    if (!currentUserId) return
     
     fetch(`/chat/search-users?q=${searchQuery}&current_user_id=${currentUserId}`)
       .then(res => res.json())
