@@ -27,7 +27,7 @@ export default function ChatPage() {
   // 2) state is now UIMessage[]
   const [messages, setMessages] = useState<UIMessage[]>([])
   const [input, setInput] = useState('')
-  const [myProfile, setMyProfile] = useState<Contact | null>(null)
+  const [myProfile] = useState<Contact | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
   const endRef = useRef<HTMLDivElement | null>(null)
 
