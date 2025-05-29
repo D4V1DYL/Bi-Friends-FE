@@ -13,7 +13,6 @@ interface EventData {
   };
 }
 
-
 const EventWidget: React.FC = () => {
   const [event, setEvent] = useState<EventData | null>(null);
 

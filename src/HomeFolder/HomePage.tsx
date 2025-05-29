@@ -300,10 +300,8 @@ return (
     })
   )}
 </div>
- 
 
-        </div>
-
+      </div>
         <div className="event-section">
           <h3 className="event-title">EVENT</h3>
           <EventWidget />

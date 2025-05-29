@@ -1,169 +1,147 @@
-// src/ChatFolder/ChatPage.tsx
-import  {
+import {
   useState,
   useEffect,
   useRef,
   FormEvent,
   ChangeEvent,
-} from 'react'
-import { Link } from 'react-router-dom'
-import { IoPersonCircleOutline, IoHomeOutline } from 'react-icons/io5'
-import ChatService from '../Shared/Chat/ChatService'
-import { Contact, Message as RawMessage, NewMessage } from '../Shared/Chat/ChatTypes'
+} from 'react';
+import { Link } from 'react-router-dom';
+import { IoPersonCircleOutline, IoHomeOutline } from 'react-icons/io5';
+import ChatService from '../Shared/Chat/ChatService';
+import { Contact, Message as RawMessage, NewMessage } from '../Shared/Chat/ChatTypes';
+import chatBg from '../assets/Chat.jpg';
 
-// 1) UIMessage holds all RawMessage fields plus our UI bits:
 interface UIMessage extends RawMessage {
-  attachment?: any
-  fromMe: boolean
-  time: string
+  attachment?: any;
+  fromMe: boolean;
+  time: string;
 }
 
 export default function ChatPage() {
-  const [contacts, setContacts] = useState<Contact[]>([])
-  const [selected, setSelected] = useState<Contact | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([])
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [selected, setSelected] = useState<Contact | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [messages, setMessages] = useState<UIMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [myProfile, setMyProfile] = useState<Contact | null>(null);
+  const wsRef = useRef<WebSocket | null>(null);
+  const endRef = useRef<HTMLDivElement | null>(null);
 
-  // 2) state is now UIMessage[]
-  const [messages, setMessages] = useState<UIMessage[]>([])
-  const [input, setInput] = useState('')
-  const [myProfile, setMyProfile] = useState<Contact | null>(null)
-  const wsRef = useRef<WebSocket | null>(null)
-  const endRef = useRef<HTMLDivElement | null>(null)
-
-  // Auto-scroll
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-  // Fetch contacts once
   useEffect(() => {
     ChatService.getContacts()
       .then(friends => {
-        setContacts(friends)
-        setFilteredContacts(friends) // ✅ penting supaya sidebar awalnya tidak kosong
-        if (friends.length) setSelected(friends[0])
+        setContacts(friends);
+        setFilteredContacts(friends);
+        if (friends.length) setSelected(friends[0]);
       })
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     ChatService.getUserProfile()
       .then(setMyProfile)
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 
-
-  // When selected changes: load history & (re)connect WS
   useEffect(() => {
-    if (!selected) return
+    if (!selected) return;
+    wsRef.current?.close();
 
-    // tear down old socket
-    wsRef.current?.close()
-
-    // 3) Load & map history into UIMessage
     ChatService.getHistory(selected.user_id)
       .then(hist => {
-        const me = ChatService.getCurrentUserId()
+        const me = ChatService.getCurrentUserId();
         const ui = hist.map(m => {
-          // normalize timestamp
-          let ts = m.created_at
-          if (!/[zZ]$/.test(ts)) ts += 'Z'
-          const d = new Date(ts)
+          let ts = m.created_at;
+          if (!/[zZ]$/.test(ts)) ts += 'Z';
+          const d = new Date(ts);
           const time = isNaN(d.getTime())
             ? m.created_at
-            : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
           return {
             ...m,
             fromMe: m.sender_id === me,
             time,
-          }
-        })
-        setMessages(ui)
+          };
+        });
+        setMessages(ui);
       })
-      .catch(console.error)
+      .catch(console.error);
 
-    // open new socket for *you*
-    const ws = ChatService.connectSocket()
-    ws.onopen = () => console.info('📡 WebSocket connected')
-    ws.onerror = ev => console.error('⚠️ WebSocket error', ev)
-    ws.onclose = () => console.info('WebSocket closed')
+    const ws = ChatService.connectSocket();
+    ws.onopen = () => console.info('📡 WebSocket connected');
+    ws.onerror = ev => console.error('⚠️ WebSocket error', ev);
+    ws.onclose = () => console.info('WebSocket closed');
 
-    // 4) Map incoming socket messages into UIMessage too
-ws.onmessage = ev => {
-  const inc = JSON.parse(ev.data) as RawMessage & { own?: boolean }
-  // 1) skip your own‐ack
-  if (inc.own) return
+    ws.onmessage = ev => {
+      const inc = JSON.parse(ev.data) as RawMessage & { own?: boolean };
+      if (inc.own) return;
+      if (inc.sender_id !== selected!.user_id) return;
 
-  // 2) optionally also ensure it really came from the “other” user
-  if (inc.sender_id !== selected!.user_id) return
+      let ts = inc.created_at;
+      if (!/[zZ]$/.test(ts)) ts += 'Z';
+      const d = new Date(ts);
+      const time = isNaN(d.getTime())
+        ? inc.created_at
+        : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    // 3) map into UIMessage
-    // const me = ChatService.getCurrentUserId()
-    let ts = inc.created_at
-    if (!/[zZ]$/.test(ts)) ts += 'Z'
-    const d = new Date(ts)
-    const time = isNaN(d.getTime())
-      ? inc.created_at
-      : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      const ui: UIMessage = {
+        ...inc,
+        attachment: inc.attachment ?? undefined,
+        fromMe: false,
+        time,
+      };
 
-    const ui: UIMessage = {
-      ...inc,
-      attachment: inc.attachment ?? undefined,
-      fromMe: false,  // definitely from the other user
-      time,
-    }
+      setMessages(ms => {
+        if (ms.some(m => m.chat_id === ui.chat_id)) return ms;
+        return [...ms, ui];
+      });
+    };
 
-    // 4) dedupe on chat_id
-    setMessages(ms => {
-      if (ms.some(m => m.chat_id === ui.chat_id)) return ms
-      return [...ms, ui]
-    })
-  }
-
-
-    wsRef.current = ws
+    wsRef.current = ws;
     return () => {
-      ws.close()
-    }
-  }, [selected])
+      ws.close();
+    };
+  }, [selected]);
 
   useEffect(() => {
-  const delayDebounce = setTimeout(() => {
-    if (searchQuery.length === 0) {
-      setFilteredContacts(contacts)
-      return
-    }
+    const delayDebounce = setTimeout(() => {
+      if (searchQuery.length === 0) {
+        setFilteredContacts(contacts);
+        return;
+      }
 
-    const currentUserId = myProfile?.user_id
-    if (!currentUserId) return
-    
-    fetch(`/chat/search-users?q=${searchQuery}&current_user_id=${currentUserId}`)
-      .then(res => res.json())
-      .then(data => {
-        setFilteredContacts(data.data || [])
-      })
-      .catch(console.error)
-  }, 300)
+      const currentUserId = myProfile?.user_id;
+      if (!currentUserId) return;
 
-  return () => clearTimeout(delayDebounce)
-}, [searchQuery, contacts])
+      fetch(`/chat/search-users?q=${searchQuery}&current_user_id=${currentUserId}`)
+        .then(res => res.json())
+        .then(data => {
+          setFilteredContacts(data.data || []);
+        })
+        .catch(console.error);
+    }, 300);
 
-  // send
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, contacts]);
+
   const sendMessage = (e: FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || !selected || !wsRef.current) return
+    e.preventDefault();
+    if (!input.trim() || !selected || !wsRef.current) return;
 
     const payload: NewMessage = {
       receiver_id: selected.user_id,
       message: input.trim(),
       attachment: null,
-    }
+    };
 
-    // optimistic UI with a temporary chat_id
-    const tempId = Date.now()
-    const now = new Date().toISOString()
+    const tempId = Date.now();
+    const now = new Date().toISOString();
     setMessages(ms => [
       ...ms,
       {
@@ -174,17 +152,16 @@ ws.onmessage = ev => {
         attachment: null,
         created_at: now,
         fromMe: true,
-        // format time for optimistic message too
         time: new Date(now).toLocaleTimeString([], {
           hour: '2-digit',
           minute: '2-digit',
         }),
       },
-    ])
+    ]);
 
-    wsRef.current.send(JSON.stringify(payload))
-    setInput('')
-  }
+    wsRef.current.send(JSON.stringify(payload));
+    setInput('');
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -209,10 +186,9 @@ ws.onmessage = ev => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-
         <ul className="flex-1 overflow-auto space-y-2">
           {filteredContacts.map(c => {
-            const isActive = selected?.user_id === c.user_id
+            const isActive = selected?.user_id === c.user_id;
             return (
               <li
                 key={c.user_id}
@@ -236,14 +212,14 @@ ws.onmessage = ev => {
                 </div>
                 <p className="font-semibold truncate">{c.username}</p>
               </li>
-            )
+            );
           })}
         </ul>
       </aside>
 
       {/* Chat Window */}
-      <section className="flex-1 flex flex-col bg-white">
-        <header className="flex items-center p-4 border-b">
+      <section className="flex-1 flex flex-col">
+        <header className="flex items-center p-4 border-b bg-blue-200">
           <div className="flex items-center">
             <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
               {selected?.profile_picture ? (
@@ -263,7 +239,15 @@ ws.onmessage = ev => {
           </div>
         </header>
 
-        <div className="flex-1 overflow-auto p-4 space-y-4">
+        <div
+          className="flex-1 overflow-auto p-4 space-y-4"
+          style={{
+            backgroundImage: `url(${chatBg})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+          }}
+        >
           {messages.map(m => (
             <div
               key={m.chat_id}
@@ -273,7 +257,7 @@ ws.onmessage = ev => {
                 <div className="flex items-end space-x-2">
                   {!m.fromMe && (
                     <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
-                        {selected?.profile_picture ? (
+                      {selected?.profile_picture ? (
                         <img
                           src={selected.profile_picture}
                           alt={selected.username}
@@ -286,7 +270,7 @@ ws.onmessage = ev => {
                   )}
                   <div
                     className={`p-3 rounded-lg text-sm break-words ${
-                      m.fromMe ? 'bg-[#81BFDA] text-white' : 'bg-[#FADA7A] text-gray-900'
+                      m.fromMe ? 'bg-[#81BFDA] text-black' : 'bg-[#FADA7A] text-gray-900'
                     }`}
                   >
                     {m.message}
@@ -303,7 +287,7 @@ ws.onmessage = ev => {
                   </div>
                   {m.fromMe && (
                     <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
-                        {myProfile?.profile_picture ? (
+                      {myProfile?.profile_picture ? (
                         <img
                           src={myProfile.profile_picture}
                           alt={myProfile.username}
@@ -321,7 +305,7 @@ ws.onmessage = ev => {
           <div ref={endRef} />
         </div>
 
-        <form onSubmit={sendMessage} className="p-4 border-t bg-[#F5F0CD]">
+        <form onSubmit={sendMessage} className="p-4 border-t bg-blue-200">
           <div className="flex space-x-2">
             <input
               type="text"
@@ -343,5 +327,5 @@ ws.onmessage = ev => {
         </form>
       </section>
     </div>
-  )
+  );
 }
