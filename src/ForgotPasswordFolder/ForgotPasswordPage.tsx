@@ -95,7 +95,7 @@ function ForgotPasswordPage() {
             </div>
             <div>
               <button id="ResetPasswordBtn" onClick={handleRecovery} disabled={loading}>
-                <b>{loading ? "Verifying..." : "Reset Password"}</b>
+                <span className="button_top">{loading ? "Verifying..." : "Reset Password"}</span>
               </button>
             </div>
       </div>
