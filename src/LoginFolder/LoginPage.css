@@ -21,9 +21,6 @@ body.LoginPage {
   z-index: 1;
 }
 
-
-
-
 #SL{
   height: 100vh;
   position: absolute;
@@ -38,12 +35,6 @@ body.LoginPage {
   right: 0;
   z-index: 3;
 }
-
-
-
-
-
-
 
 .container1{
   display: flex;
@@ -70,6 +61,7 @@ body.LoginPage {
   text-align: center;
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: black;
 }
 
 
@@ -95,6 +87,7 @@ body.LoginPage {
   width: 95%;
   border: none;
   outline: none;
+  color: black;
 }
 
 
