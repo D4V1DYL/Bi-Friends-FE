@@ -74,9 +74,11 @@ function RecoveryPasswordPage() {
                 </div>
 
                 <div>
-                    <button id="ChangePasswordBtn" onClick={handleChangePassword}>
-                        <b>Change Password</b>
-                    </button>
+                    <div className="ChangePasswordWrapper">
+                        <button id="ChangePasswordBtn" onClick={handleChangePassword}>
+                            <span className="button_top">Change Password</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
