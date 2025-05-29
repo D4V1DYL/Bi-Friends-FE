@@ -90,11 +90,6 @@ body.LoginPage {
   color: black;
 }
 
-
-
-
-
-  
 .RememberBox_ForgetPassword_Box{
   display: flex;
   justify-content: space-between;
@@ -118,6 +113,7 @@ body.LoginPage {
 #RememberMeTxt{
   display: flex;
   font-size: 10.5px;
+  color: black;
 }
 
 #LastSection_Log{
@@ -145,12 +141,6 @@ body.LoginPage {
   color: black;
 }
 
-
-
-
-
-
-
 .DirectToRegister_Box{
   display: flex;
   justify-content: right;
@@ -172,6 +162,7 @@ body.LoginPage {
 
 .DTRTxt{
   width: 11rem;
+  color: black;
 }
 
 
@@ -197,6 +188,7 @@ body.LoginPage {
   font-weight: 700;
   color: black;
 }
+
 .LoginBtn:hover{
   background-color: #9ee0e8;
 }
@@ -205,10 +197,6 @@ body.LoginPage {
   display: flex;
   margin: 1rem 0 0 0;
 }
-
-
-
-
 
 @media (max-width: 1100px) {
   .AllImg {
