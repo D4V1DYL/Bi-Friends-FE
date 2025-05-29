@@ -182,6 +182,7 @@ body.LoginPage {
   display: flex;
   justify-content: center;
   width: 110px;
+  margin-top: 1.2rem;
 }
 
 .fancy-button {
