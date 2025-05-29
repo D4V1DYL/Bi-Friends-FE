@@ -16,6 +16,8 @@ function LoginPage(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ function LoginPage(){
     function handleLogin() {
         const usernameInput = document.querySelector('.Username') as HTMLInputElement;
         const passwordInput = document.querySelector('.password') as HTMLInputElement;
-        const rememberMe = document.querySelector('#RememberMe') as HTMLInputElement;
+        // const rememberMe = document.querySelector('#RememberMe') as HTMLInputElement;
     
         if (!usernameInput?.value || !passwordInput?.value) {
             toast.error('Please enter both username and password');
@@ -42,7 +44,8 @@ function LoginPage(){
     
         const loginData = {
             nim: usernameInput.value,
-            password: passwordInput.value
+            password: passwordInput.value,
+            remember_me: rememberMe
         };
     
         setTimeout(() => {
@@ -50,7 +53,7 @@ function LoginPage(){
                 .then(response => {
                     const token = response.access_token;
                     
-                    if (rememberMe.checked) {
+                    if (rememberMe) {
                         localStorage.setItem('token', token);
                     } else {
                         sessionStorage.setItem('token', token);
@@ -110,8 +113,8 @@ function LoginPage(){
 
                         <div className="RememberBox_ForgetPassword_Box">
                             <div className="RememberBox" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <Checkbox />
-                                <p id="RememberMeTxt" style={{ fontWeight: '600', color: 'black' }}>Remember me</p>
+                                 <Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
+                            <p id="RememberMeTxt" style={{ fontWeight: '600', color: 'black' }}>Remember me</p>
                             </div>
                             
                             <div className="ForgetPasswordBox">

@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 
-const Checkbox = () => {
+const Checkbox = ({ checked, onChange }: { checked: boolean, onChange: () => void }) => {
   return (
     <StyledWrapper>
       <label className="checkboxLabel" htmlFor="checkbox">
-        <input id="checkbox" name="checkbox" type="checkbox" />
+        <input
+          id="checkbox"
+          name="checkbox"
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+        />        
         <span id="bar1" className="bar" />
         <span id="bar2" className="bar" />
         <span id="bar3" className="bar" />
