@@ -241,3 +241,36 @@ input:-ms-input-placeholder { /* IE 10-11 */
 input::-ms-input-placeholder { /* Edge */
   color: black;
 }
+
+.RegisterBtn {
+  --button_radius: 0.75em;
+  --button_color: #e8e8e8;
+  --button_outline_color: #000000;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--button_radius);
+  background: var(--button_outline_color);
+  padding: 0;
+  margin-top: 1.2rem; /* boleh diubah sesuai kebutuhan posisi */
+}
+
+.RegisterBtn .button_top {
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid var(--button_outline_color);
+  border-radius: var(--button_radius);
+  padding: 0.5em 1.4em;
+  color: var(--button_outline_color);
+  transform: translateY(-0.2em);
+  transition: transform 0.1s ease;
+  background: linear-gradient(45deg, #FF5F6D, #FFC371);
+}
+
+.RegisterBtn:hover .button_top {
+  transform: translateY(-0.33em);
+}
+
+.RegisterBtn:active .button_top {
+  transform: translateY(0);
+}

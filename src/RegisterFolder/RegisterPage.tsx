@@ -187,11 +187,10 @@ function RegisterPage() {
                             </div>
                         </div>
                         <div className="RegisterBox">
-                            <button className="RegisterBtn" onClick={handleRegistering}>Register</button>
+                            <button className="RegisterBtn" onClick={handleRegistering}>
+                                <span className="button_top">Register</span>
+                            </button>
                         </div>
-
-
-
                     </div>
                 </div>
                 <ToastContainer
