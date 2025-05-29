@@ -21,9 +21,6 @@ interface UIMessage extends RawMessage {
 export default function ChatPage() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [selected, setSelected] = useState<Contact | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([])
-
   // 2) state is now UIMessage[]
   const [messages, setMessages] = useState<UIMessage[]>([])
   const [input, setInput] = useState('')
@@ -32,12 +29,8 @@ export default function ChatPage() {
   const endRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    ChatService.getContacts()
-      .then(friends => {
-        setContacts(friends)
-        setFilteredContacts(friends) // ✅ penting supaya sidebar awalnya tidak kosong
-        if (friends.length) setSelected(friends[0])
-      })
+    ChatService.getUserProfile()
+      .then(setMyProfile)
       .catch(console.error)
   }, [])
 
@@ -131,24 +124,6 @@ ws.onmessage = ev => {
     }
   }, [selected])
 
-  useEffect(() => {
-  const delayDebounce = setTimeout(() => {
-    if (searchQuery.length === 0) {
-      setFilteredContacts(contacts)
-      return
-    }
-
-    fetch(`/chat/search-users?q=${searchQuery}`)
-      .then(res => res.json())
-      .then(data => {
-        setFilteredContacts(data.data || [])
-      })
-      .catch(console.error)
-  }, 300)
-
-  return () => clearTimeout(delayDebounce)
-}, [searchQuery, contacts])
-
   // send
   const sendMessage = (e: FormEvent) => {
     e.preventDefault()
@@ -204,13 +179,10 @@ ws.onmessage = ev => {
           type="text"
           placeholder="Search…"
           className="mb-4 w-full py-2 px-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-
         <ul className="flex-1 overflow-auto space-y-2">
-          {filteredContacts.map(c => {
+          {contacts.map(c => {
             const isActive = selected?.user_id === c.user_id
             return (
               <li
