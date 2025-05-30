@@ -10,6 +10,7 @@ import search from '../assets/SearchIcon.svg';
 import dots from '../assets/3dot.png';
 import Swal from 'sweetalert2';
 import ProfileService from '../Shared/Profile/ProfileService';
+import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
 
@@ -19,6 +20,31 @@ const HomePage: React.FC = () => {
   const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
+
+  const handleDeleteForum = async (forumId: number) => {
+    const token = sessionStorage.getItem('token') || '';
+    try {
+      const result = await Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: 'Forum ini akan dihapus permanen!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      });
+
+      if (result.isConfirmed) {
+        await GetForumService.deleteForum(forumId, token);
+        setForums(prevForums => prevForums.filter(forum => forum.post_id !== forumId));
+        Swal.fire('Dihapus!', 'Forum berhasil dihapus.', 'success');
+      }
+    } catch (error) {
+      console.error('Gagal menghapus forum:', error);
+      Swal.fire('Gagal!', 'Forum gagal dihapus.', 'error');
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -202,6 +228,13 @@ return (
 
       return (
         <div key={forum.post_id ?? index} className="forum-card">
+        <img
+          src={deleteIcon}
+          alt="Delete Forum"
+          className="delete-icon"
+          onClick={() => handleDeleteForum(forum.post_id)}
+        />
+
           {/* User Info */}
           {user && (
             <div className="forum-user-info">
@@ -241,15 +274,7 @@ return (
                         });
 
                         if (result.isConfirmed) {
-                          console.log(
-                            "Confirmed delete for post:",
-                            forum.post_id ?? index
-                          );
-                          await Swal.fire(
-                            "Dihapus!",
-                            "Post telah dihapus.",
-                            "success"
-                          );
+                          await handleDeleteForum(forum.post_id);
                         }
 
                         setActiveMenuPostId(null);
