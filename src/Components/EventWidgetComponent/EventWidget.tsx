@@ -17,7 +17,7 @@ const EventWidget: React.FC = () => {
   const [event, setEvent] = useState<EventData | null>(null);
 
   useEffect(() => {
-    fetch('http://bifriendsbe.bifriends.my.id/Forum/list-events')
+    fetch('https://bifriendsbe.bifriends.my.id/Forum/list-events')
       .then((res) => res.json())
       .then((data) => {
         if (data.events && data.events.length > 0) {
