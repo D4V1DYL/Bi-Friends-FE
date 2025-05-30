@@ -62,25 +62,30 @@
     border: 1px solid #ccc;
   }
   
-  .gender-toggle {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .gender-toggle button {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: #eee;
-    cursor: pointer;
-  }
-  
-  .gender-toggle button.active {
-    background: #409eff;
-    color: white;
-    font-weight: bold;
-  }
+.gender-toggle {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.gender-toggle button {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #000; /* Ubah jadi hitam untuk semua */
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.gender-toggle button.active {
+  background-color: #3399ff;
+  color: #fff; /* Tetap putih untuk button aktif */
+  border: none;
+}
   
   .char-count {
     font-size: 0.8rem;

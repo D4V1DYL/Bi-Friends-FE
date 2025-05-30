@@ -8,7 +8,6 @@ import profileLogo from '../../assets/profileLogo.png';
 import './NavigationBar.css';
 import ProfileService from '../../Shared/Profile/ProfileService';
 import { getUserIdFromToken } from '../../Utils/jwt';
-import { Profile } from '../../Shared/Profile/ProfileTypes';
 import { useState, useEffect } from 'react';
 
 const NavigationBar: React.FC = () => {
@@ -21,14 +20,26 @@ const NavigationBar: React.FC = () => {
         if (userId && token) {
           const fetchData = async () => {
             try {
-              const res = await ProfileService.getProfile(userId, token);
-              const data: Profile = res.data;
+              const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+              const userId = getUserIdFromToken(token);
 
-              setAvatarPreview(data.profile_picture);
-            } catch (error) {
-              console.error('Failed to fetch profile:', error);
-            }
-          };
+              if (!userId || !token) {
+                console.warn("Token or userId is missing");
+                return;
+              }
+
+              const res = await ProfileService.getProfile(userId, token);
+              if (!res || typeof res !== 'object') {
+                console.warn("Profile response is empty or invalid");
+                return;
+              }
+
+    setAvatarPreview(res.profile_picture || '');
+  } catch (error) {
+    console.error("Failed to fetch profile:", error);
+  }
+};
+
 
           fetchData();
         }

@@ -11,7 +11,8 @@ const ProfilePage: React.FC = () => {
   const [gender, setGender] = useState<'Male' | 'Female' | ''>('');
   const [bio, setBio] = useState('');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const email = 'user@email.com';
+  const [email, setEmail] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
@@ -22,10 +23,10 @@ const ProfilePage: React.FC = () => {
         try {
           const res = await ProfileService.getProfile(userId, token);
           const data: Profile = res.data;
-
           setUsername(data.username);
-          setGender(data.gender as "" | "Male" | "Female");
+          setGender(data.gender as '' | 'Male' | 'Female');
           setAvatarPreview(data.profile_picture);
+          setEmail(data.email);
         } catch (error) {
           console.error('Failed to fetch profile:', error);
         }
@@ -38,7 +39,29 @@ const ProfilePage: React.FC = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!userId || !token) return;
+
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('gender', gender);
+    if (selectedFile) {
+      formData.append('profile_picture', selectedFile);
+    }
+    // Optional: if backend supports it
+    // formData.append('bio', bio);
+
+    try {
+      await ProfileService.updateProfile(userId, formData, token);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Update failed:', error);
+      alert('Failed to update profile');
     }
   };
 
@@ -98,7 +121,9 @@ const ProfilePage: React.FC = () => {
           />
           <div className="char-count">{bio.length} / 250</div>
 
-          <button className="update-btn">Update</button>
+          <button className="update-btn" onClick={handleUpdate}>
+            Update
+          </button>
         </div>
       </div>
     </div>
