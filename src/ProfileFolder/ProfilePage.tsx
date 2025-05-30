@@ -5,6 +5,7 @@ import profileLogo from '../assets/profileLogo.png';
 import ProfileService from '../Shared/Profile/ProfileService';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
+import Swal from 'sweetalert2';
 
 const ProfilePage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -27,6 +28,7 @@ const ProfilePage: React.FC = () => {
           setGender(data.gender as '' | 'Male' | 'Female');
           setAvatarPreview(data.profile_picture);
           setEmail(data.email);
+          setBio(data.bio || '');
         } catch (error) {
           console.error('Failed to fetch profile:', error);
         }
@@ -50,20 +52,30 @@ const ProfilePage: React.FC = () => {
     const formData = new FormData();
     formData.append('username', username);
     formData.append('gender', gender);
+    formData.append('bio', bio); // ⬅️ tambahkan ini
     if (selectedFile) {
       formData.append('profile_picture', selectedFile);
     }
-    // Optional: if backend supports it
-    // formData.append('bio', bio);
 
     try {
       await ProfileService.updateProfile(userId, formData, token);
-      alert('Profile updated successfully!');
+      await Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Profil berhasil diperbarui.',
+        confirmButtonColor: '#3085d6',
+      });
     } catch (error) {
       console.error('Update failed:', error);
-      alert('Failed to update profile');
+      await Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Gagal memperbarui profil.',
+        confirmButtonColor: '#d33',
+      });
     }
   };
+
 
   return (
     <div>

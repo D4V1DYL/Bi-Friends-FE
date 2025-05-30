@@ -4,4 +4,5 @@ export interface Profile {
   profile_picture: string;
   gender: string;
   email: string;
+  bio?: string;
 }
