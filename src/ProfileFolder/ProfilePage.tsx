@@ -22,8 +22,7 @@ const ProfilePage: React.FC = () => {
     if (userId && token) {
       const fetchData = async () => {
         try {
-          const res = await ProfileService.getProfile(userId, token);
-          const data: Profile = res.data;
+          const data: Profile = await ProfileService.getProfile(userId, token);
           setUsername(data.username);
           setGender(data.gender as '' | 'Male' | 'Female');
           setAvatarPreview(data.profile_picture);
@@ -33,7 +32,6 @@ const ProfilePage: React.FC = () => {
           console.error('Failed to fetch profile:', error);
         }
       };
-
       fetchData();
     }
   }, [userId, token]);
@@ -52,19 +50,30 @@ const ProfilePage: React.FC = () => {
     const formData = new FormData();
     formData.append('username', username);
     formData.append('gender', gender);
-    formData.append('bio', bio); // ⬅️ tambahkan ini
+    formData.append('bio', bio);
     if (selectedFile) {
       formData.append('profile_picture', selectedFile);
     }
 
     try {
       await ProfileService.updateProfile(userId, formData, token);
+
       await Swal.fire({
         icon: 'success',
         title: 'Berhasil!',
         text: 'Profil berhasil diperbarui.',
         confirmButtonColor: '#3085d6',
       });
+
+      // Fetch updated profile
+      const updatedData: Profile = await ProfileService.getProfile(userId, token);
+      setUsername(updatedData.username);
+      setGender(updatedData.gender as '' | 'Male' | 'Female');
+      setAvatarPreview(updatedData.profile_picture);
+      setEmail(updatedData.email);
+      setBio(updatedData.bio || '');
+      setSelectedFile(null);
+
     } catch (error) {
       console.error('Update failed:', error);
       await Swal.fire({
@@ -75,7 +84,6 @@ const ProfilePage: React.FC = () => {
       });
     }
   };
-
 
   return (
     <div>
@@ -107,7 +115,10 @@ const ProfilePage: React.FC = () => {
 
         <div className="form-card">
           <label>Username</label>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
           <label>Gender</label>
           <div className="gender-toggle">
