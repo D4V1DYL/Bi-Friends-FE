@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useEffect} from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
@@ -7,7 +7,6 @@ import GetForumService from "../Shared/GetForum/GetForumService";
 import upload from '../assets/upload.png';
 import event from '../assets/event.png';
 import search from '../assets/SearchIcon.svg';
-import dots from '../assets/3dot.png';
 import Swal from 'sweetalert2';
 import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
@@ -18,8 +17,6 @@ import { Profile } from '../Shared/Profile/ProfileTypes';
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
-  const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
   const [titleText, setTitleText] = useState("");
@@ -222,22 +219,6 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     setSubjects(dummySubjects);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        contextMenuRef.current &&
-        !contextMenuRef.current.contains(event.target as Node)
-      ) {
-        setActiveMenuPostId(null); // Tutup context menu kalau klik di luar
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
   
   return (
