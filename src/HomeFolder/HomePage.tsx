@@ -13,6 +13,7 @@ import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
+import { useNavigate } from 'react-router-dom';
 // import ChatService from '../Shared/Chat/ChatService';
 
 const HomePage: React.FC = () => {  
@@ -21,6 +22,10 @@ const HomePage: React.FC = () => {
   const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+  const userId = getUserIdFromToken(token);
+  const navigate = useNavigate();
 
   const handleDeleteForum = async (forumId: number) => {
     const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
@@ -91,7 +96,7 @@ const HomePage: React.FC = () => {
 
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-      const response = await fetch('http://localhost:8000/Forum/create_forum', {
+      const response = await fetch('http://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,6 +132,21 @@ const HomePage: React.FC = () => {
     fetchForums();
   }, []);
 
+  useEffect(() => {
+    if (userId && token) {
+      const fetchProfile = async () => {
+        try {
+          const data: Profile = await ProfileService.getProfile(userId, token);
+          setAvatarPreview(data.profile_picture);
+        } catch (error) {
+          console.error('Failed to fetch profile:', error);
+        }
+      };
+
+      fetchProfile();
+    }
+  }, [userId, token]);
+
 
 const dummySubjects = [
   { id: 1, name: "Netflix n Chill" },
@@ -154,7 +174,7 @@ const Sidebar: React.FC = () => {
         contextMenuRef.current &&
         !contextMenuRef.current.contains(event.target as Node)
       ) {
-        setActiveMenuPostId(null); // Tutup context menu kalau klik di luar
+        setActiveMenuPostId(null); 
       }
     };
 
@@ -191,28 +211,6 @@ const Sidebar: React.FC = () => {
     </div>
   );
 };
-  
-
-const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-    const userId = getUserIdFromToken(token);
-
-    useEffect(() => {
-      if (userId && token) {
-        const fetchData = async () => {
-          try {
-            const res = await ProfileService.getProfile(userId, token);
-            const data: Profile = res.data;
-
-            setAvatarPreview(data.profile_picture);
-          } catch (error) {
-            console.error('Failed to fetch profile:', error);
-          }
-        };
-
-        fetchData();
-      }
-    }, [userId, token]);
 
 return (
   <div className="homepage">
@@ -223,7 +221,7 @@ return (
         <div className="main-content">
           <div className='inputForm'>
             <div className='divAtas'>
-              <img src={avatarPreview || profile} alt="Profile" className="profile-icon" /> 
+              <img src={avatarPreview|| profile} alt="Profile" className="profile-icon" /> 
               <textarea
                 id="textinput"
                 placeholder="What's new?"
@@ -266,120 +264,123 @@ return (
           </div>
 
           <div className="forum-list">
-  {forums.length === 0 ? (
-    <p>Tidak ada forum untuk ditampilkan</p>
-  ) : (
-    forums.map((forum, index) => {
-      const user = forum.msuser ?? {
-        username: "Username",
-        profile_image: profile,
-      };
-      const subject = forum.subject_name ?? forum.mssubject?.subject_name;
-      const eventName = forum.event_name ?? forum.msevent?.event_name;
-      const eventDate = forum.event_date ?? forum.msevent?.event_date;
-      const participants = forum.participants ?? forum.total_participants;
-      const isEventForum = eventName && eventDate;
+            {forums.length === 0 ? (
+              <p>Tidak ada forum untuk ditampilkan</p>
+            ) : (
+              forums.map((forum, index) => {
+                const user = forum.msuser ?? {
+                  username: "Username",
+                  profile_image: profile,
+                };
+                const subject = forum.subject_name ?? forum.mssubject?.subject_name;
+                const eventName = forum.event_name ?? forum.msevent?.event_name;
+                const eventDate = forum.event_date ?? forum.msevent?.event_date;
+                const participants = forum.participants ?? forum.total_participants;
+                const isEventForum = eventName && eventDate;
 
-      return (
-        <div key={forum.post_id ?? index} className="forum-card">
-        <img
-          src={deleteIcon}
-          alt="Delete Forum"
-          className="delete-icon"
-          onClick={() => handleDeleteForum(forum.post_id)}
-        />
+                return (
+                  <div key={forum.post_id ?? index} className="forum-card" 
+                  onClick={() => navigate(`/forum/${forum.post_id}`)}
+                  style={{ cursor: 'pointer' }}>
+                  <img
+                    src={deleteIcon}
+                    alt="Delete Forum"
+                    className="delete-icon"
+                    onClick={(e) => {
+                      e.stopPropagation();    
+                      handleDeleteForum(forum.post_id);
+                    }}
+                  />
 
-          {/* User Info */}
-          {user && (
-            <div className="forum-user-info">
-              <img
-                src={user.profile_image ?? profile}
-                alt="User"
-                className="user-avatar-small"
-              />
-              <div className="user-meta">
-                <p className="username">{user.username}</p>
-                {user.major && <p className="major">{user.major}</p>}
-              </div>
-              <div className="menu-wrapper">
-                <button
-                  className="dots-button"
-                  onClick={() =>
-                    setActiveMenuPostId(forum.post_id ?? index)
-                  }
-                >
-                  <img src={dots} alt="Options" className="dots-icon" />
-                </button>
+                    {user && (
+                      <div className="forum-user-info">
+                        <img
+                          src={user.profile_image ?? profile}
+                          alt="User"
+                          className="user-avatar-small"
+                        />
+                        <div className="user-meta">
+                          <p className="username">{user.username}</p>
+                          {user.major && <p className="major">{user.major}</p>}
+                        </div>
+                        <div className="menu-wrapper">
+                          <button
+                            className="dots-button"
+                            onClick={() =>
+                              setActiveMenuPostId(forum.post_id ?? index)
+                            }
+                          >
+                            <img src={dots} alt="Options" className="dots-icon" />
+                          </button>
 
-                {activeMenuPostId === (forum.post_id ?? index) && (
-                  <div className="context-menu" ref={contextMenuRef}>
-                    <button
-                      className="context-menu-item"
-                      onClick={async () => {
-                        const result = await Swal.fire({
-                          title: "Yakin ingin menghapus?",
-                          text: "Post ini akan dihapus secara permanen!",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#d33",
-                          cancelButtonColor: "#3085d6",
-                          confirmButtonText: "Ya, hapus!",
-                          cancelButtonText: "Batal",
-                        });
+                          {activeMenuPostId === (forum.post_id ?? index) && (
+                            <div className="context-menu" ref={contextMenuRef}>
+                              <button
+                                className="context-menu-item"
+                                onClick={async () => {
+                                  const result = await Swal.fire({
+                                    title: "Yakin ingin menghapus?",
+                                    text: "Post ini akan dihapus secara permanen!",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#d33",
+                                    cancelButtonColor: "#3085d6",
+                                    confirmButtonText: "Ya, hapus!",
+                                    cancelButtonText: "Batal",
+                                  });
 
-                        if (result.isConfirmed) {
-                          await handleDeleteForum(forum.post_id);
-                        }
+                                  if (result.isConfirmed) {
+                                    await handleDeleteForum(forum.post_id);
+                                  }
 
-                        setActiveMenuPostId(null);
-                      }}
-                    >
-                      Delete
-                    </button>
+                                  setActiveMenuPostId(null);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Forum Biasa */}
+                    <h4>{forum.title}</h4>
+                    <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
+                    {subject && (
+                      <p>
+                        <strong>Subjek:</strong> {subject}
+                      </p>
+                    )}
+
+                    {/* Event */}
+                    {isEventForum ? (
+                      <div className="event-info">
+                        <p>
+                          <strong>Event:</strong> {eventName} ({eventDate})
+                        </p>
+                        <p>
+                          <strong>Lokasi:</strong>{" "}
+                          {forum.msevent?.mslocation?.location_name ?? "Tidak disebutkan"}
+                        </p>
+                        {participants && (
+                          <p>
+                            <strong>Partisipan:</strong> {participants} orang
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-forum-content">
+                        <p>{forum.forum_text}</p>
+                      </div>
+                    )}
+
+                    <hr />
                   </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Forum Biasa */}
-          <h4>{forum.title}</h4>
-          <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
-          {subject && (
-            <p>
-              <strong>Subjek:</strong> {subject}
-            </p>
-          )}
-
-          {/* Event */}
-          {isEventForum ? (
-            <div className="event-info">
-              <p>
-                <strong>Event:</strong> {eventName} ({eventDate})
-              </p>
-              <p>
-                <strong>Lokasi:</strong>{" "}
-                {forum.msevent?.mslocation?.location_name ?? "Tidak disebutkan"}
-              </p>
-              {participants && (
-                <p>
-                  <strong>Partisipan:</strong> {participants} orang
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="text-forum-content">
-              <p>{forum.forum_text}</p>
-            </div>
-          )}
-
-          <hr />
-        </div>
-      );
-    })
-  )}
-</div>
-
+                );
+              })
+            )}
+          </div>
         </div>
 
         <div className="event-section">

@@ -34,13 +34,11 @@ const NavigationBar: React.FC = () => {
                 return;
               }
 
-    setAvatarPreview(res.profile_picture || '');
-  } catch (error) {
-    console.error("Failed to fetch profile:", error);
-  }
-};
-
-
+              setAvatarPreview(res.profile_picture || '');
+            } catch (error) {
+              console.error("Failed to fetch profile:", error);
+            }
+          };
           fetchData();
         }
       }, [userId, token]);
