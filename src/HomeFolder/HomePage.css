@@ -595,3 +595,10 @@ select.popup-input option {
   padding-bottom: 50px; /* Biar gak mentok dan muncul scrollbar */
 }
 
+.event-widget {
+  margin-left: 0; /* pastikan tidak terdorong */
+}
+
+.event-card {
+  margin-left: 0;  /* <= inilah yang perlu disesuaikan */
+}

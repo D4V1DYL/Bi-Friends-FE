@@ -329,7 +329,7 @@ return (
                 <p className="username">{user.username}</p>
                 {user.major && <p className="major">{user.major}</p>}
               </div>
-              <div className="menu-wrapper">
+              {/* <div className="menu-wrapper">
                 <button
                   className="dots-button"
                   onClick={() =>
@@ -366,7 +366,7 @@ return (
                     </button>
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
           )}
 
