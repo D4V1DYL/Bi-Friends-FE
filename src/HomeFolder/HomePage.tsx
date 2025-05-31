@@ -113,20 +113,24 @@ const HomePage: React.FC = () => {
     }
   };
 
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    const fetchForums = async () => {
-      try {
-        const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-        const allForums = await GetForumService.getAllForums(token); // Sudah array langsung
-        setForums(allForums); // OK: setForums expects array of forums
-      } catch (error) {
-        console.error("Error fetching forums:", error);
-      }
-    };
-  
-    fetchForums();
-  }, []);
+  const fetchForums = async () => {
+    setIsLoading(true); // mulai loading
+    try {
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+      const allForums = await GetForumService.getAllForums(token);
+      setForums(allForums);
+    } catch (error) {
+      console.error("Error fetching forums:", error);
+    } finally {
+      setIsLoading(false); // selesai loading
+    }
+  };
+
+  fetchForums();
+}, []);
+
 
 
 const dummySubjects = [
@@ -276,18 +280,28 @@ return (
           </div>
 
           <div className="forum-list">
-  {forums.length === 0 ? (
-    <p>Tidak ada forum untuk ditampilkan</p>
-  ) : (
-      forums
-      .filter((forum) =>
+  {isLoading ? (
+    <p>Loading forums...</p>
+  ) : (() => {
+    const filteredForums = forums.filter(
+      (forum) =>
         selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
-      )
-      .map((forum, index) => {
+    );
+
+    if (filteredForums.length === 0) {
+      return <p style={{ padding: "1rem", textAlign: "center" }}>Tidak ada forum untuk ditampilkan</p>;
+    }
+
+    return filteredForums.map((forum, index) => {
+      if (!forum || (!forum.title && !forum.description && !forum.event_name)) {
+        return null;
+      }
+
       const user = forum.msuser ?? {
         username: "Username",
         profile_image: profile,
       };
+
       const subject = forum.subject_name ?? forum.mssubject?.subject_name;
       const eventName = forum.event_name ?? forum.msevent?.event_name;
       const eventDate = forum.event_date ?? forum.msevent?.event_date;
@@ -296,12 +310,12 @@ return (
 
       return (
         <div key={forum.post_id ?? index} className="forum-card">
-        <img
-          src={deleteIcon}
-          alt="Delete Forum"
-          className="delete-icon"
-          onClick={() => handleDeleteForum(forum.post_id)}
-        />
+          <img
+            src={deleteIcon}
+            alt="Delete Forum"
+            className="delete-icon"
+            onClick={() => handleDeleteForum(forum.post_id)}
+          />
 
           {/* User Info */}
           {user && (
@@ -390,8 +404,8 @@ return (
           <hr />
         </div>
       );
-    })
-  )}
+    });
+  })()}
 </div>
 
         </div>

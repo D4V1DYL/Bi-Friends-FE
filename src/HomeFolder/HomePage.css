@@ -7,10 +7,11 @@
   .homepage-content {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     padding: 16px;
     gap: 24px;
   }
-  
+
   .main-content {
     flex: 2;
     display: flex;
@@ -43,12 +44,6 @@
     margin-top: 30px;
     margin-left: 15px;
     flex-direction: column;
-  }
-  
-  .sidebar-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: right;
   }
 
   .search-bar{
@@ -590,3 +585,13 @@ select.popup-input {
 select.popup-input option {
   color: black;
 }
+
+.sidebar-content {
+  overflow: visible;
+  height: auto;
+}
+
+.subject-collection {
+  padding-bottom: 50px; /* Biar gak mentok dan muncul scrollbar */
+}
+
