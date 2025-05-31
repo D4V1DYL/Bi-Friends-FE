@@ -10,6 +10,7 @@ import ChatPage from './ChatFolder/ChatPage';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import Calender from './CalenderFolder/Calender';
+import OtherPersonPage from './OtherPersonPage/OtherPersonPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/CalenderPage" element={<Calender />} />
         <Route path="/ProfilePage" element={<ProfilePage />} />
         <Route path="/ChatPage" element={<ChatPage />} />
+        <Route path="/OtherPersonPage/:userId" element={<OtherPersonPage/>}/>
         <Route path="/404" element={<MaintainanceScreen />} />
       </Routes>
     </Router>
