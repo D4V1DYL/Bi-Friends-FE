@@ -290,7 +290,7 @@ return (
 
           {/* Forum Biasa */}
           <h4>{forum.title}</h4>
-          <p>{forum.description}</p>
+          <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
           {subject && (
             <p>
               <strong>Subjek:</strong> {subject}
@@ -335,80 +335,66 @@ return (
       </div>
 
       {showPopup && (
-  <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-    <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-      <h3>Make An Event</h3>
+        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="popup-content wide-popup wider-popup" onClick={(e) => e.stopPropagation()}>
+            <h3 className="popup-title">Make An Event</h3>
 
-      <label htmlFor="event-name">Event Name:</label>
-      <input
-        type="text"
-        id="event-name"
-        className="popup-input"
-        placeholder="Enter event name"
-      />
+            <div className="event-details-grid">
+              <label htmlFor="event-name">Event Name</label>
+              <input type="text" id="event-name" className="popup-input" placeholder="What should we call this awesome event?" />
 
-      <label htmlFor="event-description">Description:</label>
-      <input
-        type="text"
-        id="event-description"
-        className="popup-input"
-        placeholder="Where the party at"
-      />
-
-      <label htmlFor="event-location">Location:</label>
-      <input
-        type="text"
-        id="event-location"
-        className="popup-input"
-        placeholder="Enter event location"
-      />
-
-      <label htmlFor="event-date">Date:</label>
-      <input
-        type="text"
-        id="event-date"
-        className="popup-input"
-        placeholder="When is the party starting?"
-      />
+              <label htmlFor="event-description">Description</label>
+              <textarea id="event-description" className="popup-input" placeholder="What’s this event all about?" rows={4} style={{ resize: 'vertical' }} />
 
 
-      <label htmlFor="event-capasity">Capasity:</label>
-      <input
-        type="number"
-        id="event-capasity"
-        className="popup-input"
-        placeholder="How many people?"
-      />
+              <label htmlFor="event-location">Location</label>
+              <input type="text" id="event-location" className="popup-input" placeholder="Where will the magic happen?" />
 
-      <label htmlFor="event-latitude">Lantitude:</label>
-      <input
-        type="number"
-        id="event-latitude"
-        className="popup-input"
-        placeholder="give the latitude"
-      />
+              <label htmlFor="event-date">Date & Time Details</label>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label htmlFor="event-date" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Date</label>
+                  <input type="date" id="event-date" className="popup-input" />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label htmlFor="event-start-time" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Start Time</label>
+                  <input type="time" id="event-start-time" className="popup-input" />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <label htmlFor="event-end-time" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>End Time</label>
+                  <input type="time" id="event-end-time" className="popup-input" />
+                </div>
+              </div>
 
-      <label htmlFor="event-longtitude">Longtitude:</label>
-      <input
-        type="number"
-        id="event-longtitude"
-        className="popup-input"
-        placeholder="give the longtitude"
-      />
+              <label htmlFor="event-capasity">Capacity</label>
+              <input
+                type="number"
+                id="event-capasity"
+                className="popup-input"
+                placeholder="Max number of people allowed"
+                min="0"
+              />
 
-      <div className="popup-buttons">
-        <button className="cancel-button" onClick={() => setShowPopup(false)}>
-          Close
-        </button>
+              <label>Coordinates</label>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <label htmlFor="event-latitude" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Latitude</label>
+                    <input type="number" id="event-latitude" className="popup-input" placeholder="Drop the latitude pin" />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <label htmlFor="event-longtitude" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Longitude</label>
+                    <input type="number" id="event-longtitude" className="popup-input" placeholder="And the longitude too" />
+                  </div>
+                </div>
+              </div>
 
-        <button className="submit-button" onClick={() => setShowPopup(false)}>
-          Submit
-        </button>
-
-      </div>
-    </div>
-  </div>
-)}
+            <div className="popup-buttons">
+              <button className="cancel-button" onClick={() => setShowPopup(false)}>Close</button>
+              <button className="submit-button" onClick={() => setShowPopup(false)}>Submit</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
