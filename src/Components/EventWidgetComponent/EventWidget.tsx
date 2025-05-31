@@ -5,8 +5,8 @@ import './EventWidget.css';
 interface EventData {
   event_name: string;
   event_date: string;
-  start_time?: string;
-  end_time?: string;
+  start_date?: string;
+  end_date?: string;
   mslocation: {
     location_name: string;
     capacity: number;
@@ -37,9 +37,23 @@ const EventWidget: React.FC = () => {
   }
 
   function formatJamRange(start?: string, end?: string): string {
-    if (!start || !end) return "-"; // default fallback
-    const format = (time: string) => time.slice(0, 5);
-    return `${format(start)} - ${format(end)} WIB`;
+    if (!start || !end) return "-";
+
+    const startTime = new Date(start).toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta"
+    });
+
+    const endTime = new Date(end).toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta"
+    });
+
+    return `${startTime} - ${endTime} WIB`;
   }
 
   if (!event) return null;
@@ -50,7 +64,7 @@ const EventWidget: React.FC = () => {
         <div className="event-card">
           <h4>{event.event_name}</h4>
           <p>📅 {formatTanggalIndo(event.event_date)}</p>
-          <p>🕒 {formatJamRange(event.start_time, event.end_time)}</p>
+          <p>🕒 {formatJamRange(event.start_date, event.end_date)}</p>
           <p>📍 {event.mslocation?.location_name}</p>
           <p>👥 Kapasitas: {event.mslocation?.capacity}</p>
         </div>

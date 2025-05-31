@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useEffect} from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
@@ -7,7 +7,6 @@ import GetForumService from "../Shared/GetForum/GetForumService";
 import upload from '../assets/upload.png';
 import event from '../assets/event.png';
 import search from '../assets/SearchIcon.svg';
-import dots from '../assets/3dot.png';
 import Swal from 'sweetalert2';
 import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
@@ -19,13 +18,14 @@ import { useNavigate } from 'react-router-dom';
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
-  const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
   const navigate = useNavigate();
+  const [selectedSubject, setSelectedSubject] = useState<string>("All");
+  const [titleText, setTitleText] = useState("");
+
 
   const handleDeleteForum = async (forumId: number) => {
     const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
@@ -52,6 +52,63 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handlePostSubmit = async () => {
+    if (!titleText && !mediaPreview) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Harap isi judul atau unggah gambar terlebih dahulu.",
+      });
+      return;
+    }
+
+    if (!titleText && !mediaPreview) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Harap isi judul atau unggah gambar terlebih dahulu.",
+      });
+      return;
+    }
+
+    const payload = {
+      title: titleText,
+      description: "",                // ⬅️ tambahkan ini!
+      attachment: mediaPreview ?? null
+    };
+
+    try {
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+      const response = await fetch('http://127.0.0.1:8000/Forum/create_forum', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error("Gagal post");
+
+      await Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Post berhasil dikirim.",
+      });
+
+      // reset input
+      setTitleText("");
+      setMediaPreview(null);
+    } catch (error) {
+      console.error(error);
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Terjadi kesalahan saat mengirim post.",
+      });
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image')) {
@@ -66,22 +123,32 @@ const HomePage: React.FC = () => {
   };
 
   const handleEventSubmit = async () => {
-    const name = (document.getElementById('event-name') as HTMLInputElement)?.value;
-    const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value;
-    const subjectId = parseInt((document.getElementById('event-subject') as HTMLSelectElement)?.value);
-    const location = (document.getElementById('event-location') as HTMLInputElement)?.value;
-    const address = (document.getElementById('event-address') as HTMLInputElement)?.value;
-    const date = (document.getElementById('event-date') as HTMLInputElement)?.value;
-    const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value;
-    const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value;
-    const capacity = parseInt((document.getElementById('event-capasity') as HTMLInputElement)?.value || '0');
-    const latitude = parseFloat((document.getElementById('event-latitude') as HTMLInputElement)?.value || '0');
-    const longitude = parseFloat((document.getElementById('event-longtitude') as HTMLInputElement)?.value || '0');
+  const name = (document.getElementById('event-name') as HTMLInputElement)?.value || null;
+  const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || null;
 
-    const payload = {
-    title: name, // sudah sesuai
-    description: text, // untuk msforum
-    forum_text: text,  // untuk msisi_forum
+  const subjectIdRaw = (document.getElementById('event-subject') as HTMLSelectElement)?.value;
+  const subjectId = subjectIdRaw === "" ? null : parseInt(subjectIdRaw);
+
+  const location = (document.getElementById('event-location') as HTMLInputElement)?.value || null;
+  const address = (document.getElementById('event-address') as HTMLInputElement)?.value || null;
+
+  const date = (document.getElementById('event-date') as HTMLInputElement)?.value || null;
+  const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value || null;
+  const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value || null;
+
+  const capacityRaw = (document.getElementById('event-capasity') as HTMLInputElement)?.value;
+  const capacity = capacityRaw === "" ? null : parseInt(capacityRaw);
+
+  const latitudeRaw = (document.getElementById('event-latitude') as HTMLInputElement)?.value;
+  const latitude = latitudeRaw === "" ? null : parseFloat(latitudeRaw);
+
+  const longitudeRaw = (document.getElementById('event-longtitude') as HTMLInputElement)?.value;
+  const longitude = longitudeRaw === "" ? null : parseFloat(longitudeRaw);
+
+  const payload = {
+    title: name,
+    description: text,
+    forum_text: text,
     subject_id: subjectId,
     event_name: name,
     event_date: date,
@@ -94,43 +161,48 @@ const HomePage: React.FC = () => {
     location_longitude: longitude,
   };
 
+  try {
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+    const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create event');
+    }
+
+    Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
+    setShowPopup(false);
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+  }
+};
+
+
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+  const fetchForums = async () => {
+    setIsLoading(true); // mulai loading
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-      const response = await fetch('http://bifriendsbe.bifriends.my.id/Forum/create_forum', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create event');
-      }
-
-      Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
-      setShowPopup(false);
+      const allForums = await GetForumService.getAllForums(token);
+      setForums(allForums);
     } catch (error) {
-      console.error(error);
-      Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+      console.error("Error fetching forums:", error);
+    } finally {
+      setIsLoading(false); // selesai loading
     }
   };
 
+  fetchForums();
+}, []);
 
-  useEffect(() => {
-    const fetchForums = async () => {
-      try {
-        const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-        const allForums = await GetForumService.getAllForums(token); // Sudah array langsung
-        setForums(allForums); // OK: setForums expects array of forums
-      } catch (error) {
-        console.error("Error fetching forums:", error);
-      }
-    };
-  
-    fetchForums();
-  }, []);
 
   useEffect(() => {
     if (userId && token) {
@@ -159,6 +231,7 @@ const dummySubjects = [
   { id: 8, name: "Gaming" },
   { id: 9, name: "Memes" },
   { id: 10, name: "Night Club" },
+  {id: 11, name: "All"}
 ];
 
 const Sidebar: React.FC = () => {
@@ -166,22 +239,6 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     setSubjects(dummySubjects);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        contextMenuRef.current &&
-        !contextMenuRef.current.contains(event.target as Node)
-      ) {
-        setActiveMenuPostId(null); 
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
   
   return (
@@ -201,7 +258,15 @@ const Sidebar: React.FC = () => {
 
           <div className="subject-collection">
             {subjects.map((subject) => (
-              <p key={subject.id} className="subject-name">
+              <p
+                key={subject.id}
+                className="subject-name"
+                style={{
+                  fontWeight: selectedSubject === subject.name ? 'bold' : 'normal',
+                  cursor: 'pointer',
+                }}
+                onClick={() => setSelectedSubject(subject.name)}
+              >
                 {subject.name}
               </p>
             ))}
@@ -227,12 +292,13 @@ return (
                 placeholder="What's new?"
                 rows={1}
                 maxLength={250}
+                value={titleText}
+                onChange={(e) => setTitleText(e.target.value)}
                 onInput={(e) => {
                   e.currentTarget.style.height = "auto";
                   e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                 }}
               ></textarea>
-
               
               {/* Event Icon Button */}
               <button onClick={() => setShowPopup(true)} id="eventPopupButton">
@@ -259,128 +325,139 @@ return (
             )}
 
             <div className='divBawah'>
-              <button id="submitButton">Post</button>
+              <button id="submitButton" onClick={handlePostSubmit}>Post</button>
             </div>
           </div>
 
           <div className="forum-list">
-            {forums.length === 0 ? (
-              <p>Tidak ada forum untuk ditampilkan</p>
-            ) : (
-              forums.map((forum, index) => {
-                const user = forum.msuser ?? {
-                  username: "Username",
-                  profile_image: profile,
-                };
-                const subject = forum.subject_name ?? forum.mssubject?.subject_name;
-                const eventName = forum.event_name ?? forum.msevent?.event_name;
-                const eventDate = forum.event_date ?? forum.msevent?.event_date;
-                const participants = forum.participants ?? forum.total_participants;
-                const isEventForum = eventName && eventDate;
+  {isLoading ? (
+    <p>Loading forums...</p>
+  ) : (() => {
+    const filteredForums = forums.filter(
+      (forum) =>
+        selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
+    );
 
-                return (
-                  <div key={forum.post_id ?? index} className="forum-card" 
-                  onClick={() => navigate(`/forum/${forum.post_id}`)}
-                  style={{ cursor: 'pointer' }}>
-                  <img
-                    src={deleteIcon}
-                    alt="Delete Forum"
-                    className="delete-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();    
-                      handleDeleteForum(forum.post_id);
-                    }}
-                  />
+    if (filteredForums.length === 0) {
+      return <p style={{ padding: "1rem", textAlign: "center" }}>Tidak ada forum untuk ditampilkan</p>;
+    }
 
-                    {user && (
-                      <div className="forum-user-info">
-                        <img
-                          src={user.profile_image ?? profile}
-                          alt="User"
-                          className="user-avatar-small"
-                        />
-                        <div className="user-meta">
-                          <p className="username">{user.username}</p>
-                          {user.major && <p className="major">{user.major}</p>}
-                        </div>
-                        <div className="menu-wrapper">
-                          <button
-                            className="dots-button"
-                            onClick={() =>
-                              setActiveMenuPostId(forum.post_id ?? index)
-                            }
-                          >
-                            <img src={dots} alt="Options" className="dots-icon" />
-                          </button>
+    return filteredForums.map((forum, index) => {
+      if (!forum || (!forum.title && !forum.description && !forum.event_name)) {
+        return null;
+      }
 
-                          {activeMenuPostId === (forum.post_id ?? index) && (
-                            <div className="context-menu" ref={contextMenuRef}>
-                              <button
-                                className="context-menu-item"
-                                onClick={async () => {
-                                  const result = await Swal.fire({
-                                    title: "Yakin ingin menghapus?",
-                                    text: "Post ini akan dihapus secara permanen!",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "#d33",
-                                    cancelButtonColor: "#3085d6",
-                                    confirmButtonText: "Ya, hapus!",
-                                    cancelButtonText: "Batal",
-                                  });
+      const user = forum.msuser ?? {
+        username: "Username",
+        profile_image: profile,
+      };
 
-                                  if (result.isConfirmed) {
-                                    await handleDeleteForum(forum.post_id);
-                                  }
+      const subject = forum.subject_name ?? forum.mssubject?.subject_name;
+      const eventName = forum.event_name ?? forum.msevent?.event_name;
+      const eventDate = forum.event_date ?? forum.msevent?.event_date;
+      const participants = forum.participants ?? forum.total_participants;
+      const isEventForum = eventName && eventDate;
 
-                                  setActiveMenuPostId(null);
-                                }}
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+      return (
+        <div key={forum.post_id ?? index} className="forum-card">
+          <img
+            src={deleteIcon}
+            alt="Delete Forum"
+            className="delete-icon"
+            onClick={() => handleDeleteForum(forum.post_id)}
+          />
 
-                    {/* Forum Biasa */}
-                    <h4>{forum.title}</h4>
-                    <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
-                    {subject && (
-                      <p>
-                        <strong>Subjek:</strong> {subject}
-                      </p>
-                    )}
+{/* User Info */}
+          {user && (
+            <div className="forum-user-info">
+              <img
+                src={user.profile_image ?? profile}
+                alt="User"
+                className="user-avatar-small"
+              />
+              <div className="user-meta">
+                <p className="username">{user.username}</p>
+                {user.major && <p className="major">{user.major}</p>}
+              </div>
+              {/* <div className="menu-wrapper">
+                <button
+                  className="dots-button"
+                  onClick={() =>
+                    setActiveMenuPostId(forum.post_id ?? index)
+                  }
+                >
+                  <img src={dots} alt="Options" className="dots-icon" />
+                </button>
 
-                    {/* Event */}
-                    {isEventForum ? (
-                      <div className="event-info">
-                        <p>
-                          <strong>Event:</strong> {eventName} ({eventDate})
-                        </p>
-                        <p>
-                          <strong>Lokasi:</strong>{" "}
-                          {forum.msevent?.mslocation?.location_name ?? "Tidak disebutkan"}
-                        </p>
-                        {participants && (
-                          <p>
-                            <strong>Partisipan:</strong> {participants} orang
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-forum-content">
-                        <p>{forum.forum_text}</p>
-                      </div>
-                    )}
+                {activeMenuPostId === (forum.post_id ?? index) && (
+                  <div className="context-menu" ref={contextMenuRef}>
+                    <button
+                      className="context-menu-item"
+                      onClick={async () => {
+                        const result = await Swal.fire({
+                          title: "Yakin ingin menghapus?",
+                          text: "Post ini akan dihapus secara permanen!",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#d33",
+                          cancelButtonColor: "#3085d6",
+                          confirmButtonText: "Ya, hapus!",
+                          cancelButtonText: "Batal",
+                        });
 
-                    <hr />
+                        if (result.isConfirmed) {
+                          await handleDeleteForum(forum.post_id);
+                        }
+
+                        setActiveMenuPostId(null);
+                      }}
+                    >
+                      Delete
+                    </button>
                   </div>
-                );
-              })
-            )}
-          </div>
+                )}
+              </div> */}
+            </div>
+          )}
+
+          {/* Forum Biasa */}
+          <h4>{forum.title}</h4>
+          <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
+          {subject && (
+            <p>
+              <strong>Subject:</strong> {subject}
+            </p>
+          )}
+
+          {/* Event */}
+          {isEventForum ? (
+            <div className="event-info">
+              <p>
+                <strong>Event:</strong> {eventName} ({eventDate})
+              </p>
+              <p>
+                <strong>Location:</strong>{" "}
+                {forum.msevent?.location?.location_name ?? "Tidak disebutkan"}
+              </p>
+              {participants && (
+                <p>
+                  <strong>Participant:</strong> {participants} orang
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="text-forum-content">
+              <p>{forum.forum_text}</p>
+            </div>
+          )}
+
+          <hr />
+        </div>
+      );
+    });
+  })()}
+</div>
+
         </div>
 
         <div className="event-section">
