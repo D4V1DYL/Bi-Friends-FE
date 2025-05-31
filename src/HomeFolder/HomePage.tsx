@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
   const [titleText, setTitleText] = useState("");
 
