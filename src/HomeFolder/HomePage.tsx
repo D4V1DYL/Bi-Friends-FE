@@ -386,12 +386,12 @@ return (
                 <strong>Event:</strong> {eventName} ({eventDate})
               </p>
               <p>
-                <strong>Lokasi:</strong>{" "}
-                {forum.msevent?.mslocation?.location_name ?? "Tidak disebutkan"}
+                <strong>Location:</strong>{" "}
+                {forum.msevent?.location?.location_name ?? "Tidak disebutkan"}
               </p>
               {participants && (
                 <p>
-                  <strong>Partisipan:</strong> {participants} orang
+                  <strong>Participant:</strong> {participants} orang
                 </p>
               )}
             </div>
