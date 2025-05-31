@@ -13,7 +13,7 @@ import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
-import ChatService from '../Shared/Chat/ChatService';
+// import ChatService from '../Shared/Chat/ChatService';
 
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
@@ -65,6 +65,7 @@ const HomePage: React.FC = () => {
     const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value;
     const subjectId = parseInt((document.getElementById('event-subject') as HTMLSelectElement)?.value);
     const location = (document.getElementById('event-location') as HTMLInputElement)?.value;
+    const address = (document.getElementById('event-address') as HTMLInputElement)?.value;
     const date = (document.getElementById('event-date') as HTMLInputElement)?.value;
     const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value;
     const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value;
@@ -82,7 +83,7 @@ const HomePage: React.FC = () => {
     start_date: startDate,
     end_date: endDate,
     location_name: location,
-    location_address: "", // optional, bisa tetap kosong
+    location_address: address,
     location_capacity: capacity,
     location_latitude: latitude,
     location_longitude: longitude,
@@ -408,6 +409,9 @@ return (
 
               <label htmlFor="event-location">Location</label>
               <input type="text" id="event-location" className="popup-input" placeholder="Where will the magic happen?" />
+
+              <label htmlFor="event-address">Address</label>
+              <input type="text" id="event-address" className="popup-input" placeholder="Specific location address" />
 
               <label htmlFor="event-date">Date & Time Details</label>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
