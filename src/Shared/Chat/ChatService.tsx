@@ -7,8 +7,9 @@ const ChatService = {
    /**
    * Ambil token dari sessionStorage
    */
-  getToken(): string | null {
-    return sessionStorage.getItem('token')
+  getToken(): string {
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+    return token;
   },
 
     getCurrentUserId(): number {

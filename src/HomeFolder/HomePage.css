@@ -582,3 +582,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1); /* ini membuat ikon putih jadi hitam */
 }
 
+
+select.popup-input {
+  color: black;
+}
+
+select.popup-input option {
+  color: black;
+}

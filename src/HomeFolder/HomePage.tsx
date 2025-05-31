@@ -13,6 +13,7 @@ import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
+import ChatService from '../Shared/Chat/ChatService';
 
 const HomePage: React.FC = () => {  
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
@@ -22,7 +23,7 @@ const HomePage: React.FC = () => {
   const [forums, setForums] = useState<any[]>([]);
 
   const handleDeleteForum = async (forumId: number) => {
-    const token = sessionStorage.getItem('token') || '';
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
     try {
       const result = await Swal.fire({
         title: 'Yakin ingin menghapus?',
@@ -59,10 +60,62 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handleEventSubmit = async () => {
+    const name = (document.getElementById('event-name') as HTMLInputElement)?.value;
+    const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value;
+    const subjectId = parseInt((document.getElementById('event-subject') as HTMLSelectElement)?.value);
+    const location = (document.getElementById('event-location') as HTMLInputElement)?.value;
+    const date = (document.getElementById('event-date') as HTMLInputElement)?.value;
+    const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value;
+    const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value;
+    const capacity = parseInt((document.getElementById('event-capasity') as HTMLInputElement)?.value || '0');
+    const latitude = parseFloat((document.getElementById('event-latitude') as HTMLInputElement)?.value || '0');
+    const longitude = parseFloat((document.getElementById('event-longtitude') as HTMLInputElement)?.value || '0');
+
+    const payload = {
+    title: name, // sudah sesuai
+    description: text, // untuk msforum
+    forum_text: text,  // untuk msisi_forum
+    subject_id: subjectId,
+    event_name: name,
+    event_date: date,
+    start_date: startDate,
+    end_date: endDate,
+    location_name: location,
+    location_address: "", // optional, bisa tetap kosong
+    location_capacity: capacity,
+    location_latitude: latitude,
+    location_longitude: longitude,
+  };
+
+    try {
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+      const response = await fetch('http://localhost:8000/Forum/create_forum', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create event');
+      }
+
+      Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
+      setShowPopup(false);
+    } catch (error) {
+      console.error(error);
+      Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+    }
+  };
+
+
   useEffect(() => {
     const fetchForums = async () => {
       try {
-        const token = sessionStorage.getItem('token') || '';
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
         const allForums = await GetForumService.getAllForums(token); // Sudah array langsung
         setForums(allForums); // OK: setForums expects array of forums
       } catch (error) {
@@ -305,7 +358,7 @@ return (
               </p>
               <p>
                 <strong>Lokasi:</strong>{" "}
-                {forum.location_name ?? "Tidak disebutkan"}
+                {forum.msevent?.mslocation?.location_name ?? "Tidak disebutkan"}
               </p>
               {participants && (
                 <p>
@@ -346,6 +399,12 @@ return (
               <label htmlFor="event-description">Description</label>
               <textarea id="event-description" className="popup-input" placeholder="What’s this event all about?" rows={4} style={{ resize: 'vertical' }} />
 
+              <label htmlFor="event-subject">Subject</label>
+              <select id="event-subject" className="popup-input">
+                {dummySubjects.map((subject) => (
+                  <option key={subject.id} value={subject.id}>{subject.name}</option>
+                ))}
+              </select>
 
               <label htmlFor="event-location">Location</label>
               <input type="text" id="event-location" className="popup-input" placeholder="Where will the magic happen?" />
@@ -390,7 +449,7 @@ return (
 
             <div className="popup-buttons">
               <button className="cancel-button" onClick={() => setShowPopup(false)}>Close</button>
-              <button className="submit-button" onClick={() => setShowPopup(false)}>Submit</button>
+              <button className="submit-button" onClick={handleEventSubmit}>Submit</button>
             </div>
           </div>
         </div>
