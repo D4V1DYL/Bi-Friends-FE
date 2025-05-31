@@ -12,7 +12,7 @@ import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import ChatService from '../Shared/Chat/ChatService';
 
 const HomePage: React.FC = () => {  
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
   const [titleText, setTitleText] = useState("");
 
@@ -359,7 +359,8 @@ return (
       const isEventForum = eventName && eventDate;
 
       return (
-        <div key={forum.post_id ?? index} className="forum-card">
+        <div key={forum.post_id ?? index} className="forum-card" onClick={() => navigate(`/forum/${forum.post_id}`)}
+        style={{ cursor: 'pointer' }}>
           <img
             src={deleteIcon}
             alt="Delete Forum"
@@ -379,44 +380,6 @@ return (
                 <p className="username">{user.username}</p>
                 {user.major && <p className="major">{user.major}</p>}
               </div>
-              {/* <div className="menu-wrapper">
-                <button
-                  className="dots-button"
-                  onClick={() =>
-                    setActiveMenuPostId(forum.post_id ?? index)
-                  }
-                >
-                  <img src={dots} alt="Options" className="dots-icon" />
-                </button>
-
-                {activeMenuPostId === (forum.post_id ?? index) && (
-                  <div className="context-menu" ref={contextMenuRef}>
-                    <button
-                      className="context-menu-item"
-                      onClick={async () => {
-                        const result = await Swal.fire({
-                          title: "Yakin ingin menghapus?",
-                          text: "Post ini akan dihapus secara permanen!",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#d33",
-                          cancelButtonColor: "#3085d6",
-                          confirmButtonText: "Ya, hapus!",
-                          cancelButtonText: "Batal",
-                        });
-
-                        if (result.isConfirmed) {
-                          await handleDeleteForum(forum.post_id);
-                        }
-
-                        setActiveMenuPostId(null);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div> */}
             </div>
           )}
 
