@@ -12,7 +12,7 @@ import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // import ChatService from '../Shared/Chat/ChatService';
 
 const HomePage: React.FC = () => {  
