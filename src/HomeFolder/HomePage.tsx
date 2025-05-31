@@ -22,6 +22,8 @@ const HomePage: React.FC = () => {
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
+  const [titleText, setTitleText] = useState("");
+
 
   const handleDeleteForum = async (forumId: number) => {
     const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
@@ -48,6 +50,63 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handlePostSubmit = async () => {
+    if (!titleText && !mediaPreview) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Harap isi judul atau unggah gambar terlebih dahulu.",
+      });
+      return;
+    }
+
+    if (!titleText && !mediaPreview) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Harap isi judul atau unggah gambar terlebih dahulu.",
+      });
+      return;
+    }
+
+    const payload = {
+      title: titleText,
+      description: "",                // ⬅️ tambahkan ini!
+      attachment: mediaPreview ?? null
+    };
+
+    try {
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+      const response = await fetch('http://127.0.0.1:8000/Forum/create_forum', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error("Gagal post");
+
+      await Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Post berhasil dikirim.",
+      });
+
+      // reset input
+      setTitleText("");
+      setMediaPreview(null);
+    } catch (error) {
+      console.error(error);
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Terjadi kesalahan saat mengirim post.",
+      });
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image')) {
@@ -62,22 +121,32 @@ const HomePage: React.FC = () => {
   };
 
   const handleEventSubmit = async () => {
-    const name = (document.getElementById('event-name') as HTMLInputElement)?.value;
-    const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value;
-    const subjectId = parseInt((document.getElementById('event-subject') as HTMLSelectElement)?.value);
-    const location = (document.getElementById('event-location') as HTMLInputElement)?.value;
-    const address = (document.getElementById('event-address') as HTMLInputElement)?.value;
-    const date = (document.getElementById('event-date') as HTMLInputElement)?.value;
-    const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value;
-    const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value;
-    const capacity = parseInt((document.getElementById('event-capasity') as HTMLInputElement)?.value || '0');
-    const latitude = parseFloat((document.getElementById('event-latitude') as HTMLInputElement)?.value || '0');
-    const longitude = parseFloat((document.getElementById('event-longtitude') as HTMLInputElement)?.value || '0');
+  const name = (document.getElementById('event-name') as HTMLInputElement)?.value || null;
+  const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || null;
 
-    const payload = {
-    title: name, // sudah sesuai
-    description: text, // untuk msforum
-    forum_text: text,  // untuk msisi_forum
+  const subjectIdRaw = (document.getElementById('event-subject') as HTMLSelectElement)?.value;
+  const subjectId = subjectIdRaw === "" ? null : parseInt(subjectIdRaw);
+
+  const location = (document.getElementById('event-location') as HTMLInputElement)?.value || null;
+  const address = (document.getElementById('event-address') as HTMLInputElement)?.value || null;
+
+  const date = (document.getElementById('event-date') as HTMLInputElement)?.value || null;
+  const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value || null;
+  const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value || null;
+
+  const capacityRaw = (document.getElementById('event-capasity') as HTMLInputElement)?.value;
+  const capacity = capacityRaw === "" ? null : parseInt(capacityRaw);
+
+  const latitudeRaw = (document.getElementById('event-latitude') as HTMLInputElement)?.value;
+  const latitude = latitudeRaw === "" ? null : parseFloat(latitudeRaw);
+
+  const longitudeRaw = (document.getElementById('event-longtitude') as HTMLInputElement)?.value;
+  const longitude = longitudeRaw === "" ? null : parseFloat(longitudeRaw);
+
+  const payload = {
+    title: name,
+    description: text,
+    forum_text: text,
     subject_id: subjectId,
     event_name: name,
     event_date: date,
@@ -90,28 +159,29 @@ const HomePage: React.FC = () => {
     location_longitude: longitude,
   };
 
-    try {
-      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-      const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
+  try {
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
+    const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to create event');
-      }
-
-      Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
-      setShowPopup(false);
-    } catch (error) {
-      console.error(error);
-      Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+    if (!response.ok) {
+      throw new Error('Failed to create event');
     }
-  };
+
+    Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
+    setShowPopup(false);
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+  }
+};
+
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -243,12 +313,13 @@ return (
                 placeholder="What's new?"
                 rows={1}
                 maxLength={250}
+                value={titleText}
+                onChange={(e) => setTitleText(e.target.value)}
                 onInput={(e) => {
                   e.currentTarget.style.height = "auto";
                   e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                 }}
               ></textarea>
-
               
               {/* Event Icon Button */}
               <button onClick={() => setShowPopup(true)} id="eventPopupButton">
@@ -275,7 +346,7 @@ return (
             )}
 
             <div className='divBawah'>
-              <button id="submitButton">Post</button>
+              <button id="submitButton" onClick={handlePostSubmit}>Post</button>
             </div>
           </div>
 
@@ -375,7 +446,7 @@ return (
           <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
           {subject && (
             <p>
-              <strong>Subjek:</strong> {subject}
+              <strong>Subject:</strong> {subject}
             </p>
           )}
 
