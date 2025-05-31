@@ -21,6 +21,7 @@ const HomePage: React.FC = () => {
   const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
   const [forums, setForums] = useState<any[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<string>("All");
 
   const handleDeleteForum = async (forumId: number) => {
     const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
@@ -139,6 +140,7 @@ const dummySubjects = [
   { id: 8, name: "Gaming" },
   { id: 9, name: "Memes" },
   { id: 10, name: "Night Club" },
+  {id: 11, name: "All"}
 ];
 
 const Sidebar: React.FC = () => {
@@ -181,7 +183,15 @@ const Sidebar: React.FC = () => {
 
           <div className="subject-collection">
             {subjects.map((subject) => (
-              <p key={subject.id} className="subject-name">
+              <p
+                key={subject.id}
+                className="subject-name"
+                style={{
+                  fontWeight: selectedSubject === subject.name ? 'bold' : 'normal',
+                  cursor: 'pointer',
+                }}
+                onClick={() => setSelectedSubject(subject.name)}
+              >
                 {subject.name}
               </p>
             ))}
@@ -269,7 +279,11 @@ return (
   {forums.length === 0 ? (
     <p>Tidak ada forum untuk ditampilkan</p>
   ) : (
-    forums.map((forum, index) => {
+      forums
+      .filter((forum) =>
+        selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
+      )
+      .map((forum, index) => {
       const user = forum.msuser ?? {
         username: "Username",
         profile_image: profile,
