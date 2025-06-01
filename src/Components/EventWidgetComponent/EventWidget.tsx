@@ -22,10 +22,16 @@ const EventWidget: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.events && data.events.length > 0) {
-          setEvents(data.events);
+          const sorted = [...data.events].sort((a, b) => {
+            const timeA = new Date(a.event_date).getTime();
+            const timeB = new Date(b.event_date).getTime();
+            return timeA - timeB;
+          });
+
+          setEvents(sorted);
         }
       })
-      .catch((err) => console.error('Error fetching events:', err));
+      .catch((err) => console.error("Error fetching events:", err));
   }, []);
 
   function formatTanggalIndo(dateStr: string): string {
