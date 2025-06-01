@@ -79,7 +79,7 @@ const HomePage: React.FC = () => {
 
     try {
       const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-      const response = await fetch('http://127.0.0.1:8000/Forum/create_forum', {
+      const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
