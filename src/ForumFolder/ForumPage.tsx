@@ -122,11 +122,13 @@ const ForumPage: React.FC = () => {
 
   const renderReply = (reply: ForumReply) => (
     <div key={reply.reply_id} className="reply-box">
-      <p><strong>{reply.msuser?.username}</strong></p>
+      <p><strong>@{reply.msuser?.username}</strong></p>
       <p>{reply.reply_text}</p>
       <p className="reply-time">{new Date(reply.created_at).toLocaleString()}</p>
-      <button onClick={() => setParentReplyId(reply.reply_id)}>Balas</button>
-
+      <div className="reply-actions">
+        <button onClick={() => setParentReplyId(reply.reply_id)}>Reply</button>
+      </div>
+  
       {reply.children && reply.children.length > 0 && (
         <div className="child-replies">
           {reply.children.map((child: ForumReply) => renderReply(child))}
@@ -145,19 +147,6 @@ const ForumPage: React.FC = () => {
       <div className="forum-page-spacing">
         <div className="forum-detail-container">
           <div className="forum-header-bar">
-            <div className="reply-input-container">
-                  {parentReplyId && (
-                    <p>Membalas komentar ID: {parentReplyId} <button onClick={() => setParentReplyId(null)}>Batalkan</button></p>
-                  )}
-                  <textarea
-                    value={replyText}
-                    onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Tulis balasan anda..."
-                    rows={4}
-                    className="reply-textarea"
-                  />
-                  <button onClick={submitReply} disabled={!replyText.trim()}>Kirim Balasan</button>
-            </div>
           </div>
           <div className="forum-body">
           <div className="forum-sidebar">
@@ -180,6 +169,19 @@ const ForumPage: React.FC = () => {
                 <p><strong>Lokasi:</strong> {forum.msevent.location.location_name}</p>
                 <p><strong>Waktu:</strong> {new Date(forum.msevent.start_date).toLocaleTimeString()} - {new Date(forum.msevent.end_date).toLocaleTimeString()}</p>
               </div>
+              <div className="reply-input-container">
+                  {parentReplyId && (
+                    <p>Membalas komentar ID: {parentReplyId} <button onClick={() => setParentReplyId(null)}>Batalkan</button></p>
+                  )}
+                  <textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder="Tulis balasan anda..."
+                    rows={4}
+                    className="reply-textarea"
+                  />
+                  <button onClick={submitReply} disabled={!replyText.trim()}>Kirim Balasan</button>
+            </div>
               <div className="forum-replies-section">
                 <h3>Replies</h3>
                 {Array.isArray(replies) && replies.length === 0 ? (
