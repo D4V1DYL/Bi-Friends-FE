@@ -365,7 +365,10 @@ return (
             src={deleteIcon}
             alt="Delete Forum"
             className="delete-icon"
-            onClick={() => handleDeleteForum(forum.post_id)}
+            onClick={(e) => {
+              e.stopPropagation();    
+              handleDeleteForum(forum.post_id);
+            }}
           />
 
 {/* User Info */}

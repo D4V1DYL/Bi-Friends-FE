@@ -82,7 +82,7 @@ const ForumPage: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      console.log("Full reply response:", res.data); // tambahkan ini
+      console.log("Full reply response:", res.data); 
   
       const replyData = res.data?.replies;
   
