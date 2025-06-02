@@ -14,6 +14,7 @@ import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
 import { useNavigate } from 'react-router-dom';
 
+
 const HomePage: React.FC = () => {
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
