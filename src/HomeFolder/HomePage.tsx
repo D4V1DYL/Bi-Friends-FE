@@ -85,6 +85,7 @@ const HomePage: React.FC = () => {
         text: "Post berhasil dikirim.",
       });
 
+      window.location.reload();
       setTitleText("");
       setDescriptionText("");     
       setMediaPreview(null);
@@ -151,12 +152,14 @@ const HomePage: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to create event');
       }
+      
+      await Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
 
-      Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
+      window.location.reload();
       setShowPopup(false);
     } catch (error) {
       console.error(error);
-      Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+      await Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
     }
   };
 
@@ -251,7 +254,7 @@ const HomePage: React.FC = () => {
                 />
                 <textarea
                   id="textinput"
-                  placeholder="Judul post kamu..."
+                  placeholder="Write your title here..."
                   rows={1}
                   maxLength={100}
                   value={titleText}
@@ -269,7 +272,7 @@ const HomePage: React.FC = () => {
 
               <textarea
                 id="descinput"
-                placeholder="Ceritakan sesuatu, bagikan pengalaman atau pendapatmu di sini!"
+                placeholder="Write your description here..."
                 rows={2}
                 maxLength={500}
                 value={descriptionText}
@@ -304,7 +307,7 @@ const HomePage: React.FC = () => {
                 );
 
                 if (filteredForums.length === 0) {
-                  return <p style={{ padding: "1rem", textAlign: "center" }}>Tidak ada forum untuk ditampilkan</p>;
+                  return <p style={{ padding: "1rem", textAlign: "center" }}>No forums are available</p>;
                 }
 
                 return filteredForums.map((forum, index) => {
@@ -387,7 +390,7 @@ const HomePage: React.FC = () => {
                           </p>
                           <p>
                             <strong>Location:</strong>{" "}
-                            {forum.msevent?.location?.location_name ?? "Tidak disebutkan"}
+                            {forum.msevent?.location?.location_name ?? "Not mentioned"}
                           </p>
                           {participants && (
                             <p>

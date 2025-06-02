@@ -260,3 +260,20 @@
   text-align: center;
   margin-top: 40px;
 }
+
+.cancel-reply-button {
+  background-color: transparent;
+  border: none;
+  color: #d9534f;         
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cancel-reply-button:hover {
+  background-color: rgba(217, 83, 79, 0.1); 
+  color: #c9302c;                           
+}
