@@ -9,8 +9,8 @@ import ProfilePage from './ProfileFolder/ProfilePage';
 import ChatPage from './ChatFolder/ChatPage';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import Calender from './CalenderFolder/Calender';
 import OtherPersonPage from './OtherPersonPage/OtherPersonPage';
+import CalenderPage from './CalenderFolder/CalenderPage';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Route path='/RecoveryPassword' element={<RecoveryPassword />} />
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/forum/:postId" element={<ForumPage />} />
-        <Route path="/CalenderPage" element={<Calender />} />
+        <Route path="/CalenderPage" element={<CalenderPage />} />
         <Route path="/ProfilePage" element={<ProfilePage />} />
         <Route path="/ChatPage" element={<ChatPage />} />
         <Route path="/OtherPersonPage/:userId" element={<OtherPersonPage/>}/>
