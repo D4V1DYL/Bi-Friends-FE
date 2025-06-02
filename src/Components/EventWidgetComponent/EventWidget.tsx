@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './EventWidget.css';
 
 interface EventData {
-  post_id: number;
+  related_post_id: number;
   event_name: string;
   event_date: string;
   start_date?: string;
@@ -64,20 +64,19 @@ const EventWidget: React.FC = () => {
 
   return (
     <div className="event-widget">
-  {events.map((event, idx) => (
-    <Link to={`/forum/${event.post_id}`} className="event-link" key={idx}>
-      <div className="event-card">
-        <h4>{event.event_name}</h4>
-        <p>📅 {formatTanggalIndo(event.event_date)}</p>
-        <p>🕒 {formatJamRange(event.start_date, event.end_date)}</p>
-        <p>📍 {event.mslocation?.location_name}</p>
-        <p>👥 Kapasitas: {event.mslocation?.capacity}</p>
-      </div>
-    </Link>
-  ))}
-</div>
-
-  );
-};
+      {events.map((event, idx) => (
+        <Link to={`/forum/${event.related_post_id}`} className="event-link" key={idx}>
+          <div className="event-card">
+            <h4>{event.event_name}</h4>
+            <p>📅 {formatTanggalIndo(event.event_date)}</p>
+            <p>🕒 {formatJamRange(event.start_date, event.end_date)}</p>
+            <p>📍 {event.mslocation?.location_name}</p>
+            <p>👥 Kapasitas: {event.mslocation?.capacity}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+    );
+  };
 
 export default EventWidget;
