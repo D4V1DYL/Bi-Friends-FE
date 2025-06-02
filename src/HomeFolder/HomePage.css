@@ -1,320 +1,339 @@
-  .homepage {
-    height: 100vh;
-    width: 100%;
-    background-color: #ffffff;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-  .homepage-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 16px;
-    gap: 24px;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  .main-content {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-  }
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: #F5F0CD; 
+  color: #333;
+}
 
-  .event-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #111;
-  }
-  
-  .event-section {
-    flex-direction: column; 
-    flex-shrink: 0;
-    margin-top: 24px;
-    width: 30%;
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .sidebar{
-    display: flex;
-    justify-content: right;
-    width: 20%;
-    margin-top: 30px;
-    margin-left: 15px;
-    flex-direction: column;
-  }
-
-  .search-bar{
-    display: 'flex'; 
-    align-items: 'center'; 
-    justify-content: 'center';
-    width: 200px;
-  }
-  
-  .search-icon{
-    display: flex;
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    margin-top: 6px;
-    margin-left: 18px;
-  }
-
-  .search-input{
-    border: none;
-    outline: none;
-    padding: 10px 16px;
-    border-radius: 30px;
-    background-color: #e7e7e7;
-    font-size: 12px;
-    height: 30px;
-    overflow-y: auto;
-    min-height: 20px;
-    width: 100%;
-    margin-left: 10px;
-    padding-left: 30px;
-  }
-  
-  .subject-collection{
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    margin-top: 10px;
-    margin-left: 10px;
-    color: #6D552E;
-    max-height: 90%;
-    overflow-y: auto;
-    font-size: 18px;
-  }
-
-  .subject-collection:hover{
-    cursor: pointer;
-  }
-
-  .subject-name {
-    padding: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .subject-name:hover {
-    /* margin-left: 5px; */
-    background-color: #D3D3D3;
-    border-radius: 5px;
-  }
-
-  .inputForm {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    gap: 10px;
-    margin-top: 20px;
-    flex-direction: column;
-  }
-  
-  .profile-icon {
-    width: 59px;
-    height: 46px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-  }
-  
-  #textinput {
-    resize: none; 
-    border: none;
-    outline: none;
-    padding: 10px 16px;
-    border-radius: 10px;
-    background-color: #f0f0f0;
-    font-size: 15px;
-    width: 100%;
-    max-width: 100%;
-    line-height: 1.4;
-    overflow-y: auto;
-    min-height: 48px;
-    max-height: 200px;
-  }
-
-  #textinput:focus {
-    border: none;
-    outline: none;
-  }
-  #textinput::placeholder {
-    font-size: 19px; 
-    color: #888; 
-  }
-
-  #submitButton {
-    background-color: rgb(0, 0, 0);
-    color: rgb(255, 255, 255);
-    border: none;
-    padding: 4px 24px;       
-    border-radius: 25px;    
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-    min-width: 100px;        
-    height: 32px;      
-    margin-left: -260px;     
-  }
-  
-  #submitButton:hover {
-    background-color: #525252;
-  }
-
-  .divAtas{
-    flex-direction: row;
-    display: flex;
-    width: 600px;
-  }
-
-  .divBawah{
-    display: flex;
-    padding-left: 360px;
-  }
-
-  #eventButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    width: 32px;
-    height: 22px;
-    border-radius: 50%;
-    padding-top: 10px;
-  }
-  
-  #eventButton .icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  #eventButton:hover{
-    opacity: 0.7;
-  }
-
-  #eventPopupButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    width: 42px;
-    height: 22px;
-    border-radius: 50%;
-    padding-top: 10px;
-  }
-  
-  #eventPopupButton .icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  #eventPopupButton:hover{
-    opacity: 0.7;
-  }
-
-
-  .media-preview {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .media-thumbnail {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 10px;
-    object-fit: contain;
-  }
-
- .forum-list {
+.homepage {
   display: flex;
-  justify-content: center;
-  flex: 2; 
   flex-direction: column;
-  padding: 12px 16px;
-  background-color: #F5F0CD;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
-  max-width: 600px;
-  overflow-y: auto;
-  margin-top: 20px;
+  height: 100%;
   width: 100%;
 }
 
-.forum-card {
-  background-color: white;
-  padding: 8px 12px; /* Padding lebih kecil */
-  margin-bottom: 18px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  font-size: 12px; /* Ukuran font lebih kecil */
+.layout-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
 }
 
-.forum-card:hover {
-  transform: translateY(-5px); /* Efek sedikit terangkat saat hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Shadow lebih gelap saat hover */
+.sidebar-area {
+  background-color: #B1F0F7;
+  width: 220px;
+  padding: 20px 16px;
+  overflow-y: auto;
 }
 
-.forum-card h4 {
-  font-size: 0.9rem; /* Ukuran font lebih kecil untuk judul */
-  font-weight: bold;
+.sidebar-content .search-bar {
+  position: relative;
+  margin-bottom: 24px;
+}
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 14px; 
+  background-color: #ffffff;
   color: #333;
-  margin-bottom: 8px; /* Lebih sedikit jarak antara judul dan konten */
 }
 
+.subject-collection {
+  display: flex;
+  flex-direction: column;
+}
+.subject-name {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 16px; 
+  color: #333;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.subject-name:hover {
+  background-color: #81BFDA; 
+  color: #fff;
+}
+.subject-name[style*="font-weight: bold"] {
+  background-color: #81BFDA;
+  color: #fff;
+}
+
+.forum-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #FDFAF6; 
+}
+
+.post-creator {
+  background-color: #F5F0CD;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.post-creator .inputForm {
+  display: flex;
+  flex-direction: column;
+}
+.post-creator .divAtas {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.profile-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #81BFDA;
+  margin-right: 12px;
+}
+.post-creator textarea#textinput {
+  flex: 1;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 15px; /* Ukuran font ringkas */
+  margin-right: 12px;
+  transition: background-color 0.2s;
+}
+.post-creator textarea#textinput:focus {
+  background-color: #ffffff;
+}
+.post-creator textarea#textinput::placeholder {
+  color: #888;
+  font-size: 15px;
+}
+
+.post-creator textarea#descinput {
+  width: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 14px; 
+  margin-bottom: 12px;
+  transition: background-color 0.2s;
+}
+.post-creator textarea#descinput:focus {
+  background-color: #ffffff;
+}
+.post-creator textarea#descinput::placeholder {
+  color: #888;
+  font-size: 14px;
+}
+
+.media-preview {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+.media-thumbnail {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+#eventPopupButton,
+#eventButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+#eventPopupButton .icon,
+#eventButton .icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.8;
+}
+#eventPopupButton:hover .icon,
+#eventButton:hover .icon {
+  opacity: 1;
+}
+
+.divBawah {
+  display: flex;
+  justify-content: flex-end;
+}
+#submitButton {
+  background-color: #81BFDA; 
+  color: #fff;
+  border: none;
+  padding: 8px 28px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#submitButton:hover {
+  background-color: #69aebb;
+}
+
+.forum-feed {
+  flex: 1;
+  overflow-y: auto;
+}
+.forum-list {
+  display: flex;
+  flex-direction: column;
+}
+.forum-card {
+  position: relative;
+  background-color: #F5F0CD;  /* Pale Yellow */
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  padding: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.forum-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.forum-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
 .forum-card p {
-  font-size: 0.8rem; /* Ukuran font lebih kecil untuk deskripsi */
+  font-size: 0.85rem;
   color: #555;
-  margin-bottom: 8px; /* Lebih sedikit jarak antara paragraf */
+  margin-bottom: 8px;
+}
+.forum-card hr {
+  border: none;
+  border-top: 1px solid #E0E0E0;
+  margin-top: 10px;
 }
 
-.forum-card hr {
-  border: 0;
-  border-top: 1px solid #ddd;
-  margin-top: 8px; /* Mengurangi jarak antara garis horizontal dan konten */
+.delete-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+.forum-card:hover .delete-icon {
+  opacity: 1;
 }
 
 .forum-user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-
 .user-avatar-small {
-  width: 36px;           
+  width: 36px;
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
+  border: 2px solid #81BFDA;
 }
-
-.user-meta {
-  display: flex;
-  flex-direction: column;
-}
-
-.username {
+.user-meta .username {
+  font-size: 0.95rem;
   font-weight: 600;
-  font-size: 14px;
-  margin: 0;
+  color: #333;
+}
+.user-meta .major {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.event-info {
+  background-color: #F5F0CD;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.forum-list > p {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  padding: 20px 0;
+}
+
+.event-area {
+  background-color: #B1F0F7; 
+  width: 260px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.event-area .event-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
   color: #333;
 }
 
-.major {
-  font-size: 12px;
-  color: #666;
-  margin: 0;
+.event-widget .event-card {
+  background-color: #F5F0CD; 
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 14px 12px;
+  margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.event-widget .event-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.event-widget .event-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+.event-widget .event-card p {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+.event-widget .event-card .event-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+  opacity: 0.7;
 }
 
-/* Overlay gelap */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -328,30 +347,26 @@
   z-index: 1000;
 }
 
-/* Kontainer popup */
 .popup-content {
   background: white;
   padding: 24px;
   border-radius: 12px;
   width: 90%;
-  max-width: 1000px;
-  max-height: 90vh;         /* <-- ini penting */
-  overflow-y: auto;         /* <-- ini bikin scroll muncul */
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease;
 }
 
-
-/* Judul popup */
 .popup-content h3 {
   margin-top: 0;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
-  color: black;
+  color: #333;
 }
 
-/* Label input */
 .popup-content label {
   display: block;
   margin-top: 12px;
@@ -359,31 +374,27 @@
   font-size: 14px;
 }
 
-/* Input styling */
 .popup-input {
   width: 100%;
   padding: 10px 12px;
   margin-top: 6px;
   margin-bottom: 12px;
   font-size: 14px;
-  background-color: #f4f4f4;
+  background-color: #DBDBDB;
   border: none;
   border-radius: 6px;
   outline: none;
   transition: background-color 0.2s ease;
 }
-
 .popup-input:focus {
-  background-color: #eaeaea;
+  background-color: #ffffff;
 }
 
-/* Tombol */
 .popup-buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
-
 .cancel-button,
 .submit-button {
   flex: 1;
@@ -395,210 +406,28 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
 .cancel-button {
   background-color: #ccc;
   color: #333;
 }
-
 .cancel-button:hover {
   background-color: #bbb;
 }
-
 .submit-button {
-  background-color: #007bff;
-  color: white;
+  background-color: #81BFDA;
+  color: #fff;
 }
-
 .submit-button:hover {
-  background-color: #0062cc;
+  background-color: #69aebb;
 }
 
-.dots-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  margin-left: 400px;
-  margin-top: -15px;
-}
-
-.dots-icon {
-  width: 3px;
-  height: 13px;
-}
-
-.menu-wrapper {
-  position: relative;
-}
-
-.context-menu {
-  position: absolute;
-  top: 24px;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-  z-index: 1000;
-}
-
-.context-menu-item {
-  padding: 8px 12px;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.context-menu-item:hover {
-  background-color: #f5f5f5;
-}
-
-/* Animasi masuk */
 @keyframes fadeIn {
   from {
-    transform: scale(0.9);
+    transform: scale(0.95);
     opacity: 0;
   }
   to {
     transform: scale(1);
     opacity: 1;
   }
-}
-
-/* Delete Icon pada Forum Card */
-.delete-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.3s ease-in-out;
-  color: #888; /* warna ikon abu-abu */
-}
-
-.forum-card {
-  position: relative; /* agar delete-icon bisa positioned secara absolute di dalamnya */
-}
-
-.forum-card:hover .delete-icon {
-  opacity: 1; /* muncul saat hover */
-}
-
-.forum-list > p {
-  color: #000000; /* warna hitam */
-  font-size: 14px;
-  text-align: center;
-  padding: 16px;
-}
-
-
-.event-details-grid {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 12px 16px;
-  margin-top: 16px;
-  font-size: 14px;
-  align-items: center;
-}
-
-.event-details-grid label {
-  font-weight: 600;
-  text-align: right;
-  color: #333;
-}
-
-.event-details-grid input {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-  background-color: #f4f4f4;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-}
-
-.event-details-grid input:focus {
-  background-color: #eaeaea;
-}
-
-.wide-popup {
-  max-width: 1000px; /* sebelumnya 400px */
-}
-
-.popup-title {
-  text-align: left;
-  margin-bottom: 16px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #000 !important;
-}
-
-.event-details-grid {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 16px 20px;
-  font-size: 14px;
-  align-items: center;
-}
-
-.event-details-grid label {
-  font-weight: 600;
-  text-align: left;
-  color: #333;
-}
-
-.event-details-grid input {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-  background-color: #f4f4f4;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-}
-
-.event-details-grid input:focus {
-  background-color: #eaeaea;
-}
-
-/* Ganti warna ikon kalender */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1); /* Bikin icon hitam */
-  cursor: pointer;
-}
-
-
-input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(1); /* ini membuat ikon putih jadi hitam */
-}
-
-
-select.popup-input {
-  color: black;
-}
-
-select.popup-input option {
-  color: black;
-}
-
-.sidebar-content {
-  overflow: visible;
-  height: auto;
-}
-
-.subject-collection {
-  padding-bottom: 50px; /* Biar gak mentok dan muncul scrollbar */
-}
-
-.event-widget {
-  margin-left: 0; /* pastikan tidak terdorong */
-}
-
-.event-card {
-  margin-left: 0;  /* <= inilah yang perlu disesuaikan */
 }

@@ -4,7 +4,6 @@ import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
 import profile from '../assets/profileLogo.png';
 import GetForumService from "../Shared/GetForum/GetForumService";
-import upload from '../assets/upload.png';
 import event from '../assets/event.png';
 import search from '../assets/SearchIcon.svg';
 import Swal from 'sweetalert2';
@@ -51,7 +50,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // =========== POST SUBMIT =============
   const handlePostSubmit = async () => {
     if (!titleText.trim() || !descriptionText.trim()) {
       await Swal.fire({
@@ -64,7 +62,7 @@ const HomePage: React.FC = () => {
 
     const payload = {
       title: titleText,
-      description: descriptionText,     // <-- sudah diisi dari user
+      description: descriptionText,     
       attachment: mediaPreview ?? null
     };
 
@@ -87,9 +85,8 @@ const HomePage: React.FC = () => {
         text: "Post berhasil dikirim.",
       });
 
-      // reset input
       setTitleText("");
-      setDescriptionText("");     // <-- reset description juga
+      setDescriptionText("");     
       setMediaPreview(null);
     } catch (error) {
       console.error(error);
@@ -101,20 +98,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setMediaPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert('Please upload an image file.');
-    }
-  };
-
-  // =========== EVENT SUBMIT =============
   const handleEventSubmit = async () => {
     const name = (document.getElementById('event-name') as HTMLInputElement)?.value || null;
     const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || null;
@@ -177,7 +160,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // =========== FORUM FETCH =============
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchForums = async () => {
@@ -209,7 +191,6 @@ const HomePage: React.FC = () => {
     }
   }, [userId, token]);
 
-  // Dummy subjects
   const dummySubjects = [
     { id: 1, name: "Netflix n Chill" },
     { id: 2, name: "Sport" },
@@ -257,52 +238,40 @@ const HomePage: React.FC = () => {
   return (
     <div className="homepage">
       <NavigationBar />
-      <div className="homepage-content">
-        <Sidebar />
 
-        <div className="main-content">
-          {/* --- INPUT FORM --- */}
-          <div className='inputForm'>
-            <div className='divAtas'>
-            <img
-              src={profileData?.profile_picture || profile}
-              alt="Profile"
-              className="profile-icon"
-            />
+      <div className="layout-container">
+        <aside className="sidebar-area">
+          <Sidebar />
+        </aside>
+
+        <main className="forum-area">
+          <section className="post-creator">
+            <div className="inputForm">
+              <div className="divAtas">
+                <img
+                  src={profileData?.profile_picture || profile}
+                  alt="Profile"
+                  className="profile-icon"
+                />
+                <textarea
+                  id="textinput"
+                  placeholder="Judul post kamu..."
+                  rows={1}
+                  maxLength={100}
+                  value={titleText}
+                  onChange={(e) => setTitleText(e.target.value)}
+                  onInput={(e) => {
+                    e.currentTarget.style.height = "auto";
+                    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                  }}
+                  style={{ marginBottom: 8 }}
+                />
+                <button onClick={() => setShowPopup(true)} id="eventPopupButton">
+                  <img src={event} alt="Event Icon" className="icon" />
+                </button>
+              </div>
 
               <textarea
-                id="textinput"
-                placeholder="Judul post kamu..."
-                rows={1}
-                maxLength={100}
-                value={titleText}
-                onChange={(e) => setTitleText(e.target.value)}
-                onInput={(e) => {
-                  e.currentTarget.style.height = "auto";
-                  e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-                }}
-                style={{ marginBottom: 8 }}
-              />
-
-              {/* Event Icon Button */}
-              <button onClick={() => setShowPopup(true)} id="eventPopupButton">
-                <img src={event} alt="Event Icon" className="icon" />
-              </button>
-              {/* Upload Button */}
-              <label htmlFor="file-upload" id="eventButton">
-                <img src={upload} alt="Upload Icon" className="icon" />
-              </label>
-              <input
-                type="file"
-                id="file-upload"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-
-            </div>
-
-            <textarea
                 id="descinput"
                 placeholder="Ceritakan sesuatu, bagikan pengalaman atau pendapatmu di sini!"
                 rows={2}
@@ -316,132 +285,141 @@ const HomePage: React.FC = () => {
                 style={{ marginBottom: 8 }}
               />
 
-            {mediaPreview && (
-              <div className="media-preview">
-                <img src={mediaPreview} alt="Preview" className="media-thumbnail" />
+              {mediaPreview && (
+                <div className="media-preview">
+                  <img src={mediaPreview} alt="Preview" className="media-thumbnail" />
+                </div>
+              )}
+
+              <div className="divBawah">
+                <button id="submitButton" onClick={handlePostSubmit}>Post</button>
               </div>
-            )}
-
-            <div className='divBawah'>
-              <button id="submitButton" onClick={handlePostSubmit}>Post</button>
             </div>
-          </div>
+          </section>
 
-          {/* --- FORUM LIST --- */}
-          <div className="forum-list">
-            {isLoading ? (
-              <p>Loading forums...</p>
-            ) : (() => {
-              const filteredForums = forums.filter(
-                (forum) =>
-                  selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
-              );
+          <section className="forum-feed">
+            <div className="forum-list">
+              {isLoading ? (
+                <p>Loading forums...</p>
+              ) : (() => {
+                const filteredForums = forums.filter(
+                  (forum) =>
+                    selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
+                );
 
-              if (filteredForums.length === 0) {
-                return <p style={{ padding: "1rem", textAlign: "center" }}>Tidak ada forum untuk ditampilkan</p>;
-              }
-
-              return filteredForums.map((forum, index) => {
-                if (!forum || (!forum.title && !forum.description && !forum.event_name)) {
-                  return null;
+                if (filteredForums.length === 0) {
+                  return <p style={{ padding: "1rem", textAlign: "center" }}>Tidak ada forum untuk ditampilkan</p>;
                 }
 
-                const user = {
-                  username: forum.msuser?.username || "Anonymous",
-                  profile_image: forum.msuser?.profile_picture || profile,
-                  major: forum.msuser?.major || ""
-                };
+                return filteredForums.map((forum, index) => {
+                  if (!forum || (!forum.title && !forum.description && !forum.event_name)) {
+                    return null;
+                  }
 
-                const subject = forum.subject_name ?? forum.mssubject?.subject_name;
-                const eventName = forum.event_name ?? forum.msevent?.event_name;
-                const eventDate = forum.event_date ?? forum.msevent?.event_date;
-                const participants = forum.participants ?? forum.total_participants;
-                const isEventForum = eventName && eventDate;
+                  const creatorId = Number(forum.user_id);
 
-                return (
-                  <div key={forum.post_id ?? index} className="forum-card" onClick={() => navigate(`/forum/${forum.post_id}`)}
-                    style={{ cursor: 'pointer' }}>
-                    <img
-                      src={deleteIcon}
-                      alt="Delete Forum"
-                      className="delete-icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteForum(forum.post_id);
-                      }}
-                    />
+                  const currentUserId = Number(userId);
 
-                    {/* User Info */}
-                    {user && (
-                      <div className="forum-user-info">
+
+                  const isOwner = creatorId === currentUserId;
+
+
+                  const user = {
+                    username: forum.msuser?.username || "Anonymous",
+                    profile_image: forum.msuser?.profile_picture || profile,
+                    major: forum.msuser?.major || ""
+                  };
+
+                  const subject = forum.subject_name ?? forum.mssubject?.subject_name;
+                  const eventName = forum.event_name ?? forum.msevent?.event_name;
+                  const eventDate = forum.event_date ?? forum.msevent?.event_date;
+                  const participants = forum.participants ?? forum.total_participants;
+                  const isEventForum = eventName && eventDate;
+
+                  return (
+                    <div
+                      key={forum.post_id ?? index}
+                      className="forum-card"
+                      onClick={() => navigate(`/forum/${forum.post_id}`)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {isOwner && (
                         <img
-                          src={user.profile_image ?? profile}
-                          alt="User"
-                          className="user-avatar-small"
-                          style={{ cursor: "pointer" }}
+                          src={deleteIcon}
+                          alt="Delete Forum"
+                          className="delete-icon"
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log("User ID:", forum.user_id); 
-                            if (forum.user_id) {
-                              navigate(`/OtherPersonPage/${forum.user_id}`);
-                            }
+                            handleDeleteForum(forum.post_id);
                           }}
                         />
-                        <div className="user-meta">
-                          <p className="username">{user.username}</p>
-                          {user.major && <p className="major">{user.major}</p>}
+                      )}
+
+                      {user && (
+                        <div className="forum-user-info">
+                          <img
+                            src={user.profile_image ?? profile}
+                            alt="User"
+                            className="user-avatar-small"
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (forum.user_id) {
+                                navigate(`/OtherPersonPage/${forum.user_id}`);
+                              }
+                            }}
+                          />
+                          <div className="user-meta">
+                            <p className="username">{user.username}</p>
+                            {user.major && <p className="major">{user.major}</p>}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-
-                    {/* Forum Biasa */}
-                    <h4>{forum.title}</h4>
-                    <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
-                    {subject && (
-                      <p>
-                        <strong>Subject:</strong> {subject}
-                      </p>
-                    )}
-
-                    {/* Event */}
-                    {isEventForum ? (
-                      <div className="event-info">
+                      <h4>{forum.title}</h4>
+                      <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
+                      {subject && (
                         <p>
-                          <strong>Event:</strong> {eventName} ({eventDate})
+                          <strong>Subject:</strong> {subject}
                         </p>
-                        <p>
-                          <strong>Location:</strong>{" "}
-                          {forum.msevent?.location?.location_name ?? "Tidak disebutkan"}
-                        </p>
-                        {participants && (
+                      )}
+
+                      {isEventForum ? (
+                        <div className="event-info">
                           <p>
-                            <strong>Participant:</strong> {participants} orang
+                            <strong>Event:</strong> {eventName} ({eventDate})
                           </p>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-forum-content">
-                        <p>{forum.forum_text}</p>
-                      </div>
-                    )}
+                          <p>
+                            <strong>Location:</strong>{" "}
+                            {forum.msevent?.location?.location_name ?? "Tidak disebutkan"}
+                          </p>
+                          {participants && (
+                            <p>
+                              <strong>Participant:</strong> {participants} orang
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-forum-content">
+                          <p>{forum.forum_text}</p>
+                        </div>
+                      )}
 
-                    <hr />
-                  </div>
-                );
-              });
-            })()}
-          </div>
-        </div>
+                      <hr />
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          </section>
+        </main>
 
-        {/* EVENT SIDEBAR */}
-        <div className="event-section">
+        <aside className="event-area">
           <h3 className="event-title">EVENT</h3>
           <EventWidget />
-        </div>
+        </aside>
       </div>
 
-      {/* POPUP EVENT */}
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="popup-content wide-popup wider-popup" onClick={(e) => e.stopPropagation()}>
