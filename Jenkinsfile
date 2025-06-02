@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "bi-friends-fe"
         CONTAINER_NAME = "react-vite-container"
-        PORT = "3000"
+        PORT = "80"
         DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1348391496319111241/Q2-Y2zNTe3MC-PlAsziHoKhD6pWdWb6ZPcLoLqtkUq4f5J5CmmYqcR0uIGddt7ajGVux"
         JENKINS_URL = "https://jenkins.bifriends.my.id/"
         GITHUB_REPO_URL = "https://github.com/D4V1DYL/Bi-Friends-FE/commit/"
