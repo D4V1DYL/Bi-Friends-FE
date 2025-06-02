@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import Calendar, { CalendarEvent } from '../Components/Calendar';
+
+const COLOR_SCHEME = ['#B1F0F7', '#81BFDA', '#F5F0CD', '#FADA7A'];
 
 const CalenderPage: React.FC = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -26,7 +27,7 @@ const CalenderPage: React.FC = () => {
               endTime: formatTime(end),
               description: undefined, // You can map description if available
               location: ev.mslocation?.location_name,
-              color: '#81BFDA', // You can randomize or assign color if needed
+              color: COLOR_SCHEME[idx % COLOR_SCHEME.length],
               related_post_id: ev.related_post_id,
             };
           });
@@ -43,10 +44,7 @@ const CalenderPage: React.FC = () => {
       <div className="h-screen flex flex-col p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <header className="mb-4 sm:mb-6 text-center flex-shrink-0">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <CalendarIcon size={28} className="text-[#81BFDA]" />
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Calendar</h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Calendar</h1>
           <p className="text-sm sm:text-base text-gray-600 max-w-lg mx-auto">
             View and manage your schedule. Click on dates with events to see details.
           </p>

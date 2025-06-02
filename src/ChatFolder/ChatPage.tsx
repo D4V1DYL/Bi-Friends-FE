@@ -6,10 +6,14 @@ import {
   ChangeEvent,
 } from 'react';
 import { Link } from 'react-router-dom';
-import { IoPersonCircleOutline, IoHomeOutline } from 'react-icons/io5';
+import { IoPersonCircleOutline } from 'react-icons/io5';
 import ChatService from '../Shared/Chat/ChatService';
 import { Contact, Message as RawMessage, NewMessage } from '../Shared/Chat/ChatTypes';
 import chatBg from '../assets/Chat.jpg';
+import NavigationBar from '../Components/NavigationComponent/NavigationBar';
+
+const COLOR_ME = '#8DD8FF';
+const COLOR_OTHER = '#FADA7A';
 
 interface UIMessage extends RawMessage {
   attachment?: any;
@@ -164,168 +168,168 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      {/* Sidebar */}
-      <aside className="w-full md:w-1/4 bg-[#F5F0CD] p-4 flex flex-col">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">Inbox</h2>
-          <Link
-            to="/HomePage"
-            className="p-2 rounded hover:bg-[#E5E5E5] transition"
-            title="Home"
-          >
-            <IoHomeOutline size={24} className="text-gray-800" />
-          </Link>
-        </div>
-
-        <input
-          type="text"
-          placeholder="Search…"
-          className="mb-4 w-full py-2 px-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-
-        <ul className="flex-1 overflow-auto space-y-2">
-          {filteredContacts.map(c => {
-            const isActive = selected?.user_id === c.user_id;
-            return (
-              <li
-                key={c.user_id}
-                onClick={() => setSelected(c)}
-                className={`flex items-center p-2 rounded-lg cursor-pointer transition ${
-                  isActive
-                    ? 'bg-[#81BFDA] text-white'
-                    : 'bg-white hover:bg-[#E5E5E5] text-gray-800'
-                }`}
-              >
-                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex items-center justify-center bg-gray-200">
-                  {c.profile_picture ? (
-                    <img
-                      src={c.profile_picture}
-                      alt={c.username}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <IoPersonCircleOutline className="text-gray-500" size={32} />
-                  )}
-                </div>
-                <p className="font-semibold truncate">{c.username}</p>
-              </li>
-            );
-          })}
-        </ul>
-      </aside>
-
-      {/* Chat Window */}
-      <section className="flex-1 flex flex-col">
-        <header className="flex items-center p-4 border-b bg-blue-200">
-          <div className="flex items-center">
-            <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
-              {selected?.profile_picture ? (
-                <img
-                  src={selected.profile_picture}
-                  alt={selected.username}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <IoPersonCircleOutline className="text-gray-500" size={32} />
-              )}
-            </div>
-            <div>
-              <p className="font-semibold text-gray-800">{selected?.username}</p>
-              <p className="text-sm text-gray-500">online</p>
-            </div>
+    <div className="flex flex-col h-screen">
+      <NavigationBar />
+      <div className="flex flex-col md:flex-row flex-1">
+        {/* Sidebar */}
+        <aside className="w-full md:w-1/4 bg-[#FFD586] p-4 flex flex-col border-r border-[#FADA7A]">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-800">Inbox</h2>
           </div>
-        </header>
 
-        <div
-          className="flex-1 overflow-auto p-4 space-y-4"
-          style={{
-            backgroundImage: `url(${chatBg})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-          }}
-        >
-          {messages.map(m => (
-            <div
-              key={m.chat_id}
-              className={`flex ${m.fromMe ? 'justify-end' : 'justify-start'}`}
-            >
-              <div className="max-w-xs">
-                <div className="flex items-end space-x-2">
-                  {!m.fromMe && (
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
-                      {selected?.profile_picture ? (
-                        <img
-                          src={selected.profile_picture}
-                          alt={selected.username}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <IoPersonCircleOutline className="text-gray-500" size={24} />
-                      )}
-                    </div>
-                  )}
-                  <div
-                    className={`p-3 rounded-lg text-sm break-words ${
-                      m.fromMe ? 'bg-[#81BFDA] text-black' : 'bg-[#FADA7A] text-gray-900'
-                    }`}
-                  >
-                    {m.message}
-                    {m.attachment && (
+          <input
+            type="text"
+            placeholder="Search…"
+            className="mb-4 w-full py-2 px-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+
+          <ul className="flex-1 overflow-auto space-y-2">
+            {filteredContacts.map((c) => {
+              const isActive = selected?.user_id === c.user_id;
+              return (
+                <li
+                  key={c.user_id}
+                  onClick={() => setSelected(c)}
+                  className={`flex items-center p-2 rounded-lg cursor-pointer transition ${
+                    isActive
+                      ? 'bg-[#81BFDA] text-white'
+                      : 'bg-white hover:bg-[#E5E5E5] text-gray-800'
+                  }`}
+                  style={{ backgroundColor: isActive ? '#81BFDA' : undefined }}
+                >
+                  <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex items-center justify-center bg-gray-200">
+                    {c.profile_picture ? (
                       <img
-                        src={m.attachment}
-                        className="mt-2 w-full rounded-lg object-cover"
-                        alt="attachment"
+                        src={c.profile_picture}
+                        alt={c.username}
+                        className="w-full h-full object-cover"
                       />
+                    ) : (
+                      <IoPersonCircleOutline className="text-gray-500" size={32} />
                     )}
-                    <div className="text-xs text-gray-700 mt-1 text-right">
-                      {m.time}
-                    </div>
                   </div>
-                  {m.fromMe && (
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
-                      {myProfile?.profile_picture ? (
-                        <img
-                          src={myProfile.profile_picture}
-                          alt={myProfile.username}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <IoPersonCircleOutline className="text-gray-500" size={32} />
-                      )}
-                    </div>
-                  )}
-                </div>
+                  <p className="font-semibold truncate">{c.username}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+
+        {/* Chat Window */}
+        <section className="flex-1 flex flex-col">
+          <header className="flex items-center p-4 border-b bg-white shadow-sm">
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
+                {selected?.profile_picture ? (
+                  <img
+                    src={selected.profile_picture}
+                    alt={selected.username}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <IoPersonCircleOutline className="text-gray-500" size={32} />
+                )}
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800">{selected?.username}</p>
+                <p className="text-sm text-gray-500"></p>
               </div>
             </div>
-          ))}
-          <div ref={endRef} />
-        </div>
+          </header>
 
-        <form onSubmit={sendMessage} className="p-4 border-t bg-blue-200">
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="Type a message"
-              value={input}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setInput(e.target.value)
-              }
-              className="flex-1 py-2 px-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-lg font-semibold text-gray-900 hover:opacity-90 transition"
-              style={{ backgroundColor: '#B1F0F7' }}
-            >
-              Send
-            </button>
+          <div
+            className="flex-1 overflow-auto p-4 space-y-4"
+            style={{
+              backgroundImage: `url(${chatBg})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
+          >
+            {messages.map((m) => (
+              <div
+                key={m.chat_id}
+                className={`flex ${m.fromMe ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className="max-w-xs">
+                  <div className="flex items-end space-x-2">
+                    {!m.fromMe && (
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                        {selected?.profile_picture ? (
+                          <img
+                            src={selected.profile_picture}
+                            alt={selected.username}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <IoPersonCircleOutline className="text-gray-500" size={24} />
+                        )}
+                      </div>
+                    )}
+                    <div
+                      className={`p-3 rounded-lg text-sm break-words shadow-sm ${
+                        m.fromMe ? 'text-black' : 'text-gray-900'
+                      }`}
+                      style={{
+                        backgroundColor: m.fromMe ? COLOR_ME : COLOR_OTHER,
+                      }}
+                    >
+                      {m.message}
+                      {m.attachment && (
+                        <img
+                          src={m.attachment}
+                          className="mt-2 w-full rounded-lg object-cover"
+                          alt="attachment"
+                        />
+                      )}
+                      <div className="text-xs text-gray-700 mt-1 text-right">
+                        {m.time}
+                      </div>
+                    </div>
+                    {m.fromMe && (
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                        {myProfile?.profile_picture ? (
+                          <img
+                            src={myProfile.profile_picture}
+                            alt={myProfile.username}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <IoPersonCircleOutline className="text-gray-500" size={32} />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div ref={endRef} />
           </div>
-        </form>
-      </section>
+
+          <form onSubmit={sendMessage} className="p-4 border-t border-[#81BFDA]" style={{ backgroundColor: COLOR_ME }}>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                placeholder="Type a message"
+                value={input}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setInput(e.target.value)
+                }
+                className="flex-1 py-2 px-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg font-semibold text-gray-900 hover:opacity-90 transition"
+                style={{ backgroundColor: COLOR_ME }}
+              >
+                Send
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   );
 }
