@@ -378,6 +378,14 @@ const HomePage: React.FC = () => {
                           src={user.profile_image ?? profile}
                           alt="User"
                           className="user-avatar-small"
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log("User ID:", forum.user_id); 
+                            if (forum.user_id) {
+                              navigate(`/OtherPersonPage/${forum.user_id}`);
+                            }
+                          }}
                         />
                         <div className="user-meta">
                           <p className="username">{user.username}</p>
@@ -385,6 +393,7 @@ const HomePage: React.FC = () => {
                         </div>
                       </div>
                     )}
+
 
                     {/* Forum Biasa */}
                     <h4>{forum.title}</h4>
