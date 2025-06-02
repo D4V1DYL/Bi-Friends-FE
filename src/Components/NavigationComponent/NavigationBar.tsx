@@ -46,7 +46,9 @@ const NavigationBar: React.FC = () => {
   return (
     <div className="navigation-bar">
       <div className="nav-left">
+      <Link to ="/HomePage">
         <img src={beeLogo} alt="Bi-Friends Logo" className="nav-logo" />
+      </Link>
       </div>
 
       <div className="nav-right">

@@ -18,9 +18,9 @@ const HomePage: React.FC = () => {
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [forums, setForums] = useState<any[]>([]);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [profileData, setProfileData] = useState<Profile | null>(null);
   const [titleText, setTitleText] = useState("");
-  const [descriptionText, setDescriptionText] = useState("");   // <-- NEW
+  const [descriptionText, setDescriptionText] = useState("");  
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
   const navigate = useNavigate();
@@ -200,7 +200,7 @@ const HomePage: React.FC = () => {
       const fetchProfile = async () => {
         try {
           const data: Profile = await ProfileService.getProfile(userId, token);
-          setAvatarPreview(data.profile_picture);
+          setProfileData(data);
         } catch (error) {
           console.error('Failed to fetch profile:', error);
         }
@@ -264,7 +264,11 @@ const HomePage: React.FC = () => {
           {/* --- INPUT FORM --- */}
           <div className='inputForm'>
             <div className='divAtas'>
-              <img src={avatarPreview || profile} alt="Profile" className="profile-icon" />
+            <img
+              src={profileData?.profile_picture || profile}
+              alt="Profile"
+              className="profile-icon"
+            />
 
               <textarea
                 id="textinput"
@@ -342,9 +346,10 @@ const HomePage: React.FC = () => {
                   return null;
                 }
 
-                const user = forum.msuser ?? {
-                  username: "Username",
-                  profile_image: profile,
+                const user = {
+                  username: forum.msuser?.username || "Anonymous",
+                  profile_image: forum.msuser?.profile_picture || profile,
+                  major: forum.msuser?.major || ""
                 };
 
                 const subject = forum.subject_name ?? forum.mssubject?.subject_name;

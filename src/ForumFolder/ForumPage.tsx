@@ -4,11 +4,14 @@ import axios from 'axios';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import { baseURL } from '../../environment';
 import './ForumPage.css';
+import profile from '../assets/profileLogo.png';
+import ProfileService from '../Shared/Profile/ProfileService';
 
 interface ForumReply {
   reply_id: number;
   reply_text: string;
   created_at: string;
+  user_id: number;
   msuser: {
     username: string;
     profile_picture: string;
@@ -52,6 +55,32 @@ const ForumPage: React.FC = () => {
   const [replyText, setReplyText] = useState("");
   const [parentReplyId, setParentReplyId] = useState<number | null>(null);
   const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+  const [userProfiles, setUserProfiles] = useState<Record<number, { username: string; profile_picture: string }>>({});
+  const [openReplies, setOpenReplies] = useState<Record<number, boolean>>({});
+
+  const toggleChildReplies = (replyId: number) => {
+    setOpenReplies((prev) => ({
+      ...prev,
+      [replyId]: !prev[replyId],
+    }));
+  };
+
+  const fetchUserProfile = async (userId: number) => {
+    if (userProfiles[userId]) return; 
+    try {
+      const profile = await ProfileService.getProfile(userId, token);
+      setUserProfiles((prev) => ({
+        ...prev,
+        [userId]: {
+          username: profile.username,
+          profile_picture: profile.profile_picture,
+        }
+      }));
+    } catch (err) {
+      console.error(`Gagal mengambil profil user ${userId}:`, err);
+    }
+  };
+  
 
   useEffect(() => {
     if (!postId) return;
@@ -89,17 +118,19 @@ const ForumPage: React.FC = () => {
       if (Array.isArray(replyData)) {
         console.log("Reply data fetched:", replyData);
         setReplies(replyData);
+        replyData.forEach((reply) => {
+          fetchUserProfile(reply.user_id); 
+        });
       } else {
-        console.warn("Reply data is not an array, setting empty replies");
         setReplies([]);
       }
     } catch (err) {
-      console.error("Gagal memuat reply", err);
       setReplies([]);
     }
   };
 
   const submitReply = async () => {
+    console.log("Sending reply to post ID:", postId);
     try {
       await axios.post(`${baseURL}Forum/reply_forum`, {
         post_id: Number(postId),
@@ -120,22 +151,41 @@ const ForumPage: React.FC = () => {
     }
   };
 
-  const renderReply = (reply: ForumReply) => (
-    <div key={reply.reply_id} className="reply-box">
-      <p><strong>@{reply.msuser?.username}</strong></p>
-      <p>{reply.reply_text}</p>
-      <p className="reply-time">{new Date(reply.created_at).toLocaleString()}</p>
-      <div className="reply-actions">
-        <button onClick={() => setParentReplyId(reply.reply_id)}>Reply</button>
-      </div>
+  const renderReply = (reply: ForumReply) => {
+    const user = userProfiles[reply.user_id];
+    const isExpanded = openReplies[reply.reply_id];
   
-      {reply.children && reply.children.length > 0 && (
-        <div className="child-replies">
-          {reply.children.map((child: ForumReply) => renderReply(child))}
+    return (
+      <div key={reply.reply_id} className="reply-box">
+        <div className="reply-header">
+          <img
+            src={user?.profile_picture || profile}
+            alt={user?.username || 'anonim'}
+            className="reply-avatar"
+          />
+          <div className="reply-meta">
+            <p className="reply-username">{user?.username || 'anonim'}</p>
+            <p className="reply-text">{reply.reply_text}</p>
+            <p className="reply-time">{new Date(reply.created_at).toLocaleString()}</p>
+            <div className="reply-actions">
+              <button onClick={() => setParentReplyId(reply.reply_id)}>Reply</button>
+              {(reply.children?.length ?? 0) > 0 && (
+                <button onClick={() => toggleChildReplies(reply.reply_id)} style={{ marginLeft: 12 }}>
+                  {isExpanded ? 'Hide replies' : `${reply.children?.length ?? 0} replies`}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
-  );
+  
+        {isExpanded && reply.children && (
+          <div className="child-replies">
+            {reply.children.map((child) => renderReply(child))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   if (loading) return <p>Loading detail forum...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -151,7 +201,11 @@ const ForumPage: React.FC = () => {
           <div className="forum-body">
           <div className="forum-sidebar">
               <div className="username">{forum.msuser.username}</div>
-              <img src={forum.msuser.profile_picture} alt={forum.msuser.username} className="sidebar-profile-picture" />
+              <img
+                src={forum.msuser.profile_picture || profile}
+                alt={forum.msuser.username}
+                className="sidebar-profile-picture"
+              />
             </div>
             <div className="forum-content">
               <div className="forum-timestamp">
@@ -163,11 +217,20 @@ const ForumPage: React.FC = () => {
               <div className="forum-description">{forum.description}</div>
     
               <div className="forum-event-box">
-                <p><strong>Subject:</strong> {forum.mssubject.subject_name}</p>
-                <p><strong>Event:</strong> {forum.msevent.event_name}</p>
-                <p><strong>Tanggal:</strong> {new Date(forum.msevent.event_date).toLocaleDateString()}</p>
-                <p><strong>Lokasi:</strong> {forum.msevent.location.location_name}</p>
-                <p><strong>Waktu:</strong> {new Date(forum.msevent.start_date).toLocaleTimeString()} - {new Date(forum.msevent.end_date).toLocaleTimeString()}</p>
+              {forum.mssubject && (
+                  <p><strong>Subject:</strong> {forum.mssubject.subject_name}</p>
+              )}
+
+                {forum.msevent ? (
+                  <>
+                    <p><strong>Event:</strong> {forum.msevent.event_name}</p>
+                    <p><strong>Tanggal:</strong> {new Date(forum.msevent.event_date).toLocaleDateString()}</p>
+                    <p><strong>Lokasi:</strong> {forum.msevent.location?.location_name ?? ''}</p>
+                    <p><strong>Waktu:</strong> {new Date(forum.msevent.start_date).toLocaleTimeString()} - {new Date(forum.msevent.end_date).toLocaleTimeString()}</p>
+                  </>
+                ) : (
+                  <p></p>
+                )}
               </div>
               <div className="reply-input-container">
                   {parentReplyId && (
@@ -176,11 +239,20 @@ const ForumPage: React.FC = () => {
                   <textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Tulis balasan anda..."
-                    rows={4}
-                    className="reply-textarea"
+                    placeholder="Add a comment..."
+                    className="reply-textarea youtube-style"
+                    onInput={(e) => {
+                      e.currentTarget.style.height = 'auto';
+                      e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                    }}
                   />
-                  <button onClick={submitReply} disabled={!replyText.trim()}>Kirim Balasan</button>
+                  <button
+                    onClick={submitReply}
+                    disabled={!replyText.trim()}
+                    className="comment-button"
+                  >
+                    Comment
+                  </button>
             </div>
               <div className="forum-replies-section">
                 <h3>Replies</h3>
