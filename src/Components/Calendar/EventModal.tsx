@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, MapPin, Clock } from 'lucide-react';
 import { DateWithEvents } from './types/calendar';
-
+import { useNavigate } from 'react-router-dom';
 
 interface EventModalProps {
   dateInfo: DateWithEvents | null;
@@ -9,6 +9,7 @@ interface EventModalProps {
 }
 
 const EventModal: React.FC<EventModalProps> = ({ dateInfo, onClose }) => {
+  const navigate = useNavigate();
   if (!dateInfo) return null;
 
   const { date, events } = dateInfo;
@@ -18,6 +19,12 @@ const EventModal: React.FC<EventModalProps> = ({ dateInfo, onClose }) => {
     day: 'numeric',
     year: 'numeric'
   });
+
+  const handleEventClick = (event: any) => {
+    if (event.related_post_id) {
+      navigate(`/forum/${event.related_post_id}`);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center p-4 z-50 animate-fadeIn">
@@ -43,7 +50,9 @@ const EventModal: React.FC<EventModalProps> = ({ dateInfo, onClose }) => {
               {events.map((event) => (
                 <div 
                   key={event.id} 
-                  className="p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
+                  className={`p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors ${event.related_post_id ? 'cursor-pointer hover:bg-[#B1F0F7]/10' : ''}`}
+                  onClick={() => handleEventClick(event)}
+                  title={event.related_post_id ? 'Go to forum post' : undefined}
                 >
                   <div className="flex items-start">
                     <div 

@@ -27,6 +27,7 @@ const CalenderPage: React.FC = () => {
               description: undefined, // You can map description if available
               location: ev.mslocation?.location_name,
               color: '#81BFDA', // You can randomize or assign color if needed
+              related_post_id: ev.related_post_id,
             };
           });
           setEvents(mapped);

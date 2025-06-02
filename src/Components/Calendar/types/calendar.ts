@@ -7,6 +7,7 @@ export interface CalendarEvent {
     description?: string;
     location?: string;
     color?: string;
+    related_post_id?: number;
   }
   
   export interface DateWithEvents {
