@@ -5,7 +5,6 @@ import './HomePage.css';
 import profile from '../assets/profileLogo.png';
 import GetForumService from "../Shared/GetForum/GetForumService";
 import event from '../assets/event.png';
-import search from '../assets/SearchIcon.svg';
 import Swal from 'sweetalert2';
 import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
@@ -212,10 +211,6 @@ const HomePage: React.FC = () => {
     return (
       <div className="sidebar">
         <div className='sidebar-content'>
-          <div className="search-bar">
-            <img src={search} alt="Search_Icon" className='search-icon' />
-            <input type="text" className="search-input" placeholder="Search" />
-          </div>
           <div className="subject-collection">
             {subjects.map((subject) => (
               <p
