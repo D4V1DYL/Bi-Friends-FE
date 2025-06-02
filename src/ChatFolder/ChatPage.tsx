@@ -5,7 +5,6 @@ import {
   FormEvent,
   ChangeEvent,
 } from 'react';
-import { Link } from 'react-router-dom';
 import { IoPersonCircleOutline } from 'react-icons/io5';
 import ChatService from '../Shared/Chat/ChatService';
 import { Contact, Message as RawMessage, NewMessage } from '../Shared/Chat/ChatTypes';
