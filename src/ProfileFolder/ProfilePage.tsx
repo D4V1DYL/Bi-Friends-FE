@@ -89,7 +89,6 @@ const ProfilePage: React.FC = () => {
     <div>
       <NavigationBar />
       <div className="profile-container">
-        <h1 className="title">Edit Profil</h1>
 
         <div className="avatar-section">
           <img
