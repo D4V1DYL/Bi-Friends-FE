@@ -214,14 +214,7 @@ const ForumPage: React.FC = () => {
                     </>
                   ) : <p></p> }
                 </div>
-
                 <div className="reply-input-container">
-                  { parentReplyId && (
-                    <p>
-                      Membalas komentar ID: {parentReplyId} 
-                      <button onClick={() => setParentReplyId(null)}>Batalkan</button>
-                    </p>
-                  )}
                   <textarea
                     className="reply-textarea youtube-style"
                     placeholder="Add a comment..."
@@ -232,13 +225,25 @@ const ForumPage: React.FC = () => {
                       e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                     }}
                   />
-                  <button 
-                    className="comment-button" 
-                    onClick={submitReply} 
-                    disabled={!replyText.trim()}
-                  >
-                    Comment
-                  </button>
+
+                  <div className="reply-action-buttons">
+                    <button
+                      className="comment-button"
+                      onClick={submitReply}
+                      disabled={!replyText.trim()}
+                    >
+                      Comment
+                    </button>
+
+                    {parentReplyId && (
+                      <button
+                        className="cancel-reply-button"
+                        onClick={() => setParentReplyId(null)}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="forum-replies-section">
