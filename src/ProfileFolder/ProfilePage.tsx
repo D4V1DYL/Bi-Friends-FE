@@ -65,7 +65,8 @@ const ProfilePage: React.FC = () => {
         confirmButtonColor: '#3085d6',
       });
 
-      // Fetch updated profile
+      window.location.reload()
+      
       const updatedData: Profile = await ProfileService.getProfile(userId, token);
       setUsername(updatedData.username);
       setGender(updatedData.gender as '' | 'Male' | 'Female');
