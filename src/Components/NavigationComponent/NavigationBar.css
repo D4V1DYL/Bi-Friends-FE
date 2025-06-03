@@ -56,7 +56,7 @@
 
   .notif-wrapper {
   position: relative;
-  margin-left: 20px; /* selaraskan dengan jarak icon lain */
+  margin-left: -3px; /* selaraskan dengan jarak icon lain */
 }
 
 .notif-icon {
