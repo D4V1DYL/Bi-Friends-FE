@@ -38,6 +38,10 @@ interface ForumDetail {
     end_date: string;
     location: {
       location_name: string;
+      address: string;      
+      capacity?: number;      
+      latitude?: number;
+      longitude?: number;
     };
   };
   msisi_forum?: {
@@ -210,6 +214,10 @@ const ForumPage: React.FC = () => {
                       <p><strong>Event:</strong> {forum.msevent.event_name}</p>
                       <p><strong>Tanggal:</strong> {new Date(forum.msevent.event_date).toLocaleDateString()}</p>
                       <p><strong>Lokasi:</strong> {forum.msevent.location?.location_name ?? ''}</p>
+                      <p><strong>Address:</strong> {forum.msevent.location?.address ?? ''}</p>
+                      <p><strong>Capacity:</strong> {forum.msevent.location?.capacity ?? ''}</p>
+                      <p><strong>Longitude:</strong> {forum.msevent.location?.longitude ?? ''}</p>
+                      <p><strong>Latitude:</strong> {forum.msevent.location?.latitude ?? ''}</p>
                       <p><strong>Waktu:</strong> {new Date(forum.msevent.start_date).toLocaleTimeString()} – {new Date(forum.msevent.end_date).toLocaleTimeString()}</p>
                     </>
                   ) : <p></p> }
