@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
       if (result.isConfirmed) {
         await GetForumService.deleteForum(forumId, token);
         setForums(prevForums => prevForums.filter(forum => forum.post_id !== forumId));
-        Swal.fire('Dihapus!', 'Forum berhasil dihapus.', 'success');
+        await Swal.fire('Dihapus!', 'Forum berhasil dihapus.', 'success');
         window.location.reload();
       }
     } catch (error) {

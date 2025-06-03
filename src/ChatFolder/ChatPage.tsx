@@ -10,6 +10,7 @@ import ChatService from '../Shared/Chat/ChatService';
 import { Contact, Message as RawMessage, NewMessage } from '../Shared/Chat/ChatTypes';
 import chatBg from '../assets/Chat.jpg';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
+import { baseURL } from '../../environment';
 
 const COLOR_ME = '#8DD8FF';
 const COLOR_OTHER = '#FADA7A';
@@ -122,7 +123,7 @@ export default function ChatPage() {
       const currentUserId = myProfile?.user_id;
       if (!currentUserId) return;
 
-      fetch(`/chat/search-users?q=${searchQuery}&current_user_id=${currentUserId}`)
+      fetch(`${baseURL}chat/search-users?q=${searchQuery}&current_user_id=${currentUserId}`)
         .then(res => res.json())
         .then(data => {
           setFilteredContacts(data.data || []);
