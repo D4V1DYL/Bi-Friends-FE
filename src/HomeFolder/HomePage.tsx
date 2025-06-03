@@ -20,6 +20,7 @@ const HomePage: React.FC = () => {
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [titleText, setTitleText] = useState("");
   const [descriptionText, setDescriptionText] = useState("");  
+  const [selectedPostSubject, setSelectedPostSubject] = useState<number | "">("");
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
   const navigate = useNavigate();
@@ -64,7 +65,8 @@ const HomePage: React.FC = () => {
     const payload = {
       title: titleText,
       description: descriptionText,     
-      attachment: mediaPreview ?? null
+      attachment: mediaPreview ?? null,
+      subject_id: selectedPostSubject || null,
     };
 
     try {
@@ -90,6 +92,7 @@ const HomePage: React.FC = () => {
       setTitleText("");
       setDescriptionText("");     
       setMediaPreview(null);
+      setSelectedPostSubject("");
     } catch (error) {
       console.error(error);
       await Swal.fire({
@@ -247,25 +250,27 @@ const HomePage: React.FC = () => {
         <main className="forum-area">
           <section className="post-creator">
             <div className="inputForm">
-              <div className="divAtas">
+              <div className="divAtas" style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                 <img
                   src={profileData?.profile_picture || profile}
                   alt="Profile"
                   className="profile-icon"
                 />
-                <textarea
-                  id="textinput"
-                  placeholder="Write your title here..."
-                  rows={1}
-                  maxLength={100}
-                  value={titleText}
-                  onChange={(e) => setTitleText(e.target.value)}
-                  onInput={(e) => {
-                    e.currentTarget.style.height = "auto";
-                    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-                  }}
-                  style={{ marginBottom: 8 }}
-                />
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <textarea
+                    id="textinput"
+                    placeholder="Write your title here..."
+                    rows={1}
+                    maxLength={100}
+                    value={titleText}
+                    onChange={(e) => setTitleText(e.target.value)}
+                    onInput={(e) => {
+                      e.currentTarget.style.height = "auto";
+                      e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                    }}
+                    style={{ marginBottom: 8 }}
+                  />
+                </div>
                 <button onClick={() => setShowPopup(true)} id="eventPopupButton">
                   <img src={event} alt="Event Icon" className="icon" />
                 </button>
@@ -291,7 +296,18 @@ const HomePage: React.FC = () => {
                 </div>
               )}
 
-              <div className="divBawah">
+              <div className="divBawah" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                 <select
+                    className="p-2 rounded border border-gray-200"
+                    style={{ minWidth: 120, maxWidth: 180, background: 'white', fontSize:14}}
+                    value={selectedPostSubject}
+                    onChange={e => setSelectedPostSubject(e.target.value ? Number(e.target.value) : "")}
+                  >
+                    <option value="">Select subject...</option>
+                    {dummySubjects.filter(s => s.name !== 'All').map(subject => (
+                      <option key={subject.id} value={subject.id}>{subject.name}</option>
+                    ))}
+                  </select>
                 <button id="submitButton" onClick={handlePostSubmit}>Post</button>
               </div>
             </div>
