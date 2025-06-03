@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import './ProfilePage.css';
+import { useNavigate } from 'react-router-dom';
 import profileLogo from '../assets/profileLogo.png';
 import ProfileService from '../Shared/Profile/ProfileService';
 import { getUserIdFromToken } from '../Utils/jwt';
@@ -14,6 +15,7 @@ const ProfilePage: React.FC = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
@@ -42,6 +44,13 @@ const ProfilePage: React.FC = () => {
       setSelectedFile(file);
       setAvatarPreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+
+    navigate('/');
   };
 
   const handleUpdate = async () => {
@@ -144,9 +153,15 @@ const ProfilePage: React.FC = () => {
           />
           <div className="char-count">{bio.length} / 250</div>
 
-          <button className="update-btn" onClick={handleUpdate}>
-            Update
-          </button>
+          <div className="button-row">
+            <button className="update-btn" onClick={handleUpdate}>
+              Update
+            </button>
+
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </div>
