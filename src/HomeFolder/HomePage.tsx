@@ -80,19 +80,6 @@ const HomePage: React.FC = () => {
       setIsLoading(true);
       try {
         const res = await GetForumService.getAllForums(token);
-        //
-        // Kemungkinan struktur return:
-        //  A) res adalah axios response → res.data adalah objek { data: Forum[] }
-        //  B) res adalah hasil .then(res => res.data) → res.data langsung array
-        //  C) res langsung array
-        //
-        // Kita harus pastikan mengambil array-nya:
-        //
-        // - Jika res.data?.data ada dan Array, pakai res.data.data
-        // - Else jika res.data ada dan Array, pakai res.data
-        // - Else jika res sendiri adalah Array, pakai res
-        // - Jika tidak ada yang cocok, gunakan []
-        //
         const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
         const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
         const maybeArray3 = Array.isArray(res) ? res : null;
@@ -236,46 +223,67 @@ const HomePage: React.FC = () => {
   };
 
   const handleEventSubmit = async () => {
-    const name = (document.getElementById('event-name') as HTMLInputElement)?.value || null;
-    const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || null;
+    // Ambil semua nilai dari field input
+    const name = (document.getElementById('event-name') as HTMLInputElement)?.value || "";
+    const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || "";
+
     const subjectIdRaw = (document.getElementById('event-subject') as HTMLSelectElement)?.value;
     const subjectId = subjectIdRaw === "" ? null : parseInt(subjectIdRaw, 10);
-    const location = (document.getElementById('event-location') as HTMLInputElement)?.value || null;
-    const address = (document.getElementById('event-address') as HTMLInputElement)?.value || null;
-    const date = (document.getElementById('event-date') as HTMLInputElement)?.value || null;
-    const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value || null;
-    const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value || null;
+
+    const locationName = (document.getElementById('event-location') as HTMLInputElement)?.value || "";
+    const locationAddress = (document.getElementById('event-address') as HTMLInputElement)?.value || "";
+
+    const date = (document.getElementById('event-date') as HTMLInputElement)?.value || "";
+    const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value || "";
+    const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value || "";
+
     const capacityRaw = (document.getElementById('event-capasity') as HTMLInputElement)?.value;
     const capacity = capacityRaw === "" ? null : parseInt(capacityRaw, 10);
+
     const latitudeRaw = (document.getElementById('event-latitude') as HTMLInputElement)?.value;
     const latitude = latitudeRaw === "" ? null : parseFloat(latitudeRaw);
+
     const longitudeRaw = (document.getElementById('event-longtitude') as HTMLInputElement)?.value;
     const longitude = longitudeRaw === "" ? null : parseFloat(longitudeRaw);
 
-    const payload = {
-      title: name,
-      description: text,
-      forum_text: text,
-      subject_id: subjectId,
-      event_name: name,
-      event_date: date,
-      start_date: startDate,
-      end_date: endDate,
-      location_name: location,
-      location_address: address,
-      location_capacity: capacity,
-      location_latitude: latitude,
-      location_longitude: longitude,
-    };
+    // Buat FormData untuk dikirim
+    const formData = new FormData();
+    formData.append('title', name);
+    formData.append('description', text);
+    formData.append('forum_text', text);
+    if (subjectId !== null) {
+      formData.append('subject_id', String(subjectId));
+    }
+    formData.append('event_name', name);
+    formData.append('event_date', date);
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
+    formData.append('location_name', locationName);
+    formData.append('location_address', locationAddress);
+    if (capacity !== null) {
+      formData.append('location_capacity', String(capacity));
+    }
+    if (latitude !== null) {
+      formData.append('location_latitude', String(latitude));
+    }
+    if (longitude !== null) {
+      formData.append('location_longitude', String(longitude));
+    }
+
+    // Jika ingin menambahkan lampiran file pada event, tambahkan <input type="file" id="event-attachment" />
+    // const eventFile = (document.getElementById('event-attachment') as HTMLInputElement)?.files?.[0];
+    // if (eventFile) {
+    //   formData.append('attachment', eventFile);
+    // }
 
     try {
       const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
+          // Jangan set Content-Type di sini, biarkan browser menambahkan boundary-nya secara otomatis
         },
-        body: JSON.stringify(payload)
+        body: formData
       });
 
       if (!response.ok) {
@@ -435,7 +443,6 @@ const HomePage: React.FC = () => {
               {isLoading ? (
                 <p>Loading forums...</p>
               ) : (() => {
-                // Filter berdasarkan subject yang dipilih
                 const filteredForums =
                   Array.isArray(forums) 
                     ? forums.filter(forum =>
