@@ -301,3 +301,206 @@
   text-align: center;
   margin-top: 40px;
 }
+
+/* === Responsive Styles untuk ForumPage === */
+
+/* Tablet & di bawah */
+@media (max-width: 1024px) {
+  .forum-body {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .forum-sidebar {
+    width: 100%;
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #d0d3d4;
+    margin-bottom: 16px;
+  }
+
+  .forum-content {
+    padding-left: 0;
+  }
+
+  .sidebar-profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+}
+
+/* Smartphone besar (≥ 768px dan < 1024px) */
+@media (max-width: 768px) {
+  .forum-detail-container {
+    margin: 0 8px;
+  }
+
+  .forum-header-bar {
+    padding: 12px 16px;
+  }
+
+  .forum-title {
+    font-size: 1.3rem;
+  }
+
+  .forum-description {
+    font-size: 0.95rem;
+  }
+
+  .forum-event-info {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .reply-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .reply-username {
+    font-size: 0.9rem;
+  }
+
+  .reply-time {
+    font-size: 0.75rem;
+  }
+
+  .reply-text {
+    font-size: 0.85rem;
+  }
+
+  .comment-button,
+  .cancel-reply-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .selected-filename {
+    font-size: 0.85rem;
+  }
+}
+
+/* Smartphone kecil (≤ 480px) */
+@media (max-width: 480px) {
+  .forum-page-spacing {
+    padding-top: 12px;
+  }
+
+  .forum-detail-container {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .forum-body {
+    padding: 12px;
+  }
+
+  /* Sidebar disembunyikan, hanya tampilkan avatar kecil dan username di atas */
+  .forum-sidebar {
+    display: none;
+  }
+
+  /* Tambahkan username dan avatar di bagian atas konten */
+  .forum-content::before {
+    content: "";
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .forum-content .forum-timestamp {
+    text-align: center;
+  }
+
+  .forum-content {
+    padding: 0;
+  }
+
+  .forum-title {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .forum-description {
+    margin-bottom: 16px;
+  }
+
+  .forum-event-info {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+
+  .forum-event-info p {
+    margin: 4px 0;
+  }
+
+  /* Reply section full-width */
+  .reply-input-container {
+    margin-top: 16px;
+  }
+
+  .reply-textarea {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .reply-input-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .comment-button,
+  .cancel-reply-button {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .attach-btn {
+    align-self: flex-start;
+  }
+
+  .selected-filename {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Reply box margin lebih kecil dan indentation lebih tipis */
+  .reply-box {
+    margin-top: 12px;
+    padding-left: 10px;
+    border-left-width: 2px;
+  }
+
+  .reply-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .reply-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .reply-meta {
+    width: 100%;
+  }
+
+  .reply-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .child-replies {
+    margin-left: 16px;
+    padding-left: 8px;
+  }
+}
