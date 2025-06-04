@@ -172,19 +172,6 @@ body.LoginPage {
   color: black;
 }
 
-.Button_Box{
-  display: flex;
-  justify-content: left;
-  margin-left: 2%;
-  width: 62%;
-}
-.ButtonBox{
-  display: flex;
-  justify-content: center;
-  width: 110px;
-  margin-top: 1.2rem;
-}
-
 .fancy-button {
   --button_radius: 0.5em;
   --button_color: #e8e8e8;
@@ -229,8 +216,70 @@ body.LoginPage {
   .AllImg {
     display: none;
   }
-  #TheTemplate_Login, .container1 {
+  #TheTemplate_Login, .container1 , #TheBox_Log{
     justify-content: center;
     height: 800px;
+    width: auto;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  #TheTemplate_Login {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    height: 920px;
+  }
+
+  .container1 {
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .TheBox_Log {
+    width: 90%;
+    margin: 0;
+    padding: 2rem 1rem;
+  }
+
+  .Txt_Input_Box_Log {
+    width: 100%;
+  }
+
+  .RememberBox_ForgetPassword_Box {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .DirectToRegister_Box {
+    width: 100%;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+
+  .DirectToRegister {
+    margin: 0;
+    font-size: 0.75rem;
+  }
+
+  .Button_Box {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .ButtonBox {
+    width: auto;
+  }
+
+  #BlueBg, #SL, #TheImage {
+    display: none;
   }
 }
