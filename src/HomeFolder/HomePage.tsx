@@ -74,7 +74,6 @@ const HomePage: React.FC = () => {
     { id: 11, name: "All" }
   ];
 
-  // 1. Fetch semua forum, lalu simpan array yang benar ke state
   useEffect(() => {
     const fetchForums = async () => {
       setIsLoading(true);
@@ -93,7 +92,7 @@ const HomePage: React.FC = () => {
         setForums(forumList);
       } catch (error) {
         console.error("Error fetching forums:", error);
-        setForums([]); // guard
+        setForums([]); 
       } finally {
         setIsLoading(false);
       }
@@ -102,7 +101,6 @@ const HomePage: React.FC = () => {
     fetchForums();
   }, [token]);
 
-  // 2. Fetch profil user
   useEffect(() => {
     if (userId && token) {
       const fetchProfile = async () => {
@@ -198,14 +196,12 @@ const HomePage: React.FC = () => {
         text: "Post berhasil dikirim.",
       });
 
-      // Reset field
       setTitleText("");
       setDescriptionText("");
       setMediaPreview(null);
       setSelectedPostSubject("");
       setSelectedFile(null);
 
-      // Refetch forums setelah berhasil post
       const res = await GetForumService.getAllForums(token);
       const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
       const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
@@ -223,7 +219,6 @@ const HomePage: React.FC = () => {
   };
 
   const handleEventSubmit = async () => {
-    // Ambil semua nilai dari field input
     const name = (document.getElementById('event-name') as HTMLInputElement)?.value || "";
     const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || "";
 
@@ -246,7 +241,6 @@ const HomePage: React.FC = () => {
     const longitudeRaw = (document.getElementById('event-longtitude') as HTMLInputElement)?.value;
     const longitude = longitudeRaw === "" ? null : parseFloat(longitudeRaw);
 
-    // Buat FormData untuk dikirim
     const formData = new FormData();
     formData.append('title', name);
     formData.append('description', text);
@@ -270,18 +264,11 @@ const HomePage: React.FC = () => {
       formData.append('location_longitude', String(longitude));
     }
 
-    // Jika ingin menambahkan lampiran file pada event, tambahkan <input type="file" id="event-attachment" />
-    // const eventFile = (document.getElementById('event-attachment') as HTMLInputElement)?.files?.[0];
-    // if (eventFile) {
-    //   formData.append('attachment', eventFile);
-    // }
-
     try {
       const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
-          // Jangan set Content-Type di sini, biarkan browser menambahkan boundary-nya secara otomatis
         },
         body: formData
       });
@@ -293,7 +280,6 @@ const HomePage: React.FC = () => {
       await Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
       setShowPopup(false);
 
-      // Refetch forums supaya event baru muncul
       const res = await GetForumService.getAllForums(token);
       const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
       const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
@@ -306,7 +292,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // Sidebar untuk filter subject
   const Sidebar: React.FC = () => {
     const [subjects, setSubjects] = useState<{ id: number; name: string }[]>([]);
     useEffect(() => { setSubjects(dummySubjects); }, []);
@@ -375,7 +360,7 @@ const HomePage: React.FC = () => {
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2 rounded-full hover:bg-gray-200 transition"
+                    className="attach-btn"
                     title="Attach file"
                   >
                     <Paperclip size={20} />
@@ -495,7 +480,6 @@ const HomePage: React.FC = () => {
                         />
                       )}
 
-                      {/* User Info */}
                       <div className="forum-user-info">
                         <img
                           src={user.profile_image}
@@ -515,18 +499,15 @@ const HomePage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Title & Description */}
                       <h4>{forum.title}</h4>
                       <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
 
-                      {/* Subject */}
                       {subjectName && (
                         <p>
                           <strong>Subject:</strong> {subjectName}
                         </p>
                       )}
 
-                      {/* Jika ini event forum */}
                       {isEventForum && forum.msevent ? (
                         <div className="event-info">
                           <p>
@@ -572,7 +553,6 @@ const HomePage: React.FC = () => {
         </aside>
       </div>
 
-      {/* Popup untuk membuat event */}
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div

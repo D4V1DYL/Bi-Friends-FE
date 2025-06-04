@@ -404,6 +404,24 @@ html, body {
   background-color: #69aebb;
 }
 
+.attach-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  cursor: pointer; 
+}
+
+.attach-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer; 
+}
+
+.attach-btn:focus {
+  outline: none; 
+}
+
 @keyframes fadeIn {
   from {
     transform: scale(0.95);

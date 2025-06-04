@@ -73,7 +73,6 @@ const ForumPage: React.FC = () => {
     }));
   };
 
-  // Simpan file yang dipilih user ke state
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
@@ -112,7 +111,6 @@ const ForumPage: React.FC = () => {
       }
     };
     fetchForum();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId, token]);
 
   const fetchReplies = async () => {
@@ -139,7 +137,6 @@ const ForumPage: React.FC = () => {
     const formData = new FormData();
     formData.append('post_id', String(postId));
     formData.append('reply_text', replyText);
-    // Jika parentReplyId null atau 0, backend menganggap ini reply utama
     formData.append('parent_reply_id', parentReplyId ? String(parentReplyId) : "0");
     if (selectedFile) {
       formData.append('attachment', selectedFile);
@@ -152,11 +149,9 @@ const ForumPage: React.FC = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            // Jangan set Content-Type, biarkan browser otomatis menambahkan boundary
           },
         }
       );
-      // Reset setelah kirim
       setReplyText("");
       setParentReplyId(null);
       setSelectedFile(null);
@@ -169,13 +164,11 @@ const ForumPage: React.FC = () => {
     }
   };
 
-  // Render satu reply (dan anak-anaknya)
   const renderReply = (reply: ForumReply) => {
     const user = userProfiles[reply.user_id];
     const isExpanded = !!openReplies[reply.reply_id];
     const hasChildren = Array.isArray(reply.children) && reply.children.length > 0;
 
-    // Cek apakah attachment adalah gambar (ekstensi umum .jpg/.png/.gif/.jpeg)
     const isImage = reply.attachment
       ? /\.(jpg|jpeg|png|gif)$/i.test(reply.attachment)
       : false;
@@ -305,7 +298,6 @@ const ForumPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Input untuk menulis reply baru */}
               <div className="reply-input-container">
                 <textarea
                   className="reply-textarea youtube-style"
@@ -319,7 +311,14 @@ const ForumPage: React.FC = () => {
                 />
 
                 <div className="reply-input-actions">
-                  {/* Tombol untuk memilih file attachment */}
+                  <button
+                    className="comment-button"
+                    onClick={submitReply}
+                    disabled={!replyText.trim()}
+                  >
+                    Comment
+                  </button>
+
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     className="attach-btn"
@@ -333,25 +332,18 @@ const ForumPage: React.FC = () => {
                     style={{ display: 'none' }}
                     onChange={handleFileSelect}
                   />
+
                   {selectedFile && (
-                    <span className="selected-filename">
-                      {selectedFile.name}
-                    </span>
+                    <span className="selected-filename">{selectedFile.name}</span>
                   )}
-                  <button
-                    className="comment-button"
-                    onClick={submitReply}
-                    disabled={!replyText.trim()}
-                  >
-                    Comment
-                  </button>
+
                   {parentReplyId && (
                     <button
                       className="cancel-reply-button"
                       onClick={() => {
                         setParentReplyId(null);
                         setSelectedFile(null);
-                        if (fileInputRef.current) fileInputRef.current.value = "";
+                        if (fileInputRef.current) fileInputRef.current.value = '';
                       }}
                     >
                       Cancel
@@ -360,7 +352,6 @@ const ForumPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Tampilkan daftar replies */}
               <div className="forum-replies-section">
                 {Array.isArray(replies) && replies.length === 0 ? (
                   <p className="no-replies-text">No replies available.</p>
