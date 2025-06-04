@@ -1,33 +1,136 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import NavigationBar from '../Components/NavigationComponent/NavigationBar';
 import EventWidget from '../Components/EventWidgetComponent/EventWidget';
 import './HomePage.css';
 import profile from '../assets/profileLogo.png';
 import GetForumService from "../Shared/GetForum/GetForumService";
-import event from '../assets/event.png';
+import eventIcon from '../assets/event.png';
 import Swal from 'sweetalert2';
 import ProfileService from '../Shared/Profile/ProfileService';
 import deleteIcon from '../assets/delete.png';
 import { getUserIdFromToken } from '../Utils/jwt';
 import { Profile } from '../Shared/Profile/ProfileTypes';
 import { useNavigate } from 'react-router-dom';
+import { Paperclip } from 'lucide-react';
 
+interface Forum {
+  post_id: number;
+  user_id: number;
+  created_at: string;
+  subject_id: number | null;
+  event_id: number | null;
+  title: string;
+  description: string;
+  msuser: {
+    username: string;
+    profile_picture: string | null;
+    major?: string;
+  };
+  mssubject: {
+    subject_name: string;
+  } | null;
+  msevent: {
+    event_name: string;
+    event_date: string;
+    start_date: string;
+    end_date: string;
+    location: {
+      location_name: string;
+    };
+  } | null;
+  msisi_forum: Array<{
+    forum_text: string;
+    attachment: string | null;
+  }>;
+}
 
 const HomePage: React.FC = () => {
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [forums, setForums] = useState<any[]>([]);
+  const [forums, setForums] = useState<Forum[]>([]);
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [titleText, setTitleText] = useState("");
-  const [descriptionText, setDescriptionText] = useState("");  
+  const [descriptionText, setDescriptionText] = useState("");
   const [selectedPostSubject, setSelectedPostSubject] = useState<number | "">("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
   const userId = getUserIdFromToken(token);
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
+  const [isLoading, setIsLoading] = useState(true);
+
+  const dummySubjects = [
+    { id: 1, name: "Netflix n Chill" },
+    { id: 2, name: "Sport" },
+    { id: 3, name: "Basketball" },
+    { id: 4, name: "Writing" },
+    { id: 5, name: "Coding Geeks" },
+    { id: 6, name: "JollayBay" },
+    { id: 7, name: "Marketing Gods" },
+    { id: 8, name: "Gaming" },
+    { id: 9, name: "Memes" },
+    { id: 10, name: "Night Club" },
+    { id: 11, name: "All" }
+  ];
+
+  // 1. Fetch semua forum, lalu simpan array yang benar ke state
+  useEffect(() => {
+    const fetchForums = async () => {
+      setIsLoading(true);
+      try {
+        const res = await GetForumService.getAllForums(token);
+        //
+        // Kemungkinan struktur return:
+        //  A) res adalah axios response → res.data adalah objek { data: Forum[] }
+        //  B) res adalah hasil .then(res => res.data) → res.data langsung array
+        //  C) res langsung array
+        //
+        // Kita harus pastikan mengambil array-nya:
+        //
+        // - Jika res.data?.data ada dan Array, pakai res.data.data
+        // - Else jika res.data ada dan Array, pakai res.data
+        // - Else jika res sendiri adalah Array, pakai res
+        // - Jika tidak ada yang cocok, gunakan []
+        //
+        const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
+        const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
+        const maybeArray3 = Array.isArray(res) ? res : null;
+
+        const forumList: Forum[] =
+          (maybeArray1 as Forum[]) ||
+          (maybeArray2 as Forum[]) ||
+          (maybeArray3 as Forum[]) ||
+          [];
+
+        setForums(forumList);
+      } catch (error) {
+        console.error("Error fetching forums:", error);
+        setForums([]); // guard
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchForums();
+  }, [token]);
+
+  // 2. Fetch profil user
+  useEffect(() => {
+    if (userId && token) {
+      const fetchProfile = async () => {
+        try {
+          const data: Profile = await ProfileService.getProfile(userId, token);
+          setProfileData(data);
+        } catch (error) {
+          console.error('Failed to fetch profile:', error);
+        }
+      };
+      fetchProfile();
+    }
+  }, [userId, token]);
 
   const handleDeleteForum = async (forumId: number) => {
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
     try {
       const result = await Swal.fire({
         title: 'Yakin ingin menghapus?',
@@ -42,13 +145,31 @@ const HomePage: React.FC = () => {
 
       if (result.isConfirmed) {
         await GetForumService.deleteForum(forumId, token);
-        setForums(prevForums => prevForums.filter(forum => forum.post_id !== forumId));
+        setForums(prev => prev.filter(f => f.post_id !== forumId));
         await Swal.fire('Dihapus!', 'Forum berhasil dihapus.', 'success');
-        window.location.reload();
       }
     } catch (error) {
       console.error('Gagal menghapus forum:', error);
       Swal.fire('Gagal!', 'Forum gagal dihapus.', 'error');
+    }
+  };
+
+  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setSelectedFile(file);
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setMediaPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setMediaPreview(`File selected: ${file.name}`);
+      }
+    } else {
+      setSelectedFile(null);
+      setMediaPreview(null);
     }
   };
 
@@ -62,22 +183,24 @@ const HomePage: React.FC = () => {
       return;
     }
 
-    const payload = {
-      title: titleText,
-      description: descriptionText,     
-      attachment: mediaPreview ?? null,
-      subject_id: selectedPostSubject || null,
-    };
+    const formData = new FormData();
+    formData.append('title', titleText);
+    formData.append('description', descriptionText);
+    if (selectedPostSubject) {
+      formData.append('subject_id', String(selectedPostSubject));
+    }
+    if (selectedFile) {
+      formData.append('attachment', selectedFile);
+    }
+    formData.append('forum_text', descriptionText);
 
     try {
-      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
       const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(payload)
+        body: formData
       });
 
       if (!response.ok) throw new Error("Gagal post");
@@ -88,11 +211,20 @@ const HomePage: React.FC = () => {
         text: "Post berhasil dikirim.",
       });
 
-      window.location.reload();
+      // Reset field
       setTitleText("");
-      setDescriptionText("");     
+      setDescriptionText("");
       setMediaPreview(null);
       setSelectedPostSubject("");
+      setSelectedFile(null);
+
+      // Refetch forums setelah berhasil post
+      const res = await GetForumService.getAllForums(token);
+      const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
+      const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
+      const maybeArray3 = Array.isArray(res) ? res : null;
+      const forumList: Forum[] = (maybeArray1 as Forum[]) || (maybeArray2 as Forum[]) || (maybeArray3 as Forum[]) || [];
+      setForums(forumList);
     } catch (error) {
       console.error(error);
       await Swal.fire({
@@ -106,23 +238,17 @@ const HomePage: React.FC = () => {
   const handleEventSubmit = async () => {
     const name = (document.getElementById('event-name') as HTMLInputElement)?.value || null;
     const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || null;
-
     const subjectIdRaw = (document.getElementById('event-subject') as HTMLSelectElement)?.value;
-    const subjectId = subjectIdRaw === "" ? null : parseInt(subjectIdRaw);
-
+    const subjectId = subjectIdRaw === "" ? null : parseInt(subjectIdRaw, 10);
     const location = (document.getElementById('event-location') as HTMLInputElement)?.value || null;
     const address = (document.getElementById('event-address') as HTMLInputElement)?.value || null;
-
     const date = (document.getElementById('event-date') as HTMLInputElement)?.value || null;
     const startDate = (document.getElementById('event-start-time') as HTMLInputElement)?.value || null;
     const endDate = (document.getElementById('event-end-time') as HTMLInputElement)?.value || null;
-
     const capacityRaw = (document.getElementById('event-capasity') as HTMLInputElement)?.value;
-    const capacity = capacityRaw === "" ? null : parseInt(capacityRaw);
-
+    const capacity = capacityRaw === "" ? null : parseInt(capacityRaw, 10);
     const latitudeRaw = (document.getElementById('event-latitude') as HTMLInputElement)?.value;
     const latitude = latitudeRaw === "" ? null : parseFloat(latitudeRaw);
-
     const longitudeRaw = (document.getElementById('event-longtitude') as HTMLInputElement)?.value;
     const longitude = longitudeRaw === "" ? null : parseFloat(longitudeRaw);
 
@@ -143,7 +269,6 @@ const HomePage: React.FC = () => {
     };
 
     try {
-      const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
       const response = await fetch('https://bifriendsbe.bifriends.my.id/Forum/create_forum', {
         method: 'POST',
         headers: {
@@ -156,68 +281,30 @@ const HomePage: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to create event');
       }
-      
-      await Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
 
-      window.location.reload();
+      await Swal.fire('Sukses!', 'Event berhasil dibuat.', 'success');
       setShowPopup(false);
+
+      // Refetch forums supaya event baru muncul
+      const res = await GetForumService.getAllForums(token);
+      const maybeArray1 = Array.isArray((res as any).data?.data) ? (res as any).data.data : null;
+      const maybeArray2 = Array.isArray((res as any).data) ? (res as any).data : null;
+      const maybeArray3 = Array.isArray(res) ? res : null;
+      const forumList: Forum[] = (maybeArray1 as Forum[]) || (maybeArray2 as Forum[]) || (maybeArray3 as Forum[]) || [];
+      setForums(forumList);
     } catch (error) {
       console.error(error);
       await Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchForums = async () => {
-      setIsLoading(true);
-      try {
-        const token = sessionStorage.getItem('token') || localStorage.getItem('token') || '';
-        const allForums = await GetForumService.getAllForums(token);
-        setForums(allForums);
-      } catch (error) {
-        console.error("Error fetching forums:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchForums();
-  }, []);
-
-  useEffect(() => {
-    if (userId && token) {
-      const fetchProfile = async () => {
-        try {
-          const data: Profile = await ProfileService.getProfile(userId, token);
-          setProfileData(data);
-        } catch (error) {
-          console.error('Failed to fetch profile:', error);
-        }
-      };
-      fetchProfile();
-    }
-  }, [userId, token]);
-
-  const dummySubjects = [
-    { id: 1, name: "Netflix n Chill" },
-    { id: 2, name: "Sport" },
-    { id: 3, name: "Basketball" },
-    { id: 4, name: "Writing" },
-    { id: 5, name: "Coding Geeks" },
-    { id: 6, name: "JollayBay" },
-    { id: 7, name: "Marketing Gods" },
-    { id: 8, name: "Gaming" },
-    { id: 9, name: "Memes" },
-    { id: 10, name: "Night Club" },
-    { id: 11, name: "All" }
-  ];
-
+  // Sidebar untuk filter subject
   const Sidebar: React.FC = () => {
     const [subjects, setSubjects] = useState<{ id: number; name: string }[]>([]);
     useEffect(() => { setSubjects(dummySubjects); }, []);
     return (
       <div className="sidebar">
-        <div className='sidebar-content'>
+        <div className="sidebar-content">
           <div className="subject-collection">
             {subjects.map((subject) => (
               <p
@@ -271,9 +358,29 @@ const HomePage: React.FC = () => {
                     style={{ marginBottom: 8 }}
                   />
                 </div>
-                <button onClick={() => setShowPopup(true)} id="eventPopupButton">
-                  <img src={event} alt="Event Icon" className="icon" />
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileSelect}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-2 rounded-full hover:bg-gray-200 transition"
+                    title="Attach file"
+                  >
+                    <Paperclip size={20} />
+                  </button>
+                  <button
+                    onClick={() => setShowPopup(true)}
+                    id="eventPopupButton"
+                    className="p-2 rounded-full hover:bg-gray-200 transition"
+                    title="Create Event"
+                  >
+                    <img src={eventIcon} alt="Event Icon" className="icon" />
+                  </button>
+                </div>
               </div>
 
               <textarea
@@ -291,23 +398,33 @@ const HomePage: React.FC = () => {
               />
 
               {mediaPreview && (
-                <div className="media-preview">
-                  <img src={mediaPreview} alt="Preview" className="media-thumbnail" />
+                <div className="media-preview mt-2">
+                  {selectedFile?.type.startsWith('image/') ? (
+                    <img
+                      src={mediaPreview}
+                      alt="Preview"
+                      className="media-thumbnail max-h-40 object-cover rounded"
+                    />
+                  ) : (
+                    <p className="text-gray-600 text-sm">{mediaPreview}</p>
+                  )}
                 </div>
               )}
 
               <div className="divBawah" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                 <select
-                    className="p-2 rounded border border-gray-200"
-                    style={{ minWidth: 120, maxWidth: 180, background: 'white', fontSize:14}}
-                    value={selectedPostSubject}
-                    onChange={e => setSelectedPostSubject(e.target.value ? Number(e.target.value) : "")}
-                  >
-                    <option value="">Select subject...</option>
-                    {dummySubjects.filter(s => s.name !== 'All').map(subject => (
+                <select
+                  className="p-2 rounded border border-gray-200"
+                  style={{ minWidth: 120, maxWidth: 180, background: 'white', fontSize: 14 }}
+                  value={selectedPostSubject}
+                  onChange={e => setSelectedPostSubject(e.target.value ? Number(e.target.value) : "")}
+                >
+                  <option value="">Select subject...</option>
+                  {dummySubjects
+                    .filter(s => s.name !== 'All')
+                    .map(subject => (
                       <option key={subject.id} value={subject.id}>{subject.name}</option>
                     ))}
-                  </select>
+                </select>
                 <button id="submitButton" onClick={handlePostSubmit}>Post</button>
               </div>
             </div>
@@ -318,27 +435,27 @@ const HomePage: React.FC = () => {
               {isLoading ? (
                 <p>Loading forums...</p>
               ) : (() => {
-                const filteredForums = forums.filter(
-                  (forum) =>
-                    selectedSubject === "All" || forum.mssubject?.subject_name === selectedSubject
-                );
+                // Filter berdasarkan subject yang dipilih
+                const filteredForums =
+                  Array.isArray(forums) 
+                    ? forums.filter(forum =>
+                        selectedSubject === "All" ||
+                        forum.mssubject?.subject_name === selectedSubject
+                      )
+                    : [];
 
                 if (filteredForums.length === 0) {
                   return <p style={{ padding: "1rem", textAlign: "center" }}>No forums are available</p>;
                 }
 
-                return filteredForums.map((forum, index) => {
-                  if (!forum || (!forum.title && !forum.description && !forum.event_name)) {
+                return filteredForums.map((forum) => {
+                  if (!forum || (!forum.title && !forum.description && !forum.msevent)) {
                     return null;
                   }
 
                   const creatorId = Number(forum.user_id);
-
                   const currentUserId = Number(userId);
-
-
                   const isOwner = creatorId === currentUserId;
-
 
                   const user = {
                     username: forum.msuser?.username || "Anonymous",
@@ -346,15 +463,15 @@ const HomePage: React.FC = () => {
                     major: forum.msuser?.major || ""
                   };
 
-                  const subject = forum.subject_name ?? forum.mssubject?.subject_name;
-                  const eventName = forum.event_name ?? forum.msevent?.event_name;
-                  const eventDate = forum.event_date ?? forum.msevent?.event_date;
-                  const participants = forum.participants ?? forum.total_participants;
-                  const isEventForum = eventName && eventDate;
+                  const subjectName = forum.mssubject?.subject_name;
+                  const isEventForum = !!forum.msevent;
+                  const eventName = forum.msevent?.event_name;
+                  const eventDate = forum.msevent?.event_date;
+                  const participants = (forum as any).participants || (forum as any).total_participants;
 
                   return (
                     <div
-                      key={forum.post_id ?? index}
+                      key={forum.post_id}
                       className="forum-card"
                       onClick={() => navigate(`/forum/${forum.post_id}`)}
                       style={{ cursor: 'pointer' }}
@@ -371,43 +488,45 @@ const HomePage: React.FC = () => {
                         />
                       )}
 
-                      {user && (
-                        <div className="forum-user-info">
-                          <img
-                            src={user.profile_image ?? profile}
-                            alt="User"
-                            className="user-avatar-small"
-                            style={{ cursor: "pointer" }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (forum.user_id) {
-                                navigate(`/OtherPersonPage/${forum.user_id}`);
-                              }
-                            }}
-                          />
-                          <div className="user-meta">
-                            <p className="username">{user.username}</p>
-                            {user.major && <p className="major">{user.major}</p>}
-                          </div>
+                      {/* User Info */}
+                      <div className="forum-user-info">
+                        <img
+                          src={user.profile_image}
+                          alt="User"
+                          className="user-avatar-small"
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (forum.user_id) {
+                              navigate(`/OtherPersonPage/${forum.user_id}`);
+                            }
+                          }}
+                        />
+                        <div className="user-meta">
+                          <p className="username">{user.username}</p>
+                          {user.major && <p className="major">{user.major}</p>}
                         </div>
-                      )}
+                      </div>
 
+                      {/* Title & Description */}
                       <h4>{forum.title}</h4>
                       <p style={{ whiteSpace: 'pre-line' }}>{forum.description}</p>
-                      {subject && (
+
+                      {/* Subject */}
+                      {subjectName && (
                         <p>
-                          <strong>Subject:</strong> {subject}
+                          <strong>Subject:</strong> {subjectName}
                         </p>
                       )}
 
-                      {isEventForum ? (
+                      {/* Jika ini event forum */}
+                      {isEventForum && forum.msevent ? (
                         <div className="event-info">
                           <p>
                             <strong>Event:</strong> {eventName} ({eventDate})
                           </p>
                           <p>
-                            <strong>Location:</strong>{" "}
-                            {forum.msevent?.location?.location_name ?? "Not mentioned"}
+                            <strong>Location:</strong> {forum.msevent.location.location_name || "Not mentioned"}
                           </p>
                           {participants && (
                             <p>
@@ -417,7 +536,17 @@ const HomePage: React.FC = () => {
                         </div>
                       ) : (
                         <div className="text-forum-content">
-                          <p>{forum.forum_text}</p>
+                          {forum.msisi_forum.length > 0 && (
+                            <>
+                              {forum.msisi_forum[0].attachment && (
+                                <img
+                                  src={forum.msisi_forum[0].attachment}
+                                  alt="Attachment"
+                                  className="attachment-image max-h-40 object-cover rounded mb-2"
+                                />
+                              )}
+                            </>
+                          )}
                         </div>
                       )}
 
@@ -436,17 +565,32 @@ const HomePage: React.FC = () => {
         </aside>
       </div>
 
+      {/* Popup untuk membuat event */}
       {showPopup && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup-content wide-popup wider-popup" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="popup-content wide-popup wider-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="popup-title">Make An Event</h3>
 
             <div className="event-details-grid">
               <label htmlFor="event-name">Event Name</label>
-              <input type="text" id="event-name" className="popup-input" placeholder="What should we call this awesome event?" />
+              <input
+                type="text"
+                id="event-name"
+                className="popup-input"
+                placeholder="What should we call this awesome event?"
+              />
 
               <label htmlFor="event-description">Description</label>
-              <textarea id="event-description" className="popup-input" placeholder="What's this event all about?" rows={4} style={{ resize: 'vertical' }} />
+              <textarea
+                id="event-description"
+                className="popup-input"
+                placeholder="What's this event all about?"
+                rows={4}
+                style={{ resize: 'vertical' }}
+              />
 
               <label htmlFor="event-subject">Subject</label>
               <select id="event-subject" className="popup-input">
@@ -456,23 +600,48 @@ const HomePage: React.FC = () => {
               </select>
 
               <label htmlFor="event-location">Location</label>
-              <input type="text" id="event-location" className="popup-input" placeholder="Where will the magic happen?" />
+              <input
+                type="text"
+                id="event-location"
+                className="popup-input"
+                placeholder="Where will the magic happen?"
+              />
 
               <label htmlFor="event-address">Address</label>
-              <input type="text" id="event-address" className="popup-input" placeholder="Specific location address" />
+              <input
+                type="text"
+                id="event-address"
+                className="popup-input"
+                placeholder="Specific location address"
+              />
 
               <label htmlFor="event-date">Date & Time Details</label>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <label htmlFor="event-date" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Date</label>
+                  <label
+                    htmlFor="event-date"
+                    style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}
+                  >
+                    Date
+                  </label>
                   <input type="date" id="event-date" className="popup-input" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <label htmlFor="event-start-time" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Start Time</label>
+                  <label
+                    htmlFor="event-start-time"
+                    style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}
+                  >
+                    Start Time
+                  </label>
                   <input type="time" id="event-start-time" className="popup-input" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <label htmlFor="event-end-time" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>End Time</label>
+                  <label
+                    htmlFor="event-end-time"
+                    style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}
+                  >
+                    End Time
+                  </label>
                   <input type="time" id="event-end-time" className="popup-input" />
                 </div>
               </div>
@@ -489,19 +658,49 @@ const HomePage: React.FC = () => {
               <label>Coordinates</label>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <label htmlFor="event-latitude" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Latitude</label>
-                  <input type="number" id="event-latitude" className="popup-input" placeholder="Drop the latitude pin" />
+                  <label
+                    htmlFor="event-latitude"
+                    style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}
+                  >
+                    Latitude
+                  </label>
+                  <input
+                    type="number"
+                    id="event-latitude"
+                    className="popup-input"
+                    placeholder="Drop the latitude pin"
+                  />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <label htmlFor="event-longtitude" style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}>Longitude</label>
-                  <input type="number" id="event-longtitude" className="popup-input" placeholder="And the longitude too" />
+                  <label
+                    htmlFor="event-longtitude"
+                    style={{ fontSize: '12px', marginBottom: '4px', marginLeft: '4px' }}
+                  >
+                    Longitude
+                  </label>
+                  <input
+                    type="number"
+                    id="event-longtitude"
+                    className="popup-input"
+                    placeholder="And the longitude too"
+                  />
                 </div>
               </div>
             </div>
 
             <div className="popup-buttons">
-              <button className="cancel-button" onClick={() => setShowPopup(false)}>Close</button>
-              <button className="submit-button" onClick={handleEventSubmit}>Submit</button>
+              <button
+                className="cancel-button"
+                onClick={() => setShowPopup(false)}
+              >
+                Close
+              </button>
+              <button
+                className="submit-button"
+                onClick={handleEventSubmit}
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
