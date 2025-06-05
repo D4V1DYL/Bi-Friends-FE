@@ -52,7 +52,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ dates, onDateClick }) => {
                     {events.slice(0, 3).map((event, i) => (
                       <div
                         key={i}
-                        className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
+                        className="w-3 h-3 sm:w-4 sm:h-4 rounded-full"
                         style={{ backgroundColor: event.color }}
                         title={event.title}
                       />

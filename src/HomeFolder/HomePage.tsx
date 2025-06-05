@@ -59,6 +59,8 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEventSubmitting, setIsEventSubmitting] = useState(false);
 
   const dummySubjects = [
     { id: 1, name: "Netflix n Chill" },
@@ -159,6 +161,7 @@ const HomePage: React.FC = () => {
   };
 
   const handlePostSubmit = async () => {
+    if (isSubmitting) return; 
     if (!titleText.trim() || !descriptionText.trim()) {
       await Swal.fire({
         icon: "warning",
@@ -167,6 +170,8 @@ const HomePage: React.FC = () => {
       });
       return;
     }
+
+      setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append('title', titleText);
@@ -215,10 +220,15 @@ const HomePage: React.FC = () => {
         title: "Error",
         text: "Terjadi kesalahan saat mengirim post.",
       });
+    } finally {
+    setIsSubmitting(false);
     }
   };
 
   const handleEventSubmit = async () => {
+    if (isEventSubmitting) return;       
+    setIsEventSubmitting(true);
+
     const name = (document.getElementById('event-name') as HTMLInputElement)?.value || "";
     const text = (document.getElementById('event-description') as HTMLTextAreaElement)?.value || "";
 
@@ -289,6 +299,8 @@ const HomePage: React.FC = () => {
     } catch (error) {
       console.error(error);
       await Swal.fire('Gagal!', 'Terjadi kesalahan saat membuat event.', 'error');
+    } finally {
+    setIsEventSubmitting(false);
     }
   };
 

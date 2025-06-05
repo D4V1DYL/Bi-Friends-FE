@@ -65,6 +65,7 @@ const ForumPage: React.FC = () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
   const [userProfiles, setUserProfiles] = useState<Record<number, { username: string; profile_picture: string }>>({});
   const [openReplies, setOpenReplies] = useState<Record<number, boolean>>({});
+  const [isReplySubmitting, setIsReplySubmitting] = useState(false);
 
   const toggleChildReplies = (replyId: number) => {
     setOpenReplies((prev) => ({
@@ -132,7 +133,11 @@ const ForumPage: React.FC = () => {
   };
 
   const submitReply = async () => {
+    if (isReplySubmitting) return;  
+
     if (!replyText.trim()) return;
+
+    setIsReplySubmitting(true);
 
     const formData = new FormData();
     formData.append('post_id', String(postId));
@@ -161,6 +166,8 @@ const ForumPage: React.FC = () => {
       fetchReplies();
     } catch (err) {
       console.error("Gagal mengirim reply", err);
+    } finally {
+      setIsReplySubmitting(false);
     }
   };
 
